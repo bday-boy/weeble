@@ -1,0 +1,2 @@
+class MALApi:
+    pass

@@ -1,0 +1,2 @@
+class AniListAPI:
+    pass
