@@ -10,4 +10,4 @@ data from public APIs.
 - Year
 - Director
 - Episode count
-- MAL / AniList score
+- Popularity
