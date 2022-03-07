@@ -1,3 +1,7 @@
+mark {
+    padding: 0;
+}
+
 .title {
     color: whitesmoke;
     font-size: calc(2.375rem + 1.5vw);
@@ -5,7 +9,7 @@
 }
 .dropdown-menu {
     width: 100%;
-    max-height: 400px;
+    max-height: 500px;
     overflow-y: auto;
 }
 .dropdown-item:nth-child(n+1) {
