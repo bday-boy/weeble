@@ -15,3 +15,4 @@ data to make a Wordle- or Squirle-like game.
 ## TO-DO
 
 - Add popularity to info in search/JSON
+- Optimize search suggestions (not needed for now)
