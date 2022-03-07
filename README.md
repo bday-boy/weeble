@@ -12,9 +12,6 @@ data to make a Wordle- or Squirle-like game.
 - Popularity
 - MAL / AniList score
 
-## TO DO
+## TO-DO
 
-- Filter out stuff (<8min and <8 episodes) or <5min
-- Filter out stuff by popularity in each year (<100 for shows, <10 for
-  everything else) and global popularity
-- Filter not SPECIAL or MUSIC
+- Add popularity to info in search/JSON
