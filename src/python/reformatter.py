@@ -1,21 +1,32 @@
 import json
+import re
 import os.path as osp
 
 from anilistapi import AniListAPI
 
+director_re = re.compile(r'(episode |)director.+\(.+\)')
+
 
 def get_directors(anime: dict) -> str:
     directors = []
+    episode_directors = []
     staff = anime.get('staff', {}).get('edges', [])
     for member in staff:
-        if member.get('role') == 'Director':
+        if member.get('role').strip().lower() == 'director':
             full_name = []
             for name in member.get('node', {}).get('name').items():
                 _, name = name
                 if name:
                     full_name.append(name.strip())
             directors.append(' '.join(full_name))
-    return directors
+        elif director_re.match(member.get('role').strip().lower()):
+            full_name = []
+            for name in member.get('node', {}).get('name').items():
+                _, name = name
+                if name:
+                    full_name.append(name.strip())
+            episode_directors.append(' '.join(full_name))
+    return directors or episode_directors
 
 
 def get_studios(anime: dict) -> str:
@@ -29,6 +40,8 @@ def get_studios(anime: dict) -> str:
 
 
 def filter_anime(anime: dict) -> bool:
+    if anime.get('id') == 1887:
+        a = 1
     # ignore specials and music vids
     anime_format = anime.get('format')
     if not anime_format or anime_format == 'SPECIAL' \
@@ -45,20 +58,7 @@ def filter_anime(anime: dict) -> bool:
     if not get_directors(anime) or not get_studios(anime):
         return False
 
-    # ignore shows that are <= 100 popularity in their year and everything
-    # else that is <= 10 popularity in their year
-    rankings = anime.get('rankings', [])
-    for ranking in rankings:
-        if ranking.get('year') is None:
-            return True
-        if ranking.get('type', '') != 'POPULAR':
-            continue
-        rank = ranking.get('rank', 10000)
-        if ranking.get('format', '') == 'TV':
-            return rank <= 100
-        else:
-            return rank <= 10
-    return False
+    return True
 
 
 class Reformatter:
