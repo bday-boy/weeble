@@ -1,6 +1,10 @@
 # VSCode stuff
 .vscode/
 
+# Data folders
+cache/*
+!cache/README.md
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
