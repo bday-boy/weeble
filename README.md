@@ -10,10 +10,10 @@ data to make a Wordle- or Squirle-like game.
 - Director
 - Episode count
 - Popularity
-- MAL / AniList score
 
 ## TO-DO
 
 - Add popularity to info in search/JSON
 - Optimize search suggestions (not needed for now)
 - Paginate staff calls for shows without director/episode director
+- Use string similarity to find anime the user meant to type
