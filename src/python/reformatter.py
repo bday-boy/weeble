@@ -68,11 +68,17 @@ class Reformatter:
         self.popularity_threshold = popularity_threshold
         self.data = []
         self.formatted_data = {}
+        self.anime_titles = {}
     
-    def save(self, file_name: str = 'anime-database.json') -> None:
-        json_path = osp.normpath(osp.join(self.data_dir, file_name))
-        with open(json_path, 'w') as json_out:
+    def save(self, db_file: str = 'anime-database.json',
+             titles_file: str = 'anime-titles.json') -> None:
+        db_path = osp.normpath(osp.join(self.data_dir, db_file))
+        with open(db_path, 'w') as json_out:
             self.data = json.dump(self.formatted_data, json_out, indent=2)
+        
+        names_path = osp.normpath(osp.join(self.data_dir, titles_file))
+        with open(names_path, 'w') as json_out:
+            self.data = json.dump(self.anime_titles, json_out, indent=2)
     
     def add_anime(self, anime: dict) -> None:
         anime_entry = {}
@@ -95,6 +101,8 @@ class Reformatter:
         anime_entry['season'] = anime.get('season')
         anime_entry['year'] = anime.get('seasonYear', 0)
         self.formatted_data[anime.get('id', 'NO_ID')] = anime_entry
+        for title in (anime_entry['synonyms'] + [anime_entry['title']]):
+            self.anime_titles[title] = anime.get('id', 'NO_ID')
     
     def generate_json(self) -> None:
         response_gen = self.anilist_api.by_popularity(10000)

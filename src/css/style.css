@@ -1,6 +1,21 @@
-
 .title {
     color: whitesmoke;
     font-size: calc(2.375rem + 1.5vw);
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+.dropdown-menu {
+    width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+}
+.dropdown-item:nth-child(n+1) {
+    border-top: 1px solid #111;
+}
+.disable-scrollbars::-webkit-scrollbar {
+    background: transparent;
+    width: 0px;
+}
+.disable-scrollbars {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
