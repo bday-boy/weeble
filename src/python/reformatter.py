@@ -42,7 +42,7 @@ def filter_anime(anime: dict) -> bool:
         return False
     
     # ignore anime without a director or studios
-    if not get_directors(anime) or not anime.get('studios', {}).get('edges'):
+    if not get_directors(anime) or not get_studios(anime):
         return False
 
     # ignore shows that are <= 100 popularity in their year and everything
