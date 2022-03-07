@@ -47,17 +47,18 @@ def filter_anime(anime: dict) -> bool:
 
     # ignore shows that are <= 100 popularity in their year and everything
     # else that is <= 10 popularity in their year
-    valid = False
     rankings = anime.get('rankings', [])
     for ranking in rankings:
+        if ranking.get('year') is None:
+            return True
         if ranking.get('type', '') != 'POPULAR':
             continue
         rank = ranking.get('rank', 10000)
         if ranking.get('format', '') == 'TV':
-            valid = valid or rank <= 100
+            return rank <= 100
         else:
-            valid = valid or rank <= 10
-    return valid
+            return rank <= 10
+    return False
 
 
 class Reformatter:
@@ -89,6 +90,7 @@ class Reformatter:
             return
         anime_entry['studios'] = get_studios(anime)
         anime_entry['directors'] = get_directors(anime)
+        anime_entry['popularity'] = anime.get('popularity')
         anime_entry['averageScore'] = anime.get('averageScore')
         anime_entry['episodes'] = anime.get('episodes')
         pictures = anime.get('coverImage')
