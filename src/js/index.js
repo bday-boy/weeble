@@ -17,6 +17,7 @@ const replaceInput = function() {
   while (dropdown.firstChild) {
     dropdown.removeChild(dropdown.firstChild);
   }
+  dropdown.classList.remove('show');
 };
 
 const highlightText = function(text, index) {
