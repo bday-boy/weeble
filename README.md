@@ -1,8 +1,7 @@
 # weeble
 
-Uses an existing anime database taken from
-https://github.com/manami-project/anime-offline-database and adds/deletes some
-data from public APIs.
+Uses public APIs to get anime data based on various criteria and then uses that
+data to make a Wordle- or Squirle-like game.
 
 ## Guessing criteria
 
@@ -13,7 +12,7 @@ data from public APIs.
 - Popularity
 - MAL / AniList score
 
-## TO DO:
+## TO DO
 
 - Filter out stuff (<8min and <8 episodes) or <5min
 - Filter out stuff by popularity in each year (<100 for shows, <10 for
