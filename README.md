@@ -28,6 +28,9 @@ data to make a Wordle- or Squirle-like game.
 - Fix on mobile
 - Add spacing around guess status nodes
 - Interface that tracks correct info/ranges guessed by user
+- Add give up button
+- Delete directors and popularity
+- Maybe just give user info about the anime at the beginning?
 
 ## Funny stuff
 
