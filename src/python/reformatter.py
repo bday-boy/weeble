@@ -4,7 +4,7 @@ import os.path as osp
 
 from anilistapi import AniListAPI
 
-director_re = re.compile(r'(episode |)director.+\(.+\)')
+director_re = re.compile(r'(episode |chief |)director.+\(.+\)')
 
 
 def get_directors(anime: dict) -> str:
@@ -51,7 +51,7 @@ def filter_anime(anime: dict) -> bool:
     # ignore really short anime
     episodes = anime.get('episodes') or 0
     duration = anime.get('duration') or 0
-    if duration < 8 and episodes <= 8:
+    if duration < 8 and episodes <= 8 or episodes is None:
         return False
     
     # ignore anime without a director or studios
