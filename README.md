@@ -6,10 +6,12 @@ data to make a Wordle- or Squirle-like game.
 ## Guessing criteria
 
 - Studio
-- Year
 - Director
 - Episode count
+- Year
 - Popularity
+- Format
+- Source
 
 ## TO-DO
 
@@ -25,6 +27,7 @@ data to make a Wordle- or Squirle-like game.
 - List titles in order of shortest to longest
 - Fix on mobile
 - Add spacing around guess status nodes
+- Interface that tracks correct info/ranges guessed by user
 
 ## Funny stuff
 
