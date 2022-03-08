@@ -11,6 +11,7 @@ const fetchInit = {
 };
 
 const replaceInput = function() {
+  /* replaces the text in the input with the clicked suggestion */
   const newValue = this.querySelector('div').textContent;
   document.getElementById('anime-entry').value = newValue;
   const dropdown = this.parentNode;
@@ -21,6 +22,7 @@ const replaceInput = function() {
 };
 
 const highlightText = function(text, index) {
+  /* highlight just the part of the text the user has typed in */
   const leftSpan = document.createElement('span');
   leftSpan.textContent = text.slice(0, index);
   const highlight = document.createElement('mark');
@@ -28,6 +30,7 @@ const highlightText = function(text, index) {
   const rightSpan = document.createElement('span');
   rightSpan.textContent = text.slice(index + inputLen, text.length);
   
+  /* wrap all text in a div */
   const div = document.createElement('div');
   div.appendChild(leftSpan);
   div.appendChild(highlight);
@@ -42,6 +45,7 @@ const createAnimeLi = function(animeId, title, index) {
   const div = highlightText(title, index);
   const small = document.createElement('small');
   small.textContent = `Studio(s): ${anime_info.studios.join(", ")}, Year: ${anime_info.year}, Director(s): ${anime_info.directors.join(", ")}, Episodes: ${anime_info.episodes}, Anilist score: ${anime_info.averageScore}`;
+  small.classList.add('text-muted', 'text-wrap');
   li.appendChild(div);
   li.appendChild(small);
   li.addEventListener('click', replaceInput);
