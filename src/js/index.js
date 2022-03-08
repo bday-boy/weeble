@@ -45,7 +45,7 @@ const createAnimeLi = function(animeId, title, index) {
   const div = highlightText(title, index);
   const small = document.createElement('small');
   small.textContent = `Studio(s): ${anime_info.studios.join(", ")}, Year: ${anime_info.year}, Director(s): ${anime_info.directors.join(", ")}, Episodes: ${anime_info.episodes}, Anilist score: ${anime_info.averageScore}`;
-  small.classList.add('text-muted', 'text-wrap');
+  small.classList.add('text-wrap');
   li.appendChild(div);
   li.appendChild(small);
   li.addEventListener('click', replaceInput);
