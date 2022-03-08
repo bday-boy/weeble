@@ -108,7 +108,7 @@ class Reformatter:
             self.anime_titles[title] = anime.get('id', 'NO_ID')
     
     def generate_json(self) -> None:
-        response_gen = self.anilist_api.by_popularity(10000)
+        response_gen = self.anilist_api.by_popularity(self.popularity_threshold)
         for res in response_gen:
             filtered_res = list(filter(filter_anime, res))
             for anime in filtered_res:
@@ -116,7 +116,7 @@ class Reformatter:
 
 
 def main():
-    data_cleaner = Reformatter('../../data', '../../cache')
+    data_cleaner = Reformatter('../../data', '../../cache', popularity_threshold=50000)
     data_cleaner.generate_json()
     data_cleaner.save()
 
