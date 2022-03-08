@@ -91,6 +91,7 @@ query ($pop: Int, $page: Int, $perPage: Int) {
             seasonYear
             episodes
             duration
+            source(version: 3)
             synonyms
             coverImage {
                 extraLarge

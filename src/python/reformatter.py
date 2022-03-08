@@ -93,17 +93,18 @@ class Reformatter:
         anime_entry['popularity'] = anime.get('popularity')
         anime_entry['averageScore'] = anime.get('averageScore')
         anime_entry['episodes'] = anime.get('episodes')
+        anime_entry['source'] = anime.get('source')
         pictures = anime.get('coverImage')
         anime_entry['thumbnail'] = pictures.get('medium')
         anime_entry['picture'] = pictures.get('extraLarge')
-        anime_entry['synonyms'] = anime.get('synonyms')
-        synonyms = {t[1] for t in titles.items()} - {anime_entry['title']}
-        anime_entry['synonyms'].extend(list(synonyms))
+        synonyms = ({t[1] for t in titles.items()} - {anime_entry['title']}) \
+            | set(anime.get('synonyms'))
+        anime_entry['synonyms'] = list(filter(lambda x: bool(x), synonyms))
         anime_entry['format'] = anime.get('format')
         anime_entry['season'] = anime.get('season')
         anime_entry['year'] = anime.get('seasonYear', 0)
         self.formatted_data[anime.get('id', 'NO_ID')] = anime_entry
-        for title in (anime_entry['synonyms'] + [anime_entry['title']]):
+        for title in ([anime_entry['title']] + anime_entry['synonyms']):
             self.anime_titles[title] = anime.get('id', 'NO_ID')
     
     def generate_json(self) -> None:
@@ -112,3 +113,13 @@ class Reformatter:
             filtered_res = list(filter(filter_anime, res))
             for anime in filtered_res:
                 self.add_anime(anime)
+
+
+def main():
+    data_cleaner = Reformatter('../../data', '../../cache')
+    data_cleaner.generate_json()
+    data_cleaner.save()
+
+
+if __name__ == '__main__':
+    main()
