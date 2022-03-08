@@ -22,6 +22,9 @@ data to make a Wordle- or Squirle-like game.
 - Filters in search bar
 - Arrow keys to select dropdown items
 - Add source and format to info
+- List titles in order of shortest to longest
+- Fix on mobile
+- Add spacing around guess status nodes
 
 ## Funny stuff
 
