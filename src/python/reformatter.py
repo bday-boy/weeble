@@ -4,22 +4,22 @@ import os.path as osp
 
 from anilistapi import AniListAPI
 
-director_re = re.compile(r'(episode |chief |)director.+\(.+\)')
-
+ep_director = re.compile(r'episode director.+\(.+\)')
 
 def get_directors(anime: dict) -> str:
     directors = []
     episode_directors = []
     staff = anime.get('staff', {}).get('edges', [])
     for member in staff:
-        if member.get('role').strip().lower() == 'director':
+        role = member.get('role').strip().lower()
+        if role == 'director' or role == 'chief director':
             full_name = []
             for name in member.get('node', {}).get('name').items():
                 _, name = name
                 if name:
                     full_name.append(name.strip())
             directors.append(' '.join(full_name))
-        elif director_re.match(member.get('role').strip().lower()):
+        elif ep_director.match(role):
             full_name = []
             for name in member.get('node', {}).get('name').items():
                 _, name = name
@@ -40,7 +40,7 @@ def get_studios(anime: dict) -> str:
 
 
 def filter_anime(anime: dict) -> bool:
-    if anime.get('id') == 1887:
+    if anime.get('id') == 101281:
         a = 1
     # ignore specials and music vids
     anime_format = anime.get('format')
