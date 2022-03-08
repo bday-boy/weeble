@@ -1,14 +1,5 @@
-let anime = {};
-let animeTitles = {};
 let suggestions = [];
 let inputLen = 0;
-const headers = new Headers();
-const fetchInit = {
-  method: 'GET',
-  headers: headers,
-  mode: 'cors',
-  cache: 'default',
-};
 
 const replaceInput = function() {
   /* replaces the text in the input with the clicked suggestion */
@@ -39,7 +30,7 @@ const highlightText = function(text, index) {
 };
 
 const createAnimeLi = function(animeId, title, index) {
-  const anime_info = anime[animeId];
+  const anime_info = allAnime[animeId];
   const li = document.createElement('li');
   li.classList.add('dropdown-item');
   const div = highlightText(title, index);
@@ -81,12 +72,12 @@ const suggestAnime = function(event) {
   while (dropdown.firstChild) {
     dropdown.removeChild(dropdown.firstChild);
   }
-  if (anime === undefined || animeTitles === undefined || input === '') {
+  if (allAnime === undefined || titlesArray === undefined || input === '') {
     suggestions = [];
   }
   else if (event.prevLen === undefined || event.prevLen < inputLen) {
     suggestions = [];
-    animeTitles.filter((entry) => filterSuggestions(entry, input));
+    titlesArray.filter((entry) => filterSuggestions(entry, input));
   }
   else {
     suggestions.filter((entry) => filterSuggestions(entry));
@@ -100,21 +91,3 @@ const suggestAnime = function(event) {
   }
   event.prevLen = inputLen;
 };
-
-(function() {
-  headers.append('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
-  fetch('http://127.0.0.1:5500/data/anime-titles.json', fetchInit)
-    .then((response) => response.json())
-    .then((anime_json) => {
-      animeTitles = Object.entries(anime_json);
-    })
-    .catch((err) => console.log(err));
-  fetch('http://127.0.0.1:5500/data/anime-database.json', fetchInit)
-    .then((response) => response.json())
-    .then((anime_json) => {
-      anime = anime_json;
-      const animeEntry = document.getElementById('anime-entry');
-      animeEntry.addEventListener('input', suggestAnime);
-    })
-    .catch((err) => console.log(err));
-}());
