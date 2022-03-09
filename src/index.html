@@ -13,7 +13,7 @@
   <div class="container pb-5">
     <h1 class="row justify-content-center title mt-3">WEEBLE</h1>
 
-    <div class="row flex-column justify-content-center align-items-center" id="progress">
+    <div class="row flex-column justify-content-center align-items-center my-3" id="progress">
       <div class="col-xl-6 col-md-10 my-2 text-center" id="sources">
         <h3 class="mb-3">Source types</h3>
       </div>
@@ -22,7 +22,7 @@
         <h3 class="mb-3">Format types</h3>
       </div>
 
-      <div class="col-xl-6 col-md-10 my-2 text-center">
+      <div class="col-xl-6 col-md-9 col-9 my-2 text-center">
         <h3 class="mb-3">Year</h3>
         <div class="progress" style="font-size: large;">
           <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="year-progress-left"></div>
@@ -37,7 +37,7 @@
         </div>
       </div>
       
-      <div class="col-xl-6 col-md-10 my-2 text-center">
+      <div class="col-xl-6 col-md-9 col-9 my-2 text-center">
         <h3 class="mb-3">Episode count</h3>
         <div class="progress" style="font-size: large;">
           <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="eps-progress-left"></div>
@@ -53,9 +53,7 @@
       </div>
     </div>
 
-    <div class="row justify-content-center align-items-center my-3" id="guesses"></div>
-
-    <div class="row justify-content-center align-items-center mt-3">
+    <div class="row justify-content-center align-items-center my-4">
       <div class="col-xl-8 col-md-12">
         <div class="input-group">
           <input type="text" class="form-control" placeholder="Enter an anime..." aria-label="Anime entry" id="anime-entry">
@@ -66,6 +64,8 @@
         </div>
       </div>
     </div>
+
+    <div class="row justify-content-center align-items-center my-3" id="guesses"></div>
   </div>
   <script src="/lib/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
   <script src="/src/js/load-vars.js"></script>
