@@ -31,6 +31,7 @@ data to make a Wordle- or Squirle-like game.
 - Add give up button
 - Delete directors and popularity
 - Maybe just give user info about the anime at the beginning?
+- Make the dates range bar look better
 
 ## Funny stuff
 
