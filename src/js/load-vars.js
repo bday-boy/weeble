@@ -4,18 +4,24 @@ let titlesObj = {};
 const thresholds = {
   episodes: 20,
   year: 10,
-  popularity: 10000,
+  popularity: 25000,
 };
 const yearRange = {
-  min: 10000,
+  min: 1000000,
   max: 0,
-  low: 10000,
+  low: 1000000,
   high: 0,
 };
 const epsRange = {
-  min: 10000,
+  min: 1000000,
   max: 0,
-  low: 10000,
+  low: 1000000,
+  high: 0,
+};
+const popRange = {
+  min: 1000000,
+  max: 0,
+  low: 1000000,
   high: 0,
 };
 const sources = new Set();
@@ -50,7 +56,12 @@ const createNewButton = function(text) {
     .then((anime_json) => {
       allAnime = anime_json;
       Object.values(allAnime).forEach((anime) => {
-        const { episodes, source, format, year } = anime;
+        const { popularity, episodes, source, format, year } = anime;
+        if (popularity < popRange.min) {
+          popRange.min = popularity;
+        } else if (popularity > popRange.max) {
+          popRange.max = popularity;
+        }
         if (episodes < epsRange.min) {
           epsRange.min = episodes;
         } else if (episodes > epsRange.max) {
@@ -64,6 +75,11 @@ const createNewButton = function(text) {
           yearRange.max = year;
         }
       });
+      popRange.low = popRange.min;
+      popRange.high = popRange.max;
+      document.getElementById('pop-low').textContent = popRange.min;
+      document.getElementById('pop-high').textContent = popRange.max;
+
       epsRange.low = epsRange.min;
       epsRange.high = epsRange.max;
       document.getElementById('eps-low').textContent = epsRange.min;

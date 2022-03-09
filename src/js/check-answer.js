@@ -66,7 +66,9 @@ const progressCheckers = {
   year: (guess, dif, threshold) => {
     updateYearRange(guess, dif, threshold);
   },
-  popularity: (guess, dif, threshold) => {},
+  popularity: (guess, dif, threshold) => {
+    updatePopRange(guess, dif, threshold);
+  },
   format: (formatType, status) => {
     updateFormats(formatType, status);
   },
@@ -170,7 +172,7 @@ const strCompare = function(property, animeKey) {
 };
 
 const checkAnswer = function(inputTitle) {
-  if (!titlesObj.hasOwnProperty(inputTitle)) {
+  if (!titlesObj.hasOwnProperty(inputTitle) || anime === undefined) {
     /* do something here to warn user it's not a valid anime */
     return false;
   }
@@ -184,14 +186,14 @@ const checkAnswer = function(inputTitle) {
   guessWrapper.appendChild(numCompare(episodes, 'episodes'));
   guessWrapper.appendChild(numCompare(year, 'year'));
   guessWrapper.appendChild(numCompare(popularity, 'popularity'));
-  guessWrapper.appendChild(strCompare(format, 'format'));
   guessWrapper.appendChild(strCompare(source, 'source'));
+  guessWrapper.appendChild(strCompare(format, 'format'));
 
   const a = document.createElement('a');
   a.href = `https://anilist.co/anime/${animeId}/`
   a.target = '_blank';
   a.rel = 'noopener noreferrer';
-  a.classList.add('mb-1', 'text-wrap');
+  a.classList.add('mb-1', 'text-wrap', 'text-center');
   a.textContent = inputTitle;
 
   const div = document.createElement('div');
@@ -205,12 +207,3 @@ const checkAnswer = function(inputTitle) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
   });
 };
-
-(function() {
-  document.getElementById('guess-button').addEventListener('click', () => {
-    anime = allAnime[20583];
-    const guess = document.getElementById('anime-entry').value;
-    checkAnswer(guess);
-    document.getElementById('anime-entry').value = '';
-  });
-})();

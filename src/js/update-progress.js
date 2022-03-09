@@ -56,12 +56,16 @@ const updateProgressBar = function(progressObj, type) {
   end.style.width = `${((max - high) / total) * 100 - extraWidth / 2}%`;
 };
 
-const updateYear = function() {
-  updateProgressBar(yearRange, 'year');
+const updatePop = function() {
+  updateProgressBar(popRange, 'pop');
 };
 
 const updateEps = function() {
   updateProgressBar(epsRange, 'eps');
+};
+
+const updateYear = function() {
+  updateProgressBar(yearRange, 'year');
 };
 
 /**
@@ -92,12 +96,17 @@ const updateNumRange = function(newVal, dif, threshold, obj) {
   }
 };
 
-const updateYearRange = function(year, dif, threshold) {
-  updateNumRange(year, dif, threshold, yearRange)
-  updateYear();
+const updatePopRange = function(popularity, dif, threshold) {
+  updateNumRange(popularity, dif, threshold, popRange)
+  updatePop();
 };
 
 const updateEpsRange = function(numEps, dif, threshold) {
   updateNumRange(numEps, dif, threshold, epsRange)
   updateEps();
+};
+
+const updateYearRange = function(year, dif, threshold) {
+  updateNumRange(year, dif, threshold, yearRange)
+  updateYear();
 };
