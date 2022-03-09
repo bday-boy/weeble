@@ -1,11 +1,6 @@
 let anime;
 const guessesDiv = document.getElementById('guesses');
-const thresholds = {
-  episodes: 20,
-  year: 10,
-  popularity: 10000
-};
-const hints = {
+const tooltipTexts = {
   studios: (A, B) => {
     let answer = '';
     const incorrect = Array.from(setDif(A, B)).join(', ');
@@ -18,21 +13,6 @@ const hints = {
     }
     if (incorrect) {
       answer += `Incorrect studios: ${incorrect}`;
-    }
-    return answer;
-  },
-  directors: (A, B) => {
-    let answer = '';
-    const incorrect = Array.from(setDif(A, B)).join(', ');
-    const correct = Array.from(setIntersection(A, B)).join(', ');
-    if (correct) {
-      answer += `Correct directors: ${correct}`;
-    }
-    if (answer) {
-      answer += '\n';
-    }
-    if (incorrect) {
-      answer += `Incorrect directors: ${incorrect}`;
     }
     return answer;
   },
@@ -76,7 +56,23 @@ const hints = {
     } else {
       return `The answer's source is not ${sourceType}!`;
     }
-  }
+  },
+};
+const progressCheckers = {
+  studios: (A, B) => {},
+  episodes: (guess, dif, threshold) => {
+    updateEpsRange(guess, dif, threshold);
+  },
+  year: (guess, dif, threshold) => {
+    updateYearRange(guess, dif, threshold);
+  },
+  popularity: (guess, dif, threshold) => {},
+  format: (formatType, status) => {
+    updateFormats(formatType, status);
+  },
+  source: (sourceType, status) => {
+    updateSources(sourceType, status);
+  },
 };
 
 const createIcon = function(iconName, status) {
@@ -129,7 +125,8 @@ const setCompare = function(creators, animeKey) {
     icon = 'x-circle';
   }
   const statusNode = createIcon(icon, status);
-  addTooltip(statusNode, hints[animeKey](A, B));
+  addTooltip(statusNode, tooltipTexts[animeKey](A, B));
+  progressCheckers[animeKey](A, B);
   return statusNode;
 };
 
@@ -139,7 +136,6 @@ const numCompare = function(property, animeKey) {
   const answerValue = anime[animeKey];
   const dif = property - answerValue;
   const threshold = thresholds[animeKey];
-  /* TODO: Make this only be true when the studio sets are equal */
   if (property === answerValue) {
     status = 'correct';
     icon = 'check2-circle';
@@ -151,7 +147,8 @@ const numCompare = function(property, animeKey) {
     icon = `chevron-double-${dif < 0 ? 'up' : 'down'}`;
   }
   const statusNode = createIcon(icon, status);
-  addTooltip(statusNode, hints[animeKey](property, dif, threshold));
+  addTooltip(statusNode, tooltipTexts[animeKey](property, dif, threshold));
+  progressCheckers[animeKey](property, dif, threshold);
   return statusNode;
 };
 
@@ -159,7 +156,6 @@ const strCompare = function(property, animeKey) {
   let status;
   let icon;
   const answerValue = anime[animeKey];
-  /* TODO: Make this only be true when the studio sets are equal */
   if (property === answerValue) {
     status = 'correct';
     icon = 'check2-circle';
@@ -168,7 +164,8 @@ const strCompare = function(property, animeKey) {
     icon = 'x-circle';
   }
   const statusNode = createIcon(icon, status);
-  addTooltip(statusNode, hints[animeKey](property, status));
+  addTooltip(statusNode, tooltipTexts[animeKey](property, status));
+  progressCheckers[animeKey](property, status);
   return statusNode;
 };
 
@@ -179,12 +176,11 @@ const checkAnswer = function(inputTitle) {
   }
   const animeId = titlesObj[inputTitle];
   const inputAnime = allAnime[animeId];
-  const {studios, directors, episodes, year, popularity, format, source} = inputAnime;
+  const {studios, episodes, year, popularity, format, source} = inputAnime;
 
   const guessWrapper = document.createElement('div');
   guessWrapper.classList.add('d-flex');
   guessWrapper.appendChild(setCompare(studios, 'studios'));
-  guessWrapper.appendChild(setCompare(directors, 'directors'));
   guessWrapper.appendChild(numCompare(episodes, 'episodes'));
   guessWrapper.appendChild(numCompare(year, 'year'));
   guessWrapper.appendChild(numCompare(popularity, 'popularity'));
@@ -199,7 +195,7 @@ const checkAnswer = function(inputTitle) {
   a.textContent = inputTitle;
 
   const div = document.createElement('div');
-  div.classList.add('col-md-10', 'mt-2', 'd-flex', 'flex-column', 'align-items-center', 'justify-content-center');
+  div.classList.add('col-md-10', 'my-2', 'd-flex', 'flex-column', 'align-items-center', 'justify-content-center');
   div.appendChild(a);
   div.appendChild(guessWrapper);
 
