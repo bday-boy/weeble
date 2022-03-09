@@ -52,24 +52,6 @@ query ($id: Int, $page: Int, $perPage: Int) {
 }
 '''
 
-popularity_query = '''
-query ($pop: Int) {
-  Media (popularity_greater: $pop, type: ANIME) {
-    id
-    popularity
-    staff
-    studios(sort: [NAME]) {
-        edges {
-            node {
-                name
-            }
-            isMain
-        }
-    }
-  }
-}
-'''
-
 popularity_page_query = '''
 query ($pop: Int, $page: Int, $perPage: Int) {
     Page (page: $page, perPage: $perPage) {
@@ -99,30 +81,12 @@ query ($pop: Int, $page: Int, $perPage: Int) {
             }
             averageScore
             popularity
-            staff(sort: [RELEVANCE], page: 1, perPage: 25) {
-                edges {
-                    node {
-                        name {
-                            first
-                            last
-                        }
-                    }
-                    role
-                }
-            }
             studios(isMain: true) {
                 edges {
                     node {
                         name
                     }
                 }
-            }
-            rankings {
-                rank
-                type
-                format
-                year
-                season
             }
         }
     }
