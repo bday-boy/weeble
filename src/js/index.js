@@ -34,6 +34,7 @@ const createAnimeLi = function(animeId, title, index) {
   const li = document.createElement('li');
   li.classList.add('dropdown-item');
   const div = highlightText(title, index);
+  div.classList.add('text-wrap');
   const small = document.createElement('small');
   small.textContent = `Studio(s): ${anime_info.studios.join(", ")}, Year: ${anime_info.year}, Episodes: ${anime_info.episodes}, Anilist popularity: ${anime_info.popularity}, Format: ${anime_info.format} Source: ${anime_info.source}`;
   small.classList.add('text-wrap');
@@ -55,13 +56,23 @@ const createSuggestions = function(dropdown_element) {
   });
 };
 
-const filterSuggestions = function(entry, input) {
-  const [title, animeId] = entry;
-  const foundIndex = title.toLowerCase().indexOf(input);
-  if (foundIndex > -1) {
-    suggestions.push([title, animeId, foundIndex])
+const filterSuggestions = function(arr, input) {
+  const suggestions = [];
+  arr.forEach((entry) => {
+    const [title, animeId] = entry;
+    const foundIndex = title.toLowerCase().indexOf(input);
+    if (foundIndex > -1) {
+      suggestions.push([title, animeId, foundIndex])
+    }
+  });
+  return suggestions;
+}
+
+const toggleDropdown = function(dropdown, hide) {
+  if (hide) {
+    dropdown.classList.remove('show');
   } else {
-    return false;
+    dropdown.classList.add('show');
   }
 };
 
@@ -76,22 +87,29 @@ const suggestAnime = function(event) {
     suggestions = [];
   }
   else if (event.prevLen === undefined || event.prevLen < inputLen) {
-    suggestions = [];
-    titlesArray.filter((entry) => filterSuggestions(entry, input));
+    suggestions = filterSuggestions(titlesArray, input);
   }
   else {
-    suggestions.filter((entry) => filterSuggestions(entry));
+    suggestions = filterSuggestions(suggestions, input);
   }
   suggestions.sort((a, b) => a[2] > b[2]);
   createSuggestions(dropdown);
-  if (!suggestions || suggestions.length === 0) {
-    dropdown.classList.remove('show');
-  } else {
-    dropdown.classList.add('show');
-  }
+  toggleDropdown(dropdown, !suggestions || suggestions.length === 0);
   event.prevLen = inputLen;
 };
 
+const randomAnime = function() {
+  const allAnimeObjs = Object.values(allAnime);
+  return allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
+};
+
 (function() {
+  anime = randomAnime();
+
   document.getElementById('anime-entry').addEventListener('input', suggestAnime);
+  document.getElementById('guess-button').addEventListener('click', () => {
+    const guess = document.getElementById('anime-entry').value;
+    checkAnswer(guess);
+    document.getElementById('anime-entry').value = '';
+  });
 })();
