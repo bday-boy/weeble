@@ -44,26 +44,39 @@ mark {
   background-color: crimson;
   color: #333;
 }
-.progress span {
-  color: whitesmoke;
+.progress {
+  font-size: 1em;
+  height: 1.25em;
+  overflow: visible;
+}
+.progress > .progress-bar {
+  border-radius: .25rem;
+}
+.text-left {
+  left: -4ch;
+}
+.text-right {
+  left: 0px;
 }
 .floating-text {
   font-family: monospace;
   position: absolute;
 }
+.text-above-middle {
+  bottom: 1.25em;
+}
 .text-above-left {
   left: -4ch;
-  bottom: 5px;
-}
-.text-above-middle {
-  left: -2ch;
-  bottom: 5px;
+  bottom: 1.25em;
 }
 .text-below-right {
   left: 0px;
-  top: 5px;
+  top: 1.25em;
 }
 
 #guesses {
   font-size: xx-large;
+}
+#year-progress-middle {
+  overflow-x: visible;
 }
