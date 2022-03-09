@@ -1,12 +1,19 @@
 const updateProgressGroup = function(val, status, type, valSet) {
+  const rootGroup = document.getElementById(type);
   if (status === 'correct') {
     valSet.delete(val);
-    [...valSet].forEach((elm) => {
-      document.getElementById(elm).disabled = true;
+    [...valSet].forEach((val) => {
+      const btn = rootGroup.querySelector(`#${val}`);
+      btn.classList.add('btn-secondary', 'd-none', 'd-md-inline-block');
+      btn.classList.remove('btn-primary');
+      btn.disabled = true;
     });
-    document.getElementById(val).classList.add('btn-success');
+    rootGroup.querySelector(`#${val}`).classList.add('btn-success');
   } else {
-    document.getElementById(val).disabled = true;
+    const btn = rootGroup.querySelector(`#${val}`);
+    btn.classList.add('btn-secondary', 'd-none', 'd-md-inline-block');
+    btn.classList.remove('btn-primary');
+    btn.disabled = true;
     valSet.delete(val);
   }
 };
