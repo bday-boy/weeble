@@ -1,4 +1,4 @@
-let anime;
+window.anime = undefined;
 const guessesDiv = document.getElementById('guesses');
 const tooltipTexts = {
   studios: (A, B) => {
@@ -114,7 +114,7 @@ const setCompare = function(creators, animeKey) {
   let status;
   let icon;
   const A = new Set(creators);
-  const B = new Set(anime[animeKey]);
+  const B = new Set(window.anime[animeKey]);
   /* TODO: Make this only be true when the studio sets are equal */
   if (isSubset(B, A)) {
     status = 'correct';
@@ -135,7 +135,7 @@ const setCompare = function(creators, animeKey) {
 const numCompare = function(property, animeKey) {
   let status;
   let icon;
-  const answerValue = anime[animeKey];
+  const answerValue = window.anime[animeKey];
   const dif = property - answerValue;
   const threshold = thresholds[animeKey];
   if (property === answerValue) {
@@ -157,7 +157,7 @@ const numCompare = function(property, animeKey) {
 const strCompare = function(property, animeKey) {
   let status;
   let icon;
-  const answerValue = anime[animeKey];
+  const answerValue = window.anime[animeKey];
   if (property === answerValue) {
     status = 'correct';
     icon = 'check2-circle';
@@ -172,7 +172,7 @@ const strCompare = function(property, animeKey) {
 };
 
 const checkAnswer = function(inputTitle) {
-  if (!titlesObj.hasOwnProperty(inputTitle) || anime === undefined) {
+  if (!titlesObj.hasOwnProperty(inputTitle) || window.anime === undefined) {
     /* do something here to warn user it's not a valid anime */
     return false;
   }

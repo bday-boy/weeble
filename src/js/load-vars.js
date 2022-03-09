@@ -41,6 +41,10 @@ const createNewButton = function(text) {
   btn.id = text;
   return btn;
 };
+const randomAnime = function() {
+  const allAnimeObjs = Object.values(allAnime);
+  return allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
+};
 
 (function() {
   headers.append('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
@@ -101,6 +105,8 @@ const createNewButton = function(text) {
       yearRange.high = yearRange.max;
       document.getElementById('year-low').textContent = yearRange.min;
       document.getElementById('year-high').textContent = yearRange.max;
+      
+      window.anime = randomAnime();
     })
     .catch((err) => console.log(err));
 }());

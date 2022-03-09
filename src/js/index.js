@@ -98,18 +98,12 @@ const suggestAnime = function(event) {
   event.prevLen = inputLen;
 };
 
-const randomAnime = function() {
-  const allAnimeObjs = Object.values(allAnime);
-  return allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
-};
-
 (function() {
-  anime = randomAnime();
-
   document.getElementById('anime-entry').addEventListener('input', suggestAnime);
   document.getElementById('guess-button').addEventListener('click', () => {
-    const guess = document.getElementById('anime-entry').value;
+    const userEntry = document.getElementById('anime-entry');
+    const guess = userEntry.value;
     checkAnswer(guess);
-    document.getElementById('anime-entry').value = '';
+    userEntry.value = '';
   });
 })();
