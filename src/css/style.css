@@ -58,19 +58,17 @@ mark {
 .text-right {
   left: 0px;
 }
-.floating-text {
+.floating-text-wrapper {
   font-family: monospace;
   position: absolute;
-}
-.text-above-middle {
-  bottom: 1.25em;
+  width: 5em;
 }
 .text-above-left {
-  left: -4ch;
+  left: -5em;
   bottom: 1.25em;
 }
 .text-below-right {
-  left: 0px;
+  right: -5em;
   top: 1.25em;
 }
 
