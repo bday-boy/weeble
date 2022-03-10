@@ -10,15 +10,6 @@ mark {
   font-size: calc(2.375rem + 1.5vw);
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
-.dropdown-menu {
-  width: 100%;
-  max-height: 500px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-.dropdown-item:nth-child(n+1) {
-  border-top: 1px solid #111;
-}
 .disable-scrollbars::-webkit-scrollbar {
   background: transparent;
   width: 0px;
@@ -44,14 +35,6 @@ mark {
   background-color: crimson;
   color: #333;
 }
-.progress {
-  font-size: 1em;
-  height: 1.25em;
-  overflow: visible;
-}
-.progress > .progress-bar {
-  border-radius: .25rem;
-}
 .text-left {
   left: -4ch;
 }
@@ -65,11 +48,11 @@ mark {
 }
 .text-above-left {
   left: -5em;
-  bottom: 1.25em;
+  bottom: 0.75em;
 }
 .text-below-right {
   right: -5em;
-  top: 1.25em;
+  top: 0.75em;
 }
 
 #guesses {
@@ -77,4 +60,26 @@ mark {
 }
 #year-progress-middle {
   overflow-x: visible;
+}
+
+/* Bootstrap overrides */
+.hint-section .btn {
+  padding: 0.15rem 0.3rem;
+}
+.dropdown-menu {
+  width: 100%;
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.dropdown-item:nth-child(n+1) {
+  border-top: 1px solid #111;
+}
+.progress {
+  font-size: 1em;
+  height: 0.75em;
+  overflow: visible;
+}
+.progress > .progress-bar {
+  border-radius: .25rem;
 }
