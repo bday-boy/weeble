@@ -9,7 +9,7 @@ const updateProgressSet = function (valArr, type, valSet) {
 
 const updateStudios = function (studios) {
   updateProgressSet(studios, 'studios', possibleStudios);
-}
+};
 
 const updateProgressGroup = function (val, status, type, valSet) {
   const rootGroup = document.getElementById(type);
