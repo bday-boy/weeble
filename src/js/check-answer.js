@@ -1,4 +1,3 @@
-window.anime = undefined;
 const guessesDiv = document.getElementById('guesses');
 const tooltipTexts = {
   studios: (A, B) => {
@@ -57,9 +56,16 @@ const tooltipTexts = {
       return `The answer's source is not ${sourceType}!`;
     }
   },
+  season: (season, status) => {
+    if (status === 'correct') {
+      return `The answer was also released in the ${season}!`;
+    } else {
+      return `The answer was not released in the ${season}!`;
+    }
+  },
 };
 const progressCheckers = {
-  studios: (A, B) => {},
+  studios: (A, B) => { },
   episodes: (guess, dif, threshold) => {
     updateEpsRange(guess, dif, threshold);
   },
@@ -74,6 +80,9 @@ const progressCheckers = {
   },
   source: (sourceType, status) => {
     updateSources(sourceType, status);
+  },
+  season: (season, status) => {
+    updateSeasons(season, status);
   },
 };
 
@@ -96,10 +105,6 @@ const addTooltip = function(element, text) {
   element.title = text;
 };
 
-const isSubset = (A, B) =>  (![...A].some((x) => !B.has(x)));
-const setDif = (A, B) => new Set([...A].filter((x) => !B.has(x)));
-const setIntersection = (A, B) => new Set([...A].filter((x) => B.has(x)));
-
 const textForSets = function(A, B) {
   const incorrect = Array.from(setDif(A, B)).join(', ')
   const correct = Array.from(setIntersection(A, B)).join(', ');
@@ -110,10 +115,10 @@ const textForSets = function(A, B) {
   return incorrect;
 };
 
-const setCompare = function(creators, animeKey) {
+const setCompare = function(iterable, animeKey) {
   let status;
   let icon;
-  const A = new Set(creators);
+  const A = new Set(iterable);
   const B = new Set(window.anime[animeKey]);
   /* TODO: Make this only be true when the studio sets are equal */
   if (isSubset(B, A)) {
@@ -178,7 +183,7 @@ const checkAnswer = function(inputTitle) {
   }
   const animeId = titlesObj[inputTitle];
   const inputAnime = allAnime[animeId];
-  const {studios, episodes, year, popularity, format, source} = inputAnime;
+  const { studios, episodes, year, popularity, format, source, season } = inputAnime;
 
   const guessWrapper = document.createElement('div');
   guessWrapper.classList.add('d-flex');
@@ -188,6 +193,7 @@ const checkAnswer = function(inputTitle) {
   guessWrapper.appendChild(numCompare(popularity, 'popularity'));
   guessWrapper.appendChild(strCompare(source, 'source'));
   guessWrapper.appendChild(strCompare(format, 'format'));
+  guessWrapper.appendChild(strCompare(season, 'season'));
 
   const a = document.createElement('a');
   a.href = `https://anilist.co/anime/${animeId}/`

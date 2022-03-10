@@ -1,6 +1,8 @@
+window.anime = undefined;
 let allAnime = {};
-let titlesArray = [];
 let titlesObj = {};
+let titlesArray = [];
+let filteredTitles = [];
 const thresholds = {
   episodes: 20,
   year: 10,
@@ -24,8 +26,10 @@ const popRange = {
   low: 1000000,
   high: 0,
 };
+const possibleStudios = new Set();
 const sources = new Set();
 const formats = new Set();
+const seasons = new Set();
 const headers = new Headers();
 const fetchInit = {
   method: 'GET',
@@ -33,7 +37,9 @@ const fetchInit = {
   mode: 'cors',
   cache: 'default',
 };
-const createNewButton = function(text) {
+const filterToggle = document.getElementById('apply-filters');
+const shouldFilter = () => filterToggle.checked;
+const createNewButton = function (text) {
   const btn = document.createElement('button');
   btn.classList.add('btn', 'btn-primary', 'm-2');
   btn.textContent = text;
@@ -41,18 +47,15 @@ const createNewButton = function(text) {
   btn.id = text;
   return btn;
 };
-const randomAnime = function() {
-  const allAnimeObjs = Object.values(allAnime);
-  return allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
-};
 
-(function() {
+(function () {
   headers.append('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
   fetch('http://127.0.0.1:5500/data/anime-titles.json', fetchInit)
     .then((response) => response.json())
     .then((anime_json) => {
-        titlesArray = Object.entries(anime_json);
-        titlesObj = anime_json;
+      titlesObj = anime_json;
+      titlesArray = Object.entries(anime_json);
+      filteredTitles = Object.entries(anime_json);
     })
     .catch((err) => console.log(err));
   fetch('http://127.0.0.1:5500/data/anime-database.json', fetchInit)
@@ -60,7 +63,7 @@ const randomAnime = function() {
     .then((anime_json) => {
       allAnime = anime_json;
       Object.values(allAnime).forEach((anime) => {
-        const { popularity, episodes, source, format, year } = anime;
+        const { studios, popularity, episodes, source, format, season, year } = anime;
         if (popularity < popRange.min) {
           popRange.min = popularity;
         } else if (popularity > popRange.max) {
@@ -71,8 +74,12 @@ const randomAnime = function() {
         } else if (episodes > epsRange.max) {
           epsRange.max = episodes;
         }
+        studios.forEach((studio) => {
+          possibleStudios.add(studio);
+        })
         sources.add(source);
         formats.add(format);
+        seasons.add(season);
         if (year < yearRange.min) {
           yearRange.min = year;
         } else if (year > yearRange.max) {
@@ -101,11 +108,17 @@ const randomAnime = function() {
         formatsGroup.appendChild(formatBtn);
       });
 
+      const seasonsGroup = document.getElementById('seasons');
+      [...seasons].forEach((season) => {
+        const seasonBtn = createNewButton(season);
+        seasonsGroup.appendChild(seasonBtn);
+      });
+
       yearRange.low = yearRange.min;
       yearRange.high = yearRange.max;
       document.getElementById('year-low').textContent = yearRange.min;
       document.getElementById('year-high').textContent = yearRange.max;
-      
+
       window.anime = randomAnime();
     })
     .catch((err) => console.log(err));

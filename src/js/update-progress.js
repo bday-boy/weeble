@@ -1,4 +1,17 @@
-const updateProgressGroup = function(val, status, type, valSet) {
+const updateProgressSet = function (valArr, type, valSet) {
+  const correctStudios = new Set(window.anime[type]);
+  valArr.forEach((val) => {
+    if (!correctStudios.has(val)) {
+      valSet.delete(val);
+    }
+  });
+};
+
+const updateStudios = function (studios) {
+  updateProgressSet(studios, 'studios', possibleStudios);
+}
+
+const updateProgressGroup = function (val, status, type, valSet) {
   const rootGroup = document.getElementById(type);
   if (status === 'correct') {
     valSet.delete(val);
@@ -8,6 +21,8 @@ const updateProgressGroup = function(val, status, type, valSet) {
       btn.classList.remove('btn-primary');
       btn.disabled = true;
     });
+    valSet.clear();
+    valSet.add(val);
     rootGroup.querySelector(`#${val}`).classList.add('btn-success');
   } else {
     const btn = rootGroup.querySelector(`#${val}`);
@@ -18,12 +33,16 @@ const updateProgressGroup = function(val, status, type, valSet) {
   }
 };
 
-const updateSources = function(source, status) {
+const updateSources = function (source, status) {
   updateProgressGroup(source, status, 'sources', sources);
 };
 
-const updateFormats = function(format, status) {
+const updateFormats = function (format, status) {
   updateProgressGroup(format, status, 'formats', formats);
+};
+
+const updateSeasons = function (season, status) {
+  updateProgressGroup(season, status, 'seasons', seasons);
 };
 
 /**
@@ -31,7 +50,7 @@ const updateFormats = function(format, status) {
  * @param {Object} progressObj - The object used to track progress
  * @param {string} type - A string used to find the elements on the page
  */
-const updateProgressBar = function(progressObj, type) {
+const updateProgressBar = function (progressObj, type) {
   const min = progressObj.min;
   const max = progressObj.max;
   const total = (max - min);
@@ -56,15 +75,15 @@ const updateProgressBar = function(progressObj, type) {
   end.style.width = `${((max - high) / total) * 100 - extraWidth / 2}%`;
 };
 
-const updatePop = function() {
+const updatePop = function () {
   updateProgressBar(popRange, 'pop');
 };
 
-const updateEps = function() {
+const updateEps = function () {
   updateProgressBar(epsRange, 'eps');
 };
 
-const updateYear = function() {
+const updateYear = function () {
   updateProgressBar(yearRange, 'year');
 };
 
@@ -74,7 +93,7 @@ const updateYear = function() {
  * @param {number} newVal - The year of the user's guess
  * @param {number} dif - The year of the user's guess minus the actual year
  */
-const updateNumRange = function(newVal, dif, threshold, obj) {
+const updateNumRange = function (newVal, dif, threshold, obj) {
   const withinThreshold = (Math.abs(dif) <= threshold);
   if (dif === 0) {
     obj.low = newVal;
@@ -96,17 +115,17 @@ const updateNumRange = function(newVal, dif, threshold, obj) {
   }
 };
 
-const updatePopRange = function(popularity, dif, threshold) {
+const updatePopRange = function (popularity, dif, threshold) {
   updateNumRange(popularity, dif, threshold, popRange)
   updatePop();
 };
 
-const updateEpsRange = function(numEps, dif, threshold) {
+const updateEpsRange = function (numEps, dif, threshold) {
   updateNumRange(numEps, dif, threshold, epsRange)
   updateEps();
 };
 
-const updateYearRange = function(year, dif, threshold) {
+const updateYearRange = function (year, dif, threshold) {
   updateNumRange(year, dif, threshold, yearRange)
   updateYear();
 };
