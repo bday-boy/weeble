@@ -40,9 +40,12 @@ const fetchInit = {
 const filterToggle = document.getElementById('apply-filters');
 const shouldFilter = () => filterToggle.checked;
 const createNewButton = function (text) {
+  const small = document.createElement('small');
+  small.textContent = text;
+
   const btn = document.createElement('button');
-  btn.classList.add('btn', 'btn-primary', 'm-2');
-  btn.textContent = text;
+  btn.appendChild(small);
+  btn.classList.add('btn', 'btn-primary', 'm-1', 'fs-6');
   btn.type = 'button';
   btn.id = text;
   return btn;
