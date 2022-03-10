@@ -14,19 +14,21 @@ data to make a Wordle- or Squirle-like game.
 
 ## TO-DO
 
-- Optimize search suggestions (not needed for now)
-- Use string similarity to find anime the user meant to type
-- Filters in search bar
-- Arrow keys to select dropdown items
-- List titles in order of shortest to longest
-- Fix on mobile
-- Add spacing around guess status nodes
+### High-priority
+
 - Add give up button
+- Add more filters/customizability
+- Make user unable to guess exact ranges of numbers
+
+### Low-priority
+
+- Optimize search suggestions (not needed for now)
+- Arrow keys to select dropdown items
+- List titles in a logical way (prioritize English)
+- Fix on mobile
 - Maybe just give user info about the anime at the beginning?
 
 ## Bugs
-
-- User can guess the same anime several times even with filter turned on
 
 ## Uncertainties
 
