@@ -56,10 +56,16 @@ mark {
 }
 
 #guesses {
-  font-size: xx-large;
+  font-size: x-large;
 }
 #year-progress-middle {
   overflow-x: visible;
+}
+
+@media (min-width: 768px) {
+  #guesses {
+    font-size: xx-large;
+  }
 }
 
 /* Bootstrap overrides */
