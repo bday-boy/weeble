@@ -33,11 +33,34 @@ def validate_anime(anime: dict) -> bool:
     if (duration < 8 and episodes <= 8) or episodes == 0:
         return False
     
+    titles = anime.get('title')
+    english = titles.get('english')
+    romaji = titles.get('romaji')
+    native = titles.get('native')
+    if not (english or romaji or native or '').strip():
+        return False
+    
     # ignore anime without a studio
     if not get_studios(anime):
         return False
 
     return True
+
+
+def get_title(anime: dict) -> str:
+    titles = anime.get('title', {})
+    english = titles.get('english')
+    romaji = titles.get('romaji')
+    native = titles.get('native')
+    return (english or romaji or native or '').strip()
+
+
+def get_synonyms(anime: dict, title: str) -> list:
+    titles = anime.get('title', {})
+    allSynonyms = ({(t[1] or '').strip() for t in titles.items()} - {title}) \
+        | {(syn or '').strip() for syn in anime.get('synonyms')}
+    synonyms = list(filter(lambda x: bool(x), allSynonyms))
+    return sorted(synonyms, key=lambda s: max(list(s)))
 
 
 class Reformatter:
@@ -61,25 +84,18 @@ class Reformatter:
     
     def add_anime(self, anime: dict) -> None:
         anime_entry = {}
-        titles = anime.get('title', {})
-        anime_entry['title'] = titles.get('english') or \
-            titles.get('romaji') or titles.get('native')
-        if not anime_entry['title']:
-            return
+        anime_entry['title'] = get_title(anime)
         anime_entry['studios'] = get_studios(anime)
         anime_entry['popularity'] = anime.get('popularity')
         anime_entry['averageScore'] = anime.get('averageScore')
         anime_entry['episodes'] = anime.get('episodes')
         anime_entry['source'] = anime.get('source')
-        pictures = anime.get('coverImage')
-        anime_entry['thumbnail'] = pictures.get('medium')
-        anime_entry['picture'] = pictures.get('extraLarge')
-        synonyms = ({t[1] for t in titles.items()} - {anime_entry['title']}) \
-            | set(anime.get('synonyms'))
-        anime_entry['synonyms'] = list(filter(lambda x: bool(x), synonyms))
+        anime_entry['thumbnail'] = anime.get('coverImage').get('medium')
+        anime_entry['picture'] = anime.get('coverImage').get('extraLarge')
+        anime_entry['synonyms'] = get_synonyms(anime, anime_entry['title'])
         anime_entry['format'] = anime.get('format')
         anime_entry['season'] = anime.get('season')
-        anime_entry['year'] = anime.get('seasonYear', 0)
+        anime_entry['year'] = anime.get('seasonYear')
         self.formatted_data[anime.get('id', 'NO_ID')] = anime_entry
         for title in ([anime_entry['title']] + anime_entry['synonyms']):
             self.anime_titles[title] = anime.get('id', 'NO_ID')
