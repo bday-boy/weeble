@@ -1,4 +1,4 @@
-# weeble
+# WEEBLE
 
 Uses public APIs to get anime data based on various criteria and then uses that
 data to make a Wordle- or Squirle-like game.
@@ -23,6 +23,10 @@ data to make a Wordle- or Squirle-like game.
 - Add spacing around guess status nodes
 - Add give up button
 - Maybe just give user info about the anime at the beginning?
+
+## Bugs
+
+- User can guess the same anime several times even with filter turned on
 
 ## Uncertainties
 
