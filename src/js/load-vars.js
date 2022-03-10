@@ -4,9 +4,9 @@ let titlesObj = {};
 let titlesArray = [];
 let filteredTitles = [];
 const thresholds = {
-  episodes: 20,
-  year: 10,
-  popularity: 25000,
+  episodes: 5,
+  year: 3,
+  popularity: 10000,
 };
 const yearRange = {
   min: 1000000,
