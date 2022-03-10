@@ -41,6 +41,7 @@ const createAnimeLi = function (animeId, title, index) {
 
   const a = document.createElement('a');
   a.classList.add('dropdown-item');
+  a.href = 'javascript:;';
   a.appendChild(div);
   a.appendChild(small);
 
@@ -68,11 +69,11 @@ const filterSuggestions = function (arr, input) {
     const [title, animeId] = entry;
     const foundIndex = title.toLowerCase().indexOf(input);
     if (foundIndex > -1) {
-      suggestions.push([title, animeId, foundIndex])
+      suggestions.push([title, animeId, foundIndex]);
     }
   });
   return suggestions;
-}
+};
 
 const toggleDropdown = function (dropdown, hide) {
   if (hide) {
@@ -118,16 +119,24 @@ const filterAndSuggest = () => {
 (function () {
   loadAnime()
     .then(() => loadTitles())
-    .then(() => suggestAnime())
+    .then(() => filterAndSuggest())
     .catch((error) => console.log(error));
   document.getElementById('apply-filters').checked = false;
   document.getElementById('apply-filters').addEventListener('click', filterAndSuggest);
   document.getElementById('anime-entry').addEventListener('input', suggestAnime);
+  document.getElementById('anime-entry').addEventListener('keydown', (e) => {
+    if (e.key == 'ArrowDown') {
+      const dropdown = document.getElementById('anime-suggestions');
+      if (dropdown.firstChild) {
+        dropdown.firstChild.firstChild.focus();
+      }
+    }
+  });
   document.getElementById('guess-button').addEventListener('click', () => {
     const userEntry = document.getElementById('anime-entry');
     const guess = userEntry.value;
+    userEntry.value = '';
     checkAnswer(guess);
     filterAndSuggest();
-    userEntry.value = '';
   });
 })();
