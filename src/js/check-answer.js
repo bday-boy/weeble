@@ -65,7 +65,9 @@ const tooltipTexts = {
   },
 };
 const progressCheckers = {
-  studios: (A, B) => { },
+  studios: (guessStudiosSet) => {
+    updateStudios(guessStudiosSet)
+  },
   episodes: (guess, dif, threshold) => {
     updateEpsRange(guess, dif, threshold);
   },
@@ -118,13 +120,13 @@ const textForSets = function(A, B) {
 const setCompare = function(iterable, animeKey) {
   let status;
   let icon;
-  const A = new Set(iterable);
-  const B = new Set(window.anime[animeKey]);
+  const guessSet = new Set(iterable);
+  const answerSet = new Set(window.anime[animeKey]);
   /* TODO: Make this only be true when the studio sets are equal */
-  if (isSubset(B, A)) {
+  if (isSubset(answerSet, guessSet)) {
     status = 'correct';
     icon = 'check2-circle';
-  } else if (setIntersection(A, B).size > 0) {
+  } else if (setIntersection(guessSet, answerSet).size > 0) {
     status = 'almost';
     icon = 'asterisk';
   } else {
@@ -132,18 +134,18 @@ const setCompare = function(iterable, animeKey) {
     icon = 'x-circle';
   }
   const statusNode = createIcon(icon, status);
-  addTooltip(statusNode, tooltipTexts[animeKey](A, B));
-  progressCheckers[animeKey](A, B);
+  addTooltip(statusNode, tooltipTexts[animeKey](guessSet, answerSet));
+  progressCheckers[animeKey](guessSet);
   return statusNode;
 };
 
-const numCompare = function(property, animeKey) {
+const numCompare = function(guessNum, animeKey) {
   let status;
   let icon;
   const answerValue = window.anime[animeKey];
-  const dif = property - answerValue;
+  const dif = guessNum - answerValue;
   const threshold = thresholds[animeKey];
-  if (property === answerValue) {
+  if (guessNum === answerValue) {
     status = 'correct';
     icon = 'check2-circle';
   } else if (Math.abs(dif) <= threshold) {
@@ -154,16 +156,16 @@ const numCompare = function(property, animeKey) {
     icon = `chevron-double-${dif < 0 ? 'up' : 'down'}`;
   }
   const statusNode = createIcon(icon, status);
-  addTooltip(statusNode, tooltipTexts[animeKey](property, dif, threshold));
-  progressCheckers[animeKey](property, dif, threshold);
+  addTooltip(statusNode, tooltipTexts[animeKey](guessNum, dif, threshold));
+  progressCheckers[animeKey](guessNum, dif, threshold);
   return statusNode;
 };
 
-const strCompare = function(property, animeKey) {
+const strCompare = function(guessStr, animeKey) {
   let status;
   let icon;
   const answerValue = window.anime[animeKey];
-  if (property === answerValue) {
+  if (guessStr === answerValue) {
     status = 'correct';
     icon = 'check2-circle';
   } else {
@@ -171,8 +173,8 @@ const strCompare = function(property, animeKey) {
     icon = 'x-circle';
   }
   const statusNode = createIcon(icon, status);
-  addTooltip(statusNode, tooltipTexts[animeKey](property, status));
-  progressCheckers[animeKey](property, status);
+  addTooltip(statusNode, tooltipTexts[animeKey](guessStr, status));
+  progressCheckers[animeKey](guessStr, status);
   return statusNode;
 };
 
