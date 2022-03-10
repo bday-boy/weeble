@@ -184,6 +184,7 @@ const checkAnswer = function(inputTitle) {
     return false;
   }
   const animeId = titlesObj[inputTitle];
+  guessesAdd(animeId);
   const inputAnime = allAnime[animeId];
   const { studios, episodes, year, popularity, format, source, season } = inputAnime;
 

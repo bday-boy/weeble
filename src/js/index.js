@@ -111,9 +111,7 @@ const suggestAnime = function (event) {
     const userEntry = document.getElementById('anime-entry');
     const guess = userEntry.value;
     checkAnswer(guess);
-    if (document.getElementById('apply-filters').checked) {
-      filterAll();
-    }
+    applyFilter();
     userEntry.value = '';
   });
 })();

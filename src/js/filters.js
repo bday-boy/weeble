@@ -24,10 +24,10 @@ const filterAll = function () {
   filteredTitles = {};
   Object.entries(allAnime).forEach((entry) => {
     const [animeId, animeInfo] = entry;
-    if (animeId === '11701') {
-      const a = 1;
-    }
-    const ignore = Object.entries(filters).some(([key, fltr]) => !fltr(animeInfo[key]));
+    const ignore = (
+      Object.entries(filters).some(([key, fltr]) => !fltr(animeInfo[key]))
+      || guessesHas(animeId)
+    );
     if (!ignore) {
       const { title, synonyms } = animeInfo;
       const allTitles = Array.prototype.concat([title], synonyms);
@@ -39,12 +39,30 @@ const filterAll = function () {
   filteredTitles = Object.entries(filteredTitles);
 };
 
-(function () {
-  document.getElementById('apply-filters').addEventListener('click', function () {
-    if (this.checked) {
-      filterAll();
-    } else {
-      filteredTitles = titlesArray;
+const filterGuesses = function () {
+  filteredTitles = {};
+  Object.entries(allAnime).forEach((entry) => {
+    const [animeId, animeInfo] = entry;
+    const ignore = guessesHas(animeId);
+    if (!ignore) {
+      const { title, synonyms } = animeInfo;
+      const allTitles = Array.prototype.concat([title], synonyms);
+      allTitles.forEach((title) => {
+        filteredTitles[title] = animeId;
+      });
     }
   });
+  filteredTitles = Object.entries(filteredTitles);
+};
+
+const applyFilter = function () {
+  if (shouldFilter()) {
+    filterAll();
+  } else {
+    filterGuesses();
+  }
+};
+
+(function () {
+  document.getElementById('apply-filters').addEventListener('click', applyFilter);
 })();

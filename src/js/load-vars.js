@@ -30,6 +30,9 @@ const possibleStudios = new Set();
 const sources = new Set();
 const formats = new Set();
 const seasons = new Set();
+const guesses = new Set();
+const guessesAdd = (animeId) => guesses.add(parseInt(animeId));
+const guessesHas = (animeId) => guesses.has(parseInt(animeId));
 const headers = new Headers();
 const fetchInit = {
   method: 'GET',
