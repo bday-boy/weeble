@@ -6,7 +6,6 @@ data to make a Wordle- or Squirle-like game.
 ## Guessing criteria
 
 - Studio
-- Director
 - Episode count
 - Year
 - Popularity
@@ -16,22 +15,25 @@ data to make a Wordle- or Squirle-like game.
 ## TO-DO
 
 - Optimize search suggestions (not needed for now)
-- Paginate staff calls for shows without director/episode director
 - Use string similarity to find anime the user meant to type
-- Single up arrow for within 10 years, double for outside
-- Single up arrow for within 20 episodes, double for outside
-- Include guess information in mouse over
 - Filters in search bar
 - Arrow keys to select dropdown items
-- Add source and format to info
 - List titles in order of shortest to longest
 - Fix on mobile
 - Add spacing around guess status nodes
-- Interface that tracks correct info/ranges guessed by user
 - Add give up button
-- Delete directors and popularity
 - Maybe just give user info about the anime at the beginning?
-- Make the dates range bar look better
+
+## Uncertainties
+
+- How should the search dropdown be implemented?
+  - Automatic display:
+    - More intuitive
+    - Simpler to use
+    - Lacks functionality (nothing shows up when input is blank)
+  - Manual display:
+    - More work on the user's part
+    - More reliable functionality
 
 ## Funny stuff
 
