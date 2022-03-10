@@ -4,9 +4,9 @@ let titlesObj = {};
 let titlesArray = [];
 let filteredTitles = [];
 const thresholds = {
-  episodes: 0,
-  year: 0,
-  popularity: 0,
+  episodes: 15,
+  year: 5,
+  popularity: 10000,
 };
 const yearRange = {
   min: 1000000,
@@ -33,7 +33,9 @@ const seasons = new Set();
 const guesses = new Set();
 const guessesAdd = (animeId) => guesses.add(parseInt(animeId));
 const guessesHas = (animeId) => guesses.has(parseInt(animeId));
-const headers = new Headers();
+const headers = new Headers({
+  'Access-Control-Allow-Origin': 'http://127.0.0.1:5500'
+});
 const fetchInit = {
   method: 'GET',
   headers: headers,
@@ -53,10 +55,8 @@ const createNewButton = function (text) {
   btn.id = text;
   return btn;
 };
-
-(function () {
-  headers.append('Access-Control-Allow-Origin', 'http://127.0.0.1:5500');
-  fetch('http://127.0.0.1:5500/data/anime-titles.json', fetchInit)
+const loadTitles = function () {
+  return fetch('http://127.0.0.1:5500/data/anime-titles.json', fetchInit)
     .then((response) => response.json())
     .then((anime_json) => {
       titlesObj = anime_json;
@@ -64,7 +64,9 @@ const createNewButton = function (text) {
       filteredTitles = Object.entries(anime_json);
     })
     .catch((err) => console.log(err));
-  fetch('http://127.0.0.1:5500/data/anime-database.json', fetchInit)
+};
+const loadAnime = function () {
+  return fetch('http://127.0.0.1:5500/data/anime-database.json', fetchInit)
     .then((response) => response.json())
     .then((anime_json) => {
       allAnime = anime_json;
@@ -128,4 +130,4 @@ const createNewButton = function (text) {
       window.anime = randomAnime();
     })
     .catch((err) => console.log(err));
-}());
+};

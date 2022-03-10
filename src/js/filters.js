@@ -62,7 +62,3 @@ const applyFilter = function () {
     filterGuesses();
   }
 };
-
-(function () {
-  document.getElementById('apply-filters').addEventListener('click', applyFilter);
-})();
