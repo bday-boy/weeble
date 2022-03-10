@@ -94,8 +94,7 @@ query ($pop: Int, $page: Int, $perPage: Int) {
 '''
 
 class AniListAPI:
-    def __init__(self, cache_dir: str):
-        requests_cache.install_cache(osp.join(cache_dir, 'anilist_cache'))
+    def __init__(self):
         self.url_match = re.compile(r'https://anilist\.co.*')
         self.url = 'https://graphql.anilist.co'
         self.page = 1
@@ -120,14 +119,13 @@ class AniListAPI:
             res_json = res.json().get('data', {}).get('Page', {})
             has_next = res_json.get('pageInfo', {}).get('hasNextPage', False)
             self.page += 1
-            if not res.from_cache:
-                time.sleep(1)
+            time.sleep(1)
             yield res_json.get('media', {})
 
 
 if __name__ == '__main__':
     from pprint import pprint
-    al = AniListAPI('../../cache')
+    al = AniListAPI()
     count = 0
     res_gen = al.by_popularity(10000)
     for res in res_gen:

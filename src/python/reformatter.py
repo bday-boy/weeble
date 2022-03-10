@@ -41,10 +41,9 @@ def validate_anime(anime: dict) -> bool:
 
 
 class Reformatter:
-    def __init__(self, data_dir: str, cache_dir: str,
-                 popularity_threshold: int = 10000):
+    def __init__(self, data_dir: str, popularity_threshold: int = 10000):
         self.data_dir = data_dir
-        self.anilist_api = AniListAPI(cache_dir)
+        self.anilist_api = AniListAPI()
         self.popularity_threshold = popularity_threshold
         self.data = []
         self.formatted_data = {}
@@ -94,7 +93,7 @@ class Reformatter:
 
 
 def main():
-    data_cleaner = Reformatter('../../data', '../../cache', popularity_threshold=25000)
+    data_cleaner = Reformatter('../../data', popularity_threshold=25000)
     data_cleaner.generate_json()
     data_cleaner.save()
 
