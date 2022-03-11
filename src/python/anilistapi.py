@@ -117,7 +117,11 @@ class AniListAPI:
                 perPage=50,
             )
             res_json = res.json().get('data', {}).get('Page', {})
-            has_next = res_json.get('pageInfo', {}).get('hasNextPage', False)
+            page_info = res_json.get('pageInfo', {})
+            has_next = page_info.get('hasNextPage', False)
+            cur_page = page_info.get('currentPage', -1)
+            last_page = page_info.get('lastPage')
+            print(f'Yielding page {cur_page} of {last_page}(?)')
             self.page += 1
             time.sleep(1)
             yield res_json.get('media', {})

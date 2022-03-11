@@ -15,6 +15,11 @@ def get_studios(anime: dict) -> str:
 
 
 def validate_anime(anime: dict) -> bool:
+    # ignore anime with invalid source
+    source = anime.get('source')
+    if not source:
+        return False
+    
     # ignore specials and music vids
     anime_format = anime.get('format')
     if not anime_format or anime_format == 'SPECIAL' \
@@ -111,7 +116,7 @@ class Reformatter:
 
 
 def main():
-    data_cleaner = Reformatter('../../data', popularity_threshold=25000)
+    data_cleaner = Reformatter('../../data', popularity_threshold=5000)
     data_cleaner.generate_json()
     data_cleaner.save()
 
