@@ -129,8 +129,8 @@ const filterAndSuggest = () => {
       window.anime.curTag = 0;
     })
     .catch((error) => console.log(error));
-  document.getElementById('apply-filters').checked = false;
-  document.getElementById('apply-filters').addEventListener('click', filterAndSuggest);
+  document.getElementById('apply-filters').addEventListener('change', filterAndSuggest);
+  document.getElementById('apply-filters').checked = true;
   document.getElementById('anime-entry').addEventListener('input', suggestAnime);
   document.getElementById('anime-entry').addEventListener('keydown', (e) => {
     if (e.key == 'ArrowDown') {
