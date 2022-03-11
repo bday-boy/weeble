@@ -191,7 +191,9 @@ const checkAnswer = function(inputTitle) {
   });
 
   if (window.anime.curTag < window.anime.tags.length) {
-    const nextTag = createNewButton(window.anime.tags[window.anime.curTag++].name.toUpperCase());
+    const tag = window.anime.tags[window.anime.curTag++];
+    const tagText = `${tag.name.toUpperCase()} (${tag.rank}%)`;
+    const nextTag = createNewButton(tagText);
     nextTag.classList.remove('btn-primary');
     nextTag.classList.add('btn-success');
     document.getElementById('tags').appendChild(nextTag);
