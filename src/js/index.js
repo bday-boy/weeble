@@ -59,10 +59,13 @@ const createSuggestions = function (dropdown_element) {
   });
 };
 
-const addSuggestion = function (title, animeId, input) {
+const addSuggestion = function (title, animeId, input, idSet) {
   const foundIndex = title.toLowerCase().indexOf(input);
   if (foundIndex > -1) {
-    suggestions.push([title, animeId, foundIndex]);
+    if (!idSet.has(animeId)) {
+      idSet.add(animeId);
+      suggestions.push([title, animeId, foundIndex]);
+    }
   }
 };
 
@@ -73,10 +76,7 @@ const filterAllTitles = function (input) {
   [titles, synonyms].forEach((titleGroup) => {
     Object.entries(titleGroup).forEach((entry) => {
       const [title, animeId] = entry;
-      if (!idSet.has(animeId)) {
-        idSet.add(animeId);
-        addSuggestion(title, animeId, input);
-      }
+      addSuggestion(title, animeId, input, idSet);
     });
   });
 };
