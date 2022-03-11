@@ -17,30 +17,17 @@ data to make a Wordle- or Squirle-like game.
 ### High-priority
 
 - Add give up button and win/lose screen
-- Add more filters/customizability
 - Make user unable to guess exact ranges of numbers
 - Fix guess info badges/tooltips
 
 ### Low-priority
 
-- Optimize search suggestions (not needed for now)
-- Arrow keys to select dropdown items
-- List titles in a logical way (prioritize English)
+- Optimize search suggestions
 - Fix on mobile
-- Maybe just give user info about the anime at the beginning?
 
 ## Bugs
 
 ## Uncertainties
-
-- How should the search dropdown be implemented?
-  - Automatic display:
-    - More intuitive
-    - Simpler to use
-    - Lacks functionality (nothing shows up when input is blank)
-  - Manual display:
-    - More work on the user's part
-    - More reliable functionality
 
 ## Funny stuff
 
