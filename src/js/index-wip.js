@@ -1,114 +1,146 @@
 const guessInfo = {
   studios: {
-    active: true,
     name: 'studios',
-    obj: possibleStudios,
-    fltr (studioArr) {
-      const guessStudios = new Set(studioArr);
+    active: true,
+    guessObj: undefined,
+    progressObj: possibleStudios,
+    fltr (studiosVal) {
+      const guessStudios = new Set(studiosVal);
       const answerStudios = new Set(window.anime.studios);
-      return setFilter(guessStudios, answerStudios, this.obj);
+      return setFilter(guessStudios, answerStudios, this.progressObj);
     },
-    checkAnswer (guess) {
-      return setCompare(guess, this.name);
+    checkAnswer () {
+      return setCompare(this.guessObj, this.name);
     },
-    updateProgress (guessStudiosSet) {
-      updateProgressSet(guessStudiosSet, this.obj, this.name);
+    updateProgress () {
+      updateProgressSet(this.guessObj, this.progressObj, this.name);
     },
-    tooltipText () {},
+    tooltipText () {
+      const answerSet = new Set(window.anime.studios)
+      const guessSet = new Set(this.guessObj);
+      let answer = '';
+      const incorrect = Array.from(setDif(guessSet, answerSet)).join(', ');
+      const correct = Array.from(setIntersection(guessSet, answerSet)).join(', ');
+      if (correct) {
+        answer += `Correct studios: ${correct}`;
+      }
+      if (answer) {
+        answer += '\n';
+      }
+      if (incorrect) {
+        answer += `Incorrect studios: ${incorrect}`;
+      }
+      return answer;
+    },
   },
 
   episodes: {
-    active: true,
     name: 'episodes',
-    obj: epsRange,
-    fltr (eps) {
-      return numFilter(this.obj, eps);
+    active: true,
+    threshold: 0,
+    guessObj: undefined,
+    progressObj: epsRange,
+    fltr (episodesVal) {
+      return numFilter(this.progressObj, episodesVal);
     },
-    checkAnswer (guess) {
-      return numCompare(guess, this.name);
+    checkAnswer () {
+      return numCompare(this.guessObj, this.name);
     },
-    updateProgress (guessEpisodes, dif, threshold) {
-      updateNumRange(guessEpisodes, dif, threshold, this.obj, this.name);
+    updateProgress () {
+      const dif = this.guessObj - window.anime[this.name];
+      updateNumRange(this.guessObj, dif, this.threshold, this.progressObj, this.name);
     },
     tooltipText () {},
   },
 
   year: {
-    active: true,
     name: 'year',
-    obj: yearRange,
+    active: true,
+    threshold: 0,
+    guessObj: undefined,
+    progressObj: yearRange,
     fltr (yearVal) {
-      return numFilter(this.obj, yearVal);
+      return numFilter(this.progressObj, yearVal);
     },
-    checkAnswer (guess) {
-      return numCompare(guess, this.name);
+    checkAnswer () {
+      return numCompare(this.guessObj, this.name);
     },
-    updateProgress (guessYear, dif, threshold) {
-      updateNumRange(guessYear, dif, threshold, this.obj, this.name);
+    updateProgress () {
+      const dif = this.guessObj - window.anime[this.name];
+      updateNumRange(this.guessObj, dif, this.threshold, this.progressObj, this.name);
     },
     tooltipText () {},
   },
 
   popularity: {
-    active: true,
     name: 'popularity',
-    obj: popRange,
-    fltr (pop) {
-      return numFilter(this.obj, pop);
+    active: true,
+    threshold: 0,
+    guessObj: undefined,
+    progressObj: popRange,
+    fltr (popularityVal) {
+      return numFilter(this.progressObj, popularityVal);
     },
-    checkAnswer (guess) {
-      return numCompare(guess, this.name);
+    checkAnswer () {
+      return numCompare(this.guessObj, this.name);
     },
-    updateProgress (guessPopularity, dif, threshold) {
-      updateNumRange(guessPopularity, dif, threshold, this.obj, this.name);
+    updateProgress () {
+      const dif = this.guessObj - window.anime[this.name];
+      updateNumRange(this.guessObj, dif, this.threshold, this.progressObj, this.name);
     },
     tooltipText () {},
   },
 
   source: {
-    active: true,
     name: 'source',
-    obj: sources,
+    active: true,
+    guessObj: undefined,
+    progressObj: sources,
     fltr (sourceVal) {
-      return strFilter(this.obj, sourceVal);
+      return strFilter(this.progressObj, sourceVal);
     },
-    checkAnswer (guess) {
-      return strCompare(guess, this.name);
+    checkAnswer () {
+      return strCompare(this.guessObj, this.name);
     },
-    updateProgress (guessSource, status) {
-      updateProgressGroup(guessSource, status, this.obj, this.name);
+    updateProgress () {
+      const status = (this.guessObj === window.anime[this.name]) ? 'correct' : 'incorrect';
+      updateProgressGroup(this.guessObj, status, this.progressObj, this.name);
     },
     tooltipText () {},
   },
 
   format: {
-    active: true,
     name: 'format',
-    obj: formats,
+    active: true,
+    guessObj: undefined,
+    progressObj: formats,
     fltr (formatVal) {
-      return strFilter(this.obj, formatVal);
+      return strFilter(this.progressObj, formatVal);
     },
-    checkAnswer (guess) {
-      return strCompare(guess, this.name);
+    checkAnswer () {
+      return strCompare(this.guessObj, this.name);
     },
-    updateProgress (guessFormat, status) {
-      updateProgressGroup(guessFormat, status, this.obj, this.name);
+    updateProgress () {
+      const status = (this.guessObj === window.anime[this.name]) ? 'correct' : 'incorrect';
+      updateProgressGroup(this.guessObj, status, this.progressObj, this.name);
     },
     tooltipText () {},
   },
 
   season: {
-    active: true,
     name: 'season',
-    obj: seasons,
+    active: true,
+    guessObj: undefined,
+    progressObj: seasons,
     fltr (seasonVal) {
-      return strFilter(this.obj, seasonVal);
+      return strFilter(this.progressObj, seasonVal);
     },
-    checkAnswer (guess) {
-      return strCompare(guess, this.name);
+    checkAnswer () {
+      return strCompare(this.guessObj, this.name);
     },
-    updateProgress (guessSeason, status) {
-      updateProgressGroup(guessSeason, status, this.obj, this.name);
+    updateProgress () {
+      const status = (this.guessObj === window.anime[this.name]) ? 'correct' : 'incorrect';
+      updateProgressGroup(this.guessObj, status, this.progressObj, this.name);
     },
     tooltipText () {},
   }
