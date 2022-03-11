@@ -52,27 +52,33 @@ const createAnimeLi = function (animeId, title, index) {
 };
 
 const createSuggestions = function (dropdown_element) {
-  const idSet = new Set();
   suggestions.forEach((suggestion) => {
     const [title, animeId, index] = suggestion;
-    if (!idSet.has(animeId)) {
-      idSet.add(animeId);
-      const li = createAnimeLi(animeId, title, index);
-      dropdown_element.appendChild(li);
-    }
+    const li = createAnimeLi(animeId, title, index);
+    dropdown_element.appendChild(li);
   });
 };
 
-const filterSuggestions = function (arr, input) {
-  const suggestions = [];
-  arr.forEach((entry) => {
-    const [title, animeId] = entry;
-    const foundIndex = title.toLowerCase().indexOf(input);
-    if (foundIndex > -1) {
-      suggestions.push([title, animeId, foundIndex]);
-    }
+const addSuggestion = function (title, animeId, input) {
+  const foundIndex = title.toLowerCase().indexOf(input);
+  if (foundIndex > -1) {
+    suggestions.push([title, animeId, foundIndex]);
+  }
+};
+
+const filterAllTitles = function (input) {
+  suggestions = [];
+  const idSet = new Set();
+  const { titles, synonyms } = filteredTitles;
+  [titles, synonyms].forEach((titleGroup) => {
+    Object.entries(titleGroup).forEach((entry) => {
+      const [title, animeId] = entry;
+      if (!idSet.has(animeId)) {
+        idSet.add(animeId);
+        addSuggestion(title, animeId, input);
+      }
+    });
   });
-  return suggestions;
 };
 
 const toggleDropdown = function (dropdown, hide) {
@@ -94,11 +100,8 @@ const suggestAnime = function () {
   if (allAnime === undefined || filteredTitles === undefined) {
     suggestions = [];
   }
-  else if (animeEntry.prevLen === undefined || inputLen <= animeEntry.prevLen) {
-    suggestions = filterSuggestions(filteredTitles, input);
-  }
   else {
-    suggestions = filterSuggestions(suggestions, input);
+    filterAllTitles(input);
   }
 
   /* this makes searches with earlier matches show up sooner */

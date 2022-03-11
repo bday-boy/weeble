@@ -1,8 +1,7 @@
 window.anime = undefined;
 let allAnime = {};
 let titlesObj = {};
-let titlesArray = [];
-let filteredTitles = [];
+let filteredTitles = {};
 const thresholds = {
   episodes: 15,
   year: 5,
@@ -59,9 +58,10 @@ const loadTitles = function () {
   return fetch('http://127.0.0.1:5500/data/anime-titles.json', fetchInit)
     .then((response) => response.json())
     .then((anime_json) => {
-      titlesObj = anime_json;
-      titlesArray = Object.entries(anime_json);
-      filteredTitles = Object.entries(anime_json);
+      const titles = anime_json.titles;
+      const synonyms = anime_json.synonyms;
+      titlesObj = {...synonyms, ...titles};
+      filteredTitles = anime_json;
     })
     .catch((err) => console.log(err));
 };

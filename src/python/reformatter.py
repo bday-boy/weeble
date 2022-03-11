@@ -33,6 +33,7 @@ def validate_anime(anime: dict) -> bool:
     if (duration < 8 and episodes <= 8) or episodes == 0:
         return False
     
+    # ignore anime without a title
     titles = anime.get('title')
     english = titles.get('english')
     romaji = titles.get('romaji')
@@ -70,7 +71,7 @@ class Reformatter:
         self.popularity_threshold = popularity_threshold
         self.data = []
         self.formatted_data = {}
-        self.anime_titles = {}
+        self.anime_titles = {'titles': {}, 'synonyms': {}}
     
     def save(self, db_file: str = 'anime-database.json',
              titles_file: str = 'anime-titles.json') -> None:
@@ -96,9 +97,10 @@ class Reformatter:
         anime_entry['format'] = anime.get('format')
         anime_entry['season'] = anime.get('season')
         anime_entry['year'] = anime.get('seasonYear')
-        self.formatted_data[anime.get('id', 'NO_ID')] = anime_entry
-        for title in ([anime_entry['title']] + anime_entry['synonyms']):
-            self.anime_titles[title] = anime.get('id', 'NO_ID')
+        self.formatted_data[(animeId := anime.get('id', 'NO_ID'))] = anime_entry
+        self.anime_titles['titles'][anime_entry['title']] = animeId
+        for synonym in anime_entry['synonyms']:
+            self.anime_titles['synonyms'][synonym] = animeId
     
     def generate_json(self) -> None:
         response_gen = self.anilist_api.by_popularity(self.popularity_threshold)

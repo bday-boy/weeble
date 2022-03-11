@@ -21,7 +21,7 @@ const filters = {
 };
 
 const filterAll = function () {
-  filteredTitles = {};
+  filteredTitles = { titles: {}, synonyms: {} };
   Object.entries(allAnime).forEach((entry) => {
     const [animeId, animeInfo] = entry;
     const ignore = (
@@ -30,29 +30,27 @@ const filterAll = function () {
     );
     if (!ignore) {
       const { title, synonyms } = animeInfo;
-      const allTitles = Array.prototype.concat([title], synonyms);
-      allTitles.forEach((title) => {
-        filteredTitles[title] = animeId;
+      filteredTitles.titles[title] = animeId;
+      synonyms.forEach((title) => {
+        filteredTitles.synonyms[title] = animeId;
       });
     }
   });
-  filteredTitles = Object.entries(filteredTitles);
 };
 
 const filterGuesses = function () {
-  filteredTitles = {};
+  filteredTitles = { titles: {}, synonyms: {} };
   Object.entries(allAnime).forEach((entry) => {
     const [animeId, animeInfo] = entry;
     const ignore = guessesHas(animeId);
     if (!ignore) {
       const { title, synonyms } = animeInfo;
-      const allTitles = Array.prototype.concat([title], synonyms);
-      allTitles.forEach((title) => {
-        filteredTitles[title] = animeId;
+      filteredTitles.titles[title] = animeId;
+      synonyms.forEach((title) => {
+        filteredTitles.synonyms[title] = animeId;
       });
     }
   });
-  filteredTitles = Object.entries(filteredTitles);
 };
 
 const applyFilter = function () {
