@@ -16,9 +16,10 @@ data to make a Wordle- or Squirle-like game.
 
 ### High-priority
 
-- Add give up button
+- Add give up button and win/lose screen
 - Add more filters/customizability
 - Make user unable to guess exact ranges of numbers
+- Fix guess info badges/tooltips
 
 ### Low-priority
 
