@@ -5,7 +5,7 @@ let titlesObj = {};
 let filteredTitles = {};
 const thresholds = {
   episodes: 15,
-  year: 10,
+  year: 5,
 };
 const yearRange = {
   min: 1000000,
@@ -121,4 +121,50 @@ const loadAnime = function () {
       window.anime = randomAnime();
     })
     .catch((err) => console.log(err));
+};
+const fetchTags = function (animeId) {
+  const query = `
+  query ($id: Int) {
+    Media (id: $id, type: ANIME) {
+      tags {
+        name
+        category
+        rank
+        isGeneralSpoiler
+        isMediaSpoiler
+        isAdult
+      }
+    }
+  }
+  `;
+  const variables = {
+    id: animeId
+  };
+  const url = 'https://graphql.anilist.co';
+  const headers = new Headers({
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  });
+  const fetchInit = {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify({
+      query: query,
+      variables: variables
+    }),
+    mode: 'cors',
+    cache: 'default',
+  };
+  return fetch(url, fetchInit)
+    .then((response) => {
+      return response.json()
+        .then((json) => (response.ok ? json : Promise.reject(json)));
+    })
+    .then((data) => {
+      const tags = data.data.Media.tags;
+      const hasSpoiler = (tag) => (tag.isGeneralSpoiler || tag.isMediaSpoiler);
+      const nonSpoilerTags = tags.filter((tag) => !hasSpoiler(tag));
+      return nonSpoilerTags;
+    })
+    .catch((error) => console.log(error));
 };
