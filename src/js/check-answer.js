@@ -31,15 +31,6 @@ const tooltipTexts = {
       return `The answer was released over ${thresholds.year} years ${dif < 0 ? 'after' : 'before'} your guess.`
     }
   },
-  popularity: (guess, dif, threshold) => {
-    if (dif === 0) {
-      return `Exactly ${guess} AniList users have this anime on their list!`;
-    } else if (Math.abs(dif) <= threshold) {
-      return `${thresholds.popularity} ${dif < 0 ? 'more' : 'fewer'} people have the answer on their list, at most.`
-    } else {
-      return `${thresholds.popularity} ${dif < 0 ? 'more' : 'fewer'} people have the answer on their list, at least.`
-    }
-  },
   format: (formatType, status) => {
     if (status === 'correct') {
       return `The answer is also a(n) ${formatType}!`;
@@ -54,13 +45,6 @@ const tooltipTexts = {
       return `The answer's source is not ${sourceType}!`;
     }
   },
-  season: (season, status) => {
-    if (status === 'correct') {
-      return `The answer was also released in the ${season}!`;
-    } else {
-      return `The answer was not released in the ${season}!`;
-    }
-  },
 };
 const progressCheckers = {
   studios (guessStudiosSet) {
@@ -72,17 +56,11 @@ const progressCheckers = {
   year (guessYear, dif, threshold) {
     updateNumRange(guessYear, dif, threshold, yearRange, 'year');
   },
-  popularity (guessPopularity, dif, threshold) {
-    updateNumRange(guessPopularity, dif, threshold, popRange, 'popularity');
-  },
   format (guessFormat, status) {
     updateProgressGroup(guessFormat, status, formats, 'formats');
   },
   source (guessSource, status) {
     updateProgressGroup(guessSource, status, sources, 'sources');
-  },
-  season (guessSeason, status) {
-    updateProgressGroup(guessSeason, status, seasons, 'seasons');
   },
 };
 
@@ -184,17 +162,15 @@ const checkAnswer = function(inputTitle) {
   const animeId = titlesObj[inputTitle];
   guessesAdd(animeId);
   const inputAnime = allAnime[animeId];
-  const { studios, episodes, year, popularity, format, source, season } = inputAnime;
+  const { studios, episodes, year, format, source } = inputAnime;
 
   const guessWrapper = document.createElement('div');
   guessWrapper.classList.add('d-flex');
   guessWrapper.appendChild(setCompare(studios, 'studios'));
   guessWrapper.appendChild(numCompare(episodes, 'episodes'));
   guessWrapper.appendChild(numCompare(year, 'year'));
-  guessWrapper.appendChild(numCompare(popularity, 'popularity'));
   guessWrapper.appendChild(strCompare(source, 'source'));
   guessWrapper.appendChild(strCompare(format, 'format'));
-  guessWrapper.appendChild(strCompare(season, 'season'));
 
   const a = document.createElement('a');
   a.href = `https://anilist.co/anime/${animeId}/`

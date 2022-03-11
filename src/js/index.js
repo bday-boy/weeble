@@ -36,7 +36,7 @@ const createAnimeLi = function (animeId, title, index) {
   div.classList.add('text-wrap');
 
   const small = document.createElement('small');
-  small.textContent = `Studio(s): ${anime_info.studios.join(", ")}, Year: ${anime_info.year}, Episodes: ${anime_info.episodes}, Anilist popularity: ${anime_info.popularity}, Format: ${anime_info.format} Source: ${anime_info.source}`;
+  small.textContent = `Studio(s): ${anime_info.studios.join(", ")}, Year: ${anime_info.year}, Episodes: ${anime_info.episodes}, Format: ${anime_info.format} Source: ${anime_info.source}`;
   small.classList.add('text-wrap');
 
   const a = document.createElement('a');

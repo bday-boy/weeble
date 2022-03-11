@@ -13,11 +13,9 @@ const strFilter = function (strSet, value) {
 const filters = {
   studios: (studioArr) => setFilter(new Set(studioArr), knownStudios, possibleStudios),
   episodes: (eps) => numFilter(epsRange, eps),
-  popularity: (pop) => numFilter(popRange, pop),
   year: (yearVal) => numFilter(yearRange, yearVal),
   format: (formatVal) => strFilter(formats, formatVal),
   source: (sourceVal) => strFilter(sources, sourceVal),
-  season: (seasonVal) => strFilter(seasons, seasonVal),
 };
 
 const filterAll = function () {
