@@ -16,10 +16,8 @@ const tooltipTexts = {
     return answer;
   },
   episodes: (guess, dif, threshold) => {
-    if (dif === 0) {
-      return `${guess} episodes is correct!`;
-    } else if (Math.abs(dif) <= threshold) {
-      return `The answer has at most ${thresholds.episodes} ${dif < 0 ? 'more' : 'fewer'} episodes.`
+    if (Math.abs(dif) < threshold) {
+      return `The answer is within ${threshold} episodes of ${guess}!`;
     } else {
       return `The answer has at least ${thresholds.episodes + 1} ${dif < 0 ? 'more' : 'fewer'} episodes.`
     }
