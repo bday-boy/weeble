@@ -63,26 +63,26 @@ const tooltipTexts = {
   },
 };
 const progressCheckers = {
-  studios: (guessStudiosSet) => {
-    updateStudios(guessStudiosSet)
+  studios (guessStudiosSet) {
+    updateProgressSet(guessStudiosSet, possibleStudios, 'studios');
   },
-  episodes: (guess, dif, threshold) => {
-    updateEpsRange(guess, dif, threshold);
+  episodes (guessEpisodes, dif, threshold) {
+    updateNumRange(guessEpisodes, dif, threshold, epsRange, 'episodes');
   },
-  year: (guess, dif, threshold) => {
-    updateYearRange(guess, dif, threshold);
+  year (guessYear, dif, threshold) {
+    updateNumRange(guessYear, dif, threshold, yearRange, 'year');
   },
-  popularity: (guess, dif, threshold) => {
-    updatePopRange(guess, dif, threshold);
+  popularity (guessPopularity, dif, threshold) {
+    updateNumRange(guessPopularity, dif, threshold, popRange, 'popularity');
   },
-  format: (formatType, status) => {
-    updateFormats(formatType, status);
+  format (guessFormat, status) {
+    updateProgressGroup(guessFormat, status, formats, 'formats');
   },
-  source: (sourceType, status) => {
-    updateSources(sourceType, status);
+  source (guessSource, status) {
+    updateProgressGroup(guessSource, status, sources, 'sources');
   },
-  season: (season, status) => {
-    updateSeasons(season, status);
+  season (guessSeason, status) {
+    updateProgressGroup(guessSeason, status, seasons, 'seasons');
   },
 };
 
