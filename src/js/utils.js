@@ -3,7 +3,7 @@ const setDif = (A, B) => new Set([...A].filter((x) => !B.has(x)));
 const setIntersection = (A, B) => new Set([...A].filter((x) => B.has(x)));
 
 const randomAnime = function () {
-  const allAnimeObjs = Object.entries(guessableAnime);
+  const allAnimeObjs = Object.entries(possibleAnimeAnswers);
   const randomAnime = allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
   const [animeId, animeInfo] = randomAnime;
   animeInfo.id = animeId;

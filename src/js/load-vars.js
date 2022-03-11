@@ -1,6 +1,6 @@
 window.anime = undefined;
 let allAnime = {};
-let guessableAnime = {};
+let possibleAnimeAnswers = {};
 let titlesObj = {};
 let filteredTitles = {};
 const thresholds = {
@@ -99,7 +99,7 @@ const loadAnime = function () {
         }
 
         if (useAnime(animeInfo)) {
-          guessableAnime[animeId] = animeInfo;
+          possibleAnimeAnswers[animeId] = animeInfo;
         }
       });
       popRange.low = popRange.min;
