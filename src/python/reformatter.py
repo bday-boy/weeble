@@ -116,7 +116,7 @@ class Reformatter:
 
 
 def main():
-    data_cleaner = Reformatter('../../data', popularity_threshold=5000)
+    data_cleaner = Reformatter('../../data', popularity_threshold=10000)
     data_cleaner.generate_json()
     data_cleaner.save()
 
