@@ -1,10 +1,11 @@
 window.anime = undefined;
 let allAnime = {};
+let guessableAnime = {};
 let titlesObj = {};
 let filteredTitles = {};
 const thresholds = {
   episodes: 15,
-  year: 5,
+  year: 10,
   popularity: 10000,
 };
 const yearRange = {
@@ -54,6 +55,9 @@ const createNewButton = function (text) {
   btn.id = text;
   return btn;
 };
+const useAnime = function (anime) {
+  return 25000 < anime.popularity;
+};
 const loadTitles = function () {
   return fetch('http://127.0.0.1:5500/data/anime-titles.json', fetchInit)
     .then((response) => response.json())
@@ -70,8 +74,8 @@ const loadAnime = function () {
     .then((response) => response.json())
     .then((anime_json) => {
       allAnime = anime_json;
-      Object.values(allAnime).forEach((anime) => {
-        const { studios, popularity, episodes, source, format, season, year } = anime;
+      Object.entries(allAnime).forEach(([animeId, animeInfo]) => {
+        const { studios, popularity, episodes, source, format, season, year } = animeInfo;
         if (popularity < popRange.min) {
           popRange.min = popularity;
         } else if (popularity > popRange.max) {
@@ -93,16 +97,20 @@ const loadAnime = function () {
         } else if (year > yearRange.max) {
           yearRange.max = year;
         }
+
+        if (useAnime(animeInfo)) {
+          guessableAnime[animeId] = animeInfo;
+        }
       });
       popRange.low = popRange.min;
       popRange.high = popRange.max;
-      document.getElementById('pop-low').textContent = popRange.min;
-      document.getElementById('pop-high').textContent = popRange.max;
+      document.getElementById('popularity-low').textContent = popRange.min;
+      document.getElementById('popularity-high').textContent = popRange.max;
 
       epsRange.low = epsRange.min;
       epsRange.high = epsRange.max;
-      document.getElementById('eps-low').textContent = epsRange.min;
-      document.getElementById('eps-high').textContent = epsRange.max;
+      document.getElementById('episodes-low').textContent = epsRange.min;
+      document.getElementById('episodes-high').textContent = epsRange.max;
 
       const sourcesGroup = document.getElementById('sources');
       [...sources].forEach((source) => {

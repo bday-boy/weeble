@@ -3,7 +3,7 @@ const setDif = (A, B) => new Set([...A].filter((x) => !B.has(x)));
 const setIntersection = (A, B) => new Set([...A].filter((x) => B.has(x)));
 
 const randomAnime = function () {
-  const allAnimeObjs = Object.entries(allAnime);
+  const allAnimeObjs = Object.entries(guessableAnime);
   const randomAnime = allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
   const [animeId, animeInfo] = randomAnime;
   animeInfo.id = animeId;
@@ -14,12 +14,12 @@ const levenshtein = function (s, t) {
   if (s === t) {
     return 0;
   }
-  let n = s.length, m = t.length;
+  const n = s.length, m = t.length;
   if (n === 0 || m === 0) {
     return n + m;
   }
+  const p = new Array(n);
   let x = 0, y, a, b, c, d, g, h, k;
-  let p = new Array(n);
   for (y = 0; y < n;) {
     p[y] = ++y;
   }
