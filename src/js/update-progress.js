@@ -56,7 +56,6 @@ const updateProgressBar = function (progressObj, type) {
   const total = (max - min);
   const low = progressObj.low;
   const high = progressObj.high;
-  const extraWidth = (low === high) * 3;
 
   document.getElementById(`${type}-low`).textContent = low;
   document.getElementById(`${type}-high`).textContent = high;
@@ -66,46 +65,29 @@ const updateProgressBar = function (progressObj, type) {
   const end = document.getElementById(`${type}-progress-right`);
 
   start.setAttribute('aria-valuenow', `${low - min}`);
-  start.style.width = `${((low - min) / total) * 100 - extraWidth / 2}%`;
+  start.style.width = `${((low - min) / total) * 100}%`;
 
   middle.setAttribute('aria-valuenow', `${high - low}`);
-  middle.style.width = `${((high - low) / total) * 100 + extraWidth}%`;
+  middle.style.width = `${((high - low) / total) * 100}%`;
 
   end.setAttribute('aria-valuenow', `${max - high}`);
-  end.style.width = `${((max - high) / total) * 100 - extraWidth / 2}%`;
-};
-
-const updatePop = function () {
-  updateProgressBar(popRange, 'pop');
-};
-
-const updateEps = function () {
-  updateProgressBar(epsRange, 'eps');
-};
-
-const updateYear = function () {
-  updateProgressBar(yearRange, 'year');
+  end.style.width = `${((max - high) / total) * 100 }%`;
 };
 
 /**
  * Updates the year range object. Dif is negative when the answer was released
  * after the user's guess.
- * @param {number} newVal - The year of the user's guess
- * @param {number} dif - The year of the user's guess minus the actual year
+ * @param {number} newVal - The value of the user's guess
+ * @param {number} dif - The value of the user's guess minus the answer's value
  */
-const updateNumRange = function (newVal, dif, threshold, obj) {
+const updateNumRange = function (newVal, dif, threshold, obj, key) {
   const withinThreshold = (Math.abs(dif) <= threshold);
-  if (dif === 0) {
-    obj.low = newVal;
-    obj.high = newVal;
-  } else if (withinThreshold) {
-    if (dif < 0) {
-      obj.low = Math.max(obj.low, newVal + 1);
-      obj.high = Math.min(obj.high, newVal + threshold);
-    } else {
-      obj.low = Math.max(obj.low, newVal - threshold);
-      obj.high = Math.min(obj.high, newVal - 1);
-    }
+  if (obj.high - obj.low === threshold * 2) {
+    return;
+  }
+  if (withinThreshold) {
+    obj.low = Math.max(obj.min, newVal - threshold);
+    obj.high = Math.min(obj.max, newVal + threshold);
   } else {
     if (dif < 0) {
       obj.low = Math.max(obj.low, newVal + 1);
@@ -116,16 +98,16 @@ const updateNumRange = function (newVal, dif, threshold, obj) {
 };
 
 const updatePopRange = function (popularity, dif, threshold) {
-  updateNumRange(popularity, dif, threshold, popRange)
-  updatePop();
+  updateNumRange(popularity, dif, threshold, popRange, 'popularity');
+  updateProgressBar(popRange, 'popularity');
 };
 
 const updateEpsRange = function (numEps, dif, threshold) {
-  updateNumRange(numEps, dif, threshold, epsRange)
-  updateEps();
+  updateNumRange(numEps, dif, threshold, epsRange, 'episodes');
+  updateProgressBar(epsRange, 'episodes');
 };
 
 const updateYearRange = function (year, dif, threshold) {
-  updateNumRange(year, dif, threshold, yearRange)
-  updateYear();
+  updateNumRange(year, dif, threshold, yearRange, 'year');
+  updateProgressBar(yearRange, 'year');
 };
