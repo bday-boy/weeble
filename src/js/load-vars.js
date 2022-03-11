@@ -4,8 +4,8 @@ let possibleAnimeAnswers = {};
 let titlesObj = {};
 let filteredTitles = {};
 const thresholds = {
-  episodes: 15,
-  year: 5,
+  episodes: 5,
+  year: 2,
 };
 const yearRange = {
   min: 1000000,
