@@ -7,10 +7,10 @@ const tooltipTexts = {
     if (correct) {
       answer += `Correct studios: ${correct}`;
     }
-    if (answer) {
-      answer += '\n';
-    }
     if (incorrect) {
+      if (answer) {
+        answer += '\n';
+      }
       answer += `Incorrect studios: ${incorrect}`;
     }
     return answer;
@@ -189,4 +189,11 @@ const checkAnswer = function(inputTitle) {
   const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
   });
+
+  if (window.anime.curTag < window.anime.tags.length) {
+    const nextTag = createNewButton(window.anime.tags[window.anime.curTag++].name.toUpperCase());
+    nextTag.classList.remove('btn-primary');
+    nextTag.classList.add('btn-success');
+    document.getElementById('tags').appendChild(nextTag);
+  }
 };

@@ -123,6 +123,11 @@ const filterAndSuggest = () => {
   loadAnime()
     .then(() => loadTitles())
     .then(() => filterAndSuggest())
+    .then(() => fetchTags(window.anime.id))
+    .then((tags) => {
+      window.anime.tags = tags.sort((a, b) => a.rank < b.rank);
+      window.anime.curTag = 0;
+    })
     .catch((error) => console.log(error));
   document.getElementById('apply-filters').checked = false;
   document.getElementById('apply-filters').addEventListener('click', filterAndSuggest);
