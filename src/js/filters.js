@@ -1,4 +1,4 @@
-const setFilter = function (strSet, A) {
+const setFilter = function (A, strSet) {
   return isSubset(A, strSet);
 };
 
@@ -11,7 +11,7 @@ const strFilter = function (strSet, value) {
 };
 
 const filters = {
-  studios: (studioArr) => setFilter(possibleStudios, new Set(studioArr)),
+  studios: (studioArr) => setFilter(new Set(studioArr), new Set(window.anime.studios)),
   episodes: (eps) => numFilter(epsRange, eps),
   popularity: (pop) => numFilter(popRange, pop),
   year: (yearVal) => numFilter(yearRange, yearVal),
