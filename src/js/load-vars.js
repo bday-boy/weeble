@@ -5,7 +5,7 @@ let titlesObj = {};
 let filteredTitles = {};
 const thresholds = {
   episodes: 5,
-  year: 2,
+  year: 1,
 };
 const yearRange = {
   min: 1000000,
