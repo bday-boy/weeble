@@ -6,7 +6,7 @@ let filteredTitles = {};
 const thresholds = {
   episodes: 15,
   year: 10,
-  popularity: 10000,
+  popularity: 50000,
 };
 const yearRange = {
   min: 1000000,
@@ -27,6 +27,7 @@ const popRange = {
   high: 0,
 };
 const possibleStudios = new Set();
+const knownStudios = new Set();
 const sources = new Set();
 const formats = new Set();
 const seasons = new Set();

@@ -1,9 +1,12 @@
-const updateProgressSet = function (valArr, set, type) {
+const updateProgressSet = function (valArr, possibleSet, knownSet, type) {
   const correctStudios = new Set(window.anime[type]);
   valArr.forEach((val) => {
     if (!correctStudios.has(val)) {
-      set.delete(val);
+      possibleSet.delete(val);
     }
+  });
+  [...setIntersection(correctStudios, new Set(valArr))].forEach((elm) => {
+    knownSet.add(elm);
   });
 };
 
@@ -37,7 +40,7 @@ const updateProgressGroup = function (val, status, set, type) {
  */
 const updateNumRange = function (newVal, dif, threshold, obj, key) {
   const withinThreshold = (Math.abs(dif) <= threshold);
-  if (obj.high - obj.low === threshold * 2) {
+  if (obj.high - obj.low <= threshold * 2) {
     return;
   }
   if (withinThreshold) {
@@ -70,29 +73,3 @@ const updateNumRange = function (newVal, dif, threshold, obj, key) {
   end.setAttribute('aria-valuenow', `${max - high}`);
   end.style.width = `${((max - high) / total) * 100 }%`;
 };
-
-/*
-const progressCheckers = {
-  studios: (guessStudiosSet) => {
-    updateProgressSet(guessStudiosSet, 'studios', possibleStudios);
-  },
-  episodes: (guess, dif, threshold) => {
-    updateNumRange(guess, dif, threshold, epsRange, 'episodes');
-  },
-  year: (guess, dif, threshold) => {
-    updateNumRange(guess, dif, threshold, yearRange, 'year');
-  },
-  popularity: (guess, dif, threshold) => {
-    updateNumRange(guess, dif, threshold, popRange, 'popularity');
-  },
-  format: (formatType, status) => {
-    updateProgressGroup(formatType, status, 'formats', formats);
-  },
-  source: (sourceType, status) => {
-    updateProgressGroup(sourceType, status, 'sources', sources);
-  },
-  season: (season, status) => {
-    updateProgressGroup(season, status, 'seasons', seasons);
-  },
-};
-*/

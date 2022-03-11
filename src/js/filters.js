@@ -1,5 +1,5 @@
-const setFilter = function (A, knownSet, possibleSet) {
-  return isSubset(A, possibleSet) && isSubset(knownSet, A);
+const setFilter = function (guessSet, knownSet, possibleSet) {
+  return isSubset(guessSet, possibleSet) && isSubset(knownSet, guessSet);
 };
 
 const numFilter = function (rangeObj, value) {
@@ -11,7 +11,7 @@ const strFilter = function (strSet, value) {
 };
 
 const filters = {
-  studios: (studioArr) => setFilter(new Set(studioArr), new Set(window.anime.studios), possibleStudios),
+  studios: (studioArr) => setFilter(new Set(studioArr), knownStudios, possibleStudios),
   episodes: (eps) => numFilter(epsRange, eps),
   popularity: (pop) => numFilter(popRange, pop),
   year: (yearVal) => numFilter(yearRange, yearVal),

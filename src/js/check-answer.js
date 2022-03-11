@@ -64,7 +64,7 @@ const tooltipTexts = {
 };
 const progressCheckers = {
   studios (guessStudiosSet) {
-    updateProgressSet(guessStudiosSet, possibleStudios, 'studios');
+    updateProgressSet(guessStudiosSet, possibleStudios, knownStudios, 'studios');
   },
   episodes (guessEpisodes, dif, threshold) {
     updateNumRange(guessEpisodes, dif, threshold, epsRange, 'episodes');
