@@ -171,12 +171,29 @@ const filterAndSuggest = () => {
 
   userEntry.addEventListener('input', suggestAnime);
   userEntry.addEventListener('keydown', (e) => {
-    if (e.key == 'ArrowDown') {
-      const dropdown = document.getElementById('anime-suggestions');
-      if (dropdown.firstChild) {
-        dropdown.firstChild.firstChild.focus();
-      }
+    if (e.defaultPrevented) {
+      return;
     }
+
+    switch (e.key) {
+      case 'ArrowDown':
+      case 'Down':
+        const dropdown = document.getElementById('anime-suggestions');
+        if (dropdown.firstChild) {
+          dropdown.firstChild.firstChild.focus();
+        }
+        break;
+      case 'Enter':
+        const guess = userEntry.value;
+        userEntry.value = '';
+        checkAnswer(guess);
+        filterAndSuggest();
+        break;
+      default:
+        return;
+    }
+
+    e.preventDefault();
   });
 
   guessBtn.addEventListener('click', () => {
