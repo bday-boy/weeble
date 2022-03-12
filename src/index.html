@@ -79,8 +79,8 @@
             <div class="d-flex flex-column">
               <h5 class="modal-title">Test Your Anime Knowledge!</h5>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="tldr-checkbox">
-                <label class="form-check-label text-muted" for="tldr-checkbox">
+                <input class="form-check-input" type="checkbox" value="" id="tldr">
+                <label class="form-check-label text-muted" for="tldr">
                   TL;DR version
                 </label>
               </div>
@@ -88,13 +88,15 @@
           </div>
           <div class="modal-body">
             <div class="container-fluid">
-              <div class="row justify-content-center" id="rules-and-info">
-                <div class="col-12 text-start">
+              <div class="row flex-column justify-content-center" id="rules-and-info">
+                <div class="col-12 text-start" data-tldr="true">
                   <h5>Test your anime knowledge!</h5>
                   <p>
-                    Welcome to Weeble, an anime guessing game by Illdie and Birthday Boy!
+                    Welcome to Weeble, an anime guessing game by illdie and Birthday Boy!
                   </p>
                 </div>
+              </div>
+              <div class="row flex-column justify-content-center" id="rules-and-info">
                 <div class="col-12 text-start">
                   <h5>Rules and Important Info</h5>
                   <p>

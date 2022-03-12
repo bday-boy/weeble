@@ -134,19 +134,36 @@ const filterAndSuggest = () => {
         const modal = new bootstrap.Modal(document.getElementById('modal-intro'));
         modal.show();
       }
-      firstImpression(null); // FOR TESTING
+      firstImpression(null); // TODO: DELETE AFTER TESTING
     })
     .catch((error) => console.log(error));
+  
+  const tdlrCheckbox = document.getElementById('tldr');
+  tdlrCheckbox.checked = false;
+  tdlrCheckbox.addEventListener('change', function () {
+    const tldr = this.checked;
+    document.querySelectorAll('#modal-intro div[data-tldr=true]').forEach((section) => {
+      if (tldr) {
+        section.classList.add('d-none');
+      } else {
+        section.classList.remove('d-none');
+      }
+    });
+  });
+
   document.getElementById('weeble-about').addEventListener('click', () => {
     const modal = new bootstrap.Modal(document.getElementById('modal-intro'));
     modal.show();
   });
+  
   document.getElementById('weeble-settings').addEventListener('click', () => {
     const modal = new bootstrap.Modal(document.getElementById('modal-settings'));
     modal.show();
   });
-  document.getElementById('apply-filters').addEventListener('change', filterAndSuggest);
+
   document.getElementById('apply-filters').checked = true;
+  document.getElementById('apply-filters').addEventListener('change', filterAndSuggest);
+
   document.getElementById('anime-entry').addEventListener('input', suggestAnime);
   document.getElementById('anime-entry').addEventListener('keydown', (e) => {
     if (e.key == 'ArrowDown') {
@@ -156,6 +173,7 @@ const filterAndSuggest = () => {
       }
     }
   });
+
   document.getElementById('guess-button').addEventListener('click', () => {
     const userEntry = document.getElementById('anime-entry');
     const guess = userEntry.value;
