@@ -54,6 +54,29 @@ mark {
   right: -5em;
   top: 0.75em;
 }
+.spin-cw {
+  -webkit-animation: spin-clockwise 1s ease-in-out 1;
+  -moz-animation: spin-clockwise 1s ease-in-out 1;
+  animation: spin-clockwise 1s ease-in-out 1;
+}
+.spin-cc {
+  -webkit-animation: spin-clockwise 1s ease-in-out 1 reverse;
+  -moz-animation: spin-clockwise 1s ease-in-out 1 reverse;
+  animation: spin-clockwise 1s ease-in-out 1 reverse;
+}
+
+@-moz-keyframes spin-clockwise {
+  100% { -moz-transform: rotate(90deg); }
+}
+@-webkit-keyframes spin-clockwise {
+  100% { -webkit-transform: rotate(90deg); }
+}
+@keyframes spin-clockwise {
+  100% {
+      -webkit-transform: rotate(90deg);
+      transform:rotate(90deg);
+  }
+}
 
 #guesses {
   font-size: x-large;
