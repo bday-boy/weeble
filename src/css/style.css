@@ -1,4 +1,8 @@
-body {
+body.dark-mode {
+  background-color: #111;
+  color: whitesmoke;
+}
+body.light-mode {
   background-color: #111;
   color: whitesmoke;
 }
