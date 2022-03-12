@@ -133,8 +133,8 @@ const filterAndSuggest = () => {
       if (firstImpression()) {
         const modal = new bootstrap.Modal(document.getElementById('modal-intro'));
         modal.show();
-        firstImpression(null); // FOR TESTING
       }
+      firstImpression(null); // FOR TESTING
     })
     .catch((error) => console.log(error));
   document.getElementById('apply-filters').addEventListener('change', filterAndSuggest);
