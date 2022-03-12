@@ -1,4 +1,3 @@
-const guessesDiv = document.getElementById('guesses');
 const guessTooltips = {
   studios: (A, B) => {
     let answer = '';
@@ -152,20 +151,10 @@ const addTooltip = function (element, text) {
   element.title = text;
 };
 
-const textForSets = function (A, B) {
-  const incorrect = Array.from(setDif(A, B)).join(', ')
-  const correct = Array.from(setIntersection(A, B)).join(', ');
-  if (correct) {
-    const highlight = `<mark class="correct">${correct}</mark>`;
-    return highlight + incorrect;
-  }
-  return incorrect;
-};
-
-const setCompare = function (iterable, animeKey) {
+const setCompare = function (guessIter, animeKey) {
   let icon;
   let status;
-  const guessSet = new Set(iterable);
+  const guessSet = new Set(guessIter);
   const answerSet = new Set(weeble.anime[animeKey]);
   /* TODO: Make this only be true when the studio sets are equal */
   if (isSubset(answerSet, guessSet)) {
@@ -230,8 +219,14 @@ const showEndModal = function (modalTitle) {
   img.src = weeble.anime.picture;
   img.alt = weeble.anime.title;
 
-  const modal = new bootstrap.Modal(document.getElementById('game-end-modal'));
+  const modal = new bootstrap.Modal(document.getElementById('modal-end'));
   setTimeout(() => modal.show(), 1000);
+};
+
+const endGame = function () {
+  weeble.anime = undefined;
+  weeble.titles = undefined;
+  weeble.filteredTitles = undefined;
 };
 
 const addTag = function (numTags) {
@@ -247,9 +242,14 @@ const addTag = function (numTags) {
     tagsElement.appendChild(nextTag);
     tagCount++;
   }
-}
+};
+
+const addAllTags = function () {
+  addTag();
+};
 
 const handleCorrectAnswer = function () {
+  const guessesDiv = document.getElementById('guesses');
   const guessWrapper = document.createElement('div');
   guessWrapper.classList.add('d-flex');
 
@@ -270,18 +270,16 @@ const handleCorrectAnswer = function () {
   guessesDiv.prepend(div);
   const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
   const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
+    return new bootstrap.Tooltip(tooltipTriggerEl);
   });
 
-  addTag();
-
+  addAllTags();
   showEndModal('You won!');
-  weeble.anime = undefined;
-  weeble.titles = undefined;
-  weeble.filteredTitles = undefined;
+  endGame();
 };
 
 const checkAnswer = function (inputTitle) {
+  const guessesDiv = document.getElementById('guesses');
   if (!weeble.titles.hasOwnProperty(inputTitle) || weeble.anime === undefined) {
     /* do something here to warn user it's not a valid anime */
     return false;

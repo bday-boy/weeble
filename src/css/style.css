@@ -72,11 +72,12 @@ mark {
 span.placeholder {
   line-height: 1;
 }
+
 .hint-section [type=button] {
   padding: 0.15rem 0.3rem;
 }
 .dropdown-menu {
-  max-height: 500px;
+  max-height: 25em;
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
@@ -115,4 +116,11 @@ span.placeholder {
 }
 .modal-body p {
   word-wrap: break-word;
+}
+
+#title .bi {
+  font-size: 1.5rem;
+}
+#title .bi:hover {
+  cursor: pointer;
 }

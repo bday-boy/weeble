@@ -137,6 +137,14 @@ const filterAndSuggest = () => {
       firstImpression(null); // FOR TESTING
     })
     .catch((error) => console.log(error));
+  document.getElementById('weeble-about').addEventListener('click', () => {
+    const modal = new bootstrap.Modal(document.getElementById('modal-intro'));
+    modal.show();
+  });
+  document.getElementById('weeble-settings').addEventListener('click', () => {
+    const modal = new bootstrap.Modal(document.getElementById('modal-settings'));
+    modal.show();
+  });
   document.getElementById('apply-filters').addEventListener('change', filterAndSuggest);
   document.getElementById('apply-filters').checked = true;
   document.getElementById('anime-entry').addEventListener('input', suggestAnime);
