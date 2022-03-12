@@ -14,7 +14,7 @@ const updateProgressSet = function (valArr, possibleSet, knownSet, type) {
 const updateProgressGroup = function (val, status, set, type) {
   const progressGroup = document.getElementById(type);
   const btn = createNewButton(val);
-  if (status === 'correct') {
+  if (status === 'bg-success') {
     set.delete(val);
     progressGroup.querySelectorAll('.btn-secondary').forEach((incorrectBtn) => {
       incorrectBtn.parentNode.removeChild(incorrectBtn);

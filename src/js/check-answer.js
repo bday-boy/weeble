@@ -30,14 +30,14 @@ const guessTooltips = {
     }
   },
   format: (formatType, status) => {
-    if (status === 'correct') {
+    if (status === 'bg-success') {
       return `The answer is also a(n) ${formatType}!`;
     } else {
       return `The answer is not a(n) ${formatType}!`;
     }
   },
   source: (sourceType, status) => {
-    if (status === 'correct') {
+    if (status === 'bg-success') {
       return `The answer's source is also ${sourceType}!`;
     } else {
       return `The answer's source is not ${sourceType}!`;
@@ -128,11 +128,11 @@ const correctProgress = {
   },
   format() {
     const correctFormat = weeble.anime.format;
-    updateProgressGroup(correctFormat, 'correct', formats, 'formats');
+    updateProgressGroup(correctFormat, 'bg-success', formats, 'formats');
   },
   source() {
     const correctSource = weeble.anime.source;
-    updateProgressGroup(correctSource, 'correct', sources, 'sources');
+    updateProgressGroup(correctSource, 'bg-success', sources, 'sources');
   },
 };
 
@@ -173,13 +173,13 @@ const setCompare = function (guessIter, animeKey) {
   /* TODO: Make this only be true when the studio sets are equal */
   if (isSubset(answerSet, guessSet)) {
     icon = 'check2-circle';
-    status = 'correct';
+    status = 'bg-success';
   } else if (setIntersection(guessSet, answerSet).size > 0) {
     icon = 'asterisk';
-    status = 'almost';
+    status = 'bg-warning';
   } else {
     icon = 'x-circle';
-    status = 'incorrect';
+    status = 'bg-danger';
   }
   const statusNode = createIcon(icon, status);
   addTooltip(statusNode, guessTooltips[animeKey](guessSet, answerSet));
@@ -195,10 +195,10 @@ const numCompare = function (guessNum, animeKey) {
   const threshold = weeble.thresholds[animeKey];
   if (Math.abs(dif) <= threshold) {
     icon = `chevron-contract`;
-    status = 'almost';
+    status = 'bg-warning';
   } else {
     icon = `chevron-${dif < 0 ? 'up' : 'down'}`;
-    status = 'incorrect';
+    status = 'bg-danger';
   }
   const statusNode = createIcon(icon, status);
   addTooltip(statusNode, guessTooltips[animeKey](guessNum, dif, threshold));
@@ -212,10 +212,10 @@ const strCompare = function (guessStr, animeKey) {
   const answerValue = weeble.anime[animeKey];
   if (guessStr === answerValue) {
     icon = 'check2-circle';
-    status = 'correct';
+    status = 'bg-success';
   } else {
     icon = 'x-circle';
-    status = 'incorrect';
+    status = 'bg-danger';
   }
   const statusNode = createIcon(icon, status);
   addTooltip(statusNode, guessTooltips[animeKey](guessStr, status));
@@ -251,7 +251,6 @@ const addTag = function (numTags) {
     const tag = weeble.anime.tags[weeble.anime.curTag++];
     const tagText = `${tag.name.toUpperCase()} (${tag.rank}%)`;
     const nextTag = createNewButton(tagText);
-    nextTag.classList.remove('btn-primary');
     nextTag.classList.add('btn-success');
     tagsElement.appendChild(nextTag);
     tagCount++;
@@ -268,7 +267,7 @@ const handleCorrectAnswer = function () {
   guessWrapper.classList.add('d-flex');
 
   Object.entries(correctTooltips).forEach(([key, textFunc]) => {
-    const statusNode = createIcon('check2-circle', 'correct');
+    const statusNode = createIcon('check2-circle', 'bg-success');
     addTooltip(statusNode, textFunc());
     guessWrapper.appendChild(statusNode);
     correctProgress[key]();

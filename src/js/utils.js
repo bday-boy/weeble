@@ -16,7 +16,7 @@ const createNewButton = function (text, btnClass) {
 
   const btn = document.createElement('button');
   btn.appendChild(small);
-  btn.classList.add('btn', btnClass ? btnClass : 'btn-primary', 'm-1', 'fs-6');
+  btn.classList.add('btn', 'm-1', 'fs-6');
   if (btnClass) {
     btn.classList.add(btnClass);
   }

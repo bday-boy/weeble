@@ -144,6 +144,7 @@ const filterAndSuggest = () => {
   const weebleAbout = document.getElementById('weeble-about');
   const weebleSettings = document.getElementById('weeble-settings');
   const applyFilters = document.getElementById('apply-filters');
+  const highContrast = document.getElementById('high-contrast');
   const userEntry = document.getElementById('anime-entry');
   const guessBtn = document.getElementById('guess-button');
 
@@ -171,6 +172,14 @@ const filterAndSuggest = () => {
 
   applyFilters.checked = true;
   applyFilters.addEventListener('change', filterAndSuggest);
+
+  highContrast.addEventListener('change', function () {
+    if (this.checked) {
+      document.body.classList.add('high-contrast');
+    } else {
+      document.body.classList.remove('high-contrast');
+    }
+  })
 
   userEntry.addEventListener('input', suggestAnime);
   userEntry.addEventListener('keydown', (e) => {
