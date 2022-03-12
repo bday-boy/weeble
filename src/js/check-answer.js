@@ -22,10 +22,11 @@ const guessTooltips = {
     }
   },
   year: (guess, dif, threshold) => {
-    if (Math.abs(dif) <= threshold) {
-      return `The answer was released within ${weeble.thresholds.year} year${weeble.thresholds.year === 1 ? 's' : ''} of ${guess}!`
+    const difAbs = Math.abs(dif);
+    if (difAbs <= threshold) {
+      return `The answer was released within ${weeble.thresholds.year} year${weeble.thresholds.year === 1 ? '' : 's'} of ${guess}!`
     } else {
-      return `The answer was released at least ${weeble.thresholds.year} years ${dif < 0 ? 'after' : 'before'} ${guess}.`
+      return `The answer was released at least ${weeble.thresholds.year} year${difAbs === 1 ? '' : 's'} ${dif < 0 ? 'after' : 'before'} ${guess}.`
     }
   },
   format: (formatType, status) => {
@@ -62,7 +63,20 @@ const correctTooltips = {
     return `${weeble.anime.title} was released in ${weeble.anime.year}!`;
   },
   format: () => {
-    return `${weeble.anime.title}'s format is ${weeble.anime.format}!`;
+    const format = weeble.anime.format;
+    switch (format) {
+      case 'TV':
+        return `${weeble.anime.title} was released as a TV show!`;
+      case 'MOVIE':
+        return `${weeble.anime.title} was released as a movie!`;
+      case 'TV_SHORT':
+        return `${weeble.anime.title} was released as a TV short!`;
+      case 'OVA':
+      case 'ONA':
+        return `${weeble.anime.title} was released as an ${format}!`;
+      default:
+        return `${weeble.anime.title} was released as a ${format}!`;
+    }
   },
   source: () => {
     const source = weeble.anime.source;
