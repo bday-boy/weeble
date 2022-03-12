@@ -93,3 +93,22 @@ mark {
 .progress > .progress-bar {
   border-radius: .25rem;
 }
+.modal-body textarea.form-control {
+  min-height: 8em;
+}
+.btn-primary-colorblind {
+  color: #fff;
+  background-color: #AA4499;
+  border-color: #AA4499;
+}
+.btn-success-colorblind {
+  color: #fff;
+  background-color: #117733;
+  border-color: #117733;
+}
+.modal-content {
+  background-color: #111 !important;
+}
+.modal-body p {
+  word-wrap: break-word;
+}

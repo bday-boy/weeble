@@ -12,15 +12,15 @@ const strFilter = function (strSet, value) {
 
 const filters = {
   studios: (studioArr) => setFilter(new Set(studioArr), knownStudios, possibleStudios),
-  episodes: (eps) => numFilter(epsRange, eps),
-  year: (yearVal) => numFilter(yearRange, yearVal),
+  episodes: (eps) => numFilter(weeble.ranges.episodes, eps),
+  year: (yearVal) => numFilter(weeble.ranges.year, yearVal),
   format: (formatVal) => strFilter(formats, formatVal),
   source: (sourceVal) => strFilter(sources, sourceVal),
 };
 
 const filterAll = function () {
-  filteredTitles = { titles: {}, synonyms: {} };
-  Object.entries(allAnime).forEach((entry) => {
+  weeble.filteredTitles = { titles: {}, synonyms: {} };
+  Object.entries(weeble.allAnime).forEach((entry) => {
     const [animeId, animeInfo] = entry;
     const ignore = (
       Object.entries(filters).some(([key, fltr]) => !fltr(animeInfo[key]))
@@ -28,24 +28,24 @@ const filterAll = function () {
     );
     if (!ignore) {
       const { title, synonyms } = animeInfo;
-      filteredTitles.titles[title] = animeId;
+      weeble.filteredTitles.titles[title] = animeId;
       synonyms.forEach((title) => {
-        filteredTitles.synonyms[title] = animeId;
+        weeble.filteredTitles.synonyms[title] = animeId;
       });
     }
   });
 };
 
 const filterGuesses = function () {
-  filteredTitles = { titles: {}, synonyms: {} };
-  Object.entries(allAnime).forEach((entry) => {
+  weeble.filteredTitles = { titles: {}, synonyms: {} };
+  Object.entries(weeble.allAnime).forEach((entry) => {
     const [animeId, animeInfo] = entry;
     const ignore = guessesHas(animeId);
     if (!ignore) {
       const { title, synonyms } = animeInfo;
-      filteredTitles.titles[title] = animeId;
+      weeble.filteredTitles.titles[title] = animeId;
       synonyms.forEach((title) => {
-        filteredTitles.synonyms[title] = animeId;
+        weeble.filteredTitles.synonyms[title] = animeId;
       });
     }
   });

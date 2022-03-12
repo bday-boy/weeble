@@ -1,5 +1,5 @@
 const updateProgressSet = function (valArr, possibleSet, knownSet, type) {
-  const correctStudios = new Set(window.anime[type]);
+  const correctStudios = new Set(weeble.anime[type]);
   valArr.forEach((val) => {
     if (!correctStudios.has(val)) {
       possibleSet.delete(val);
@@ -72,4 +72,8 @@ const updateNumRange = function (newVal, dif, threshold, obj, key) {
 
   end.setAttribute('aria-valuenow', `${max - high}`);
   end.style.width = `${((max - high) / total) * 100 }%`;
+};
+
+const updateNumRangeCorrect = function () {
+
 };

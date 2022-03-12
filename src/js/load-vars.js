@@ -1,29 +1,27 @@
-window.anime = undefined;
-let allAnime = {};
-let possibleAnimeAnswers = {};
-let titlesObj = {};
-let filteredTitles = {};
-const thresholds = {
-  episodes: 5,
-  year: 1,
-};
-const yearRange = {
-  min: 1000000,
-  max: 0,
-  low: 1000000,
-  high: 0,
-};
-const epsRange = {
-  min: 1000000,
-  max: 0,
-  low: 1000000,
-  high: 0,
-};
-const popRange = {
-  min: 1000000,
-  max: 0,
-  low: 1000000,
-  high: 0,
+weeble = {
+  anime: undefined,
+  allAnime: {},
+  possibleAnime: {},
+  titles: {},
+  filteredTitles: {},
+  thresholds: {
+    episodes: 5,
+    year: 1,
+  },
+  ranges: {
+    year: {
+      min: 1000000,
+      max: 0,
+      low: 1000000,
+      high: 0,
+    },
+    episodes: {
+      min: 1000000,
+      max: 0,
+      low: 1000000,
+      high: 0,
+    },
+  },
 };
 const possibleStudios = new Set();
 const knownStudios = new Set();
@@ -63,8 +61,8 @@ const loadTitles = function () {
     .then((anime_json) => {
       const titles = anime_json.titles;
       const synonyms = anime_json.synonyms;
-      titlesObj = {...synonyms, ...titles};
-      filteredTitles = anime_json;
+      weeble.titles = {...synonyms, ...titles};
+      weeble.filteredTitles = anime_json;
     })
     .catch((err) => console.log(err));
 };
@@ -72,34 +70,34 @@ const loadAnime = function () {
   return fetch('http://127.0.0.1:5500/data/anime-database.json', fetchInit)
     .then((response) => response.json())
     .then((anime_json) => {
-      allAnime = anime_json;
-      Object.entries(allAnime).forEach(([animeId, animeInfo]) => {
+      weeble.allAnime = anime_json;
+      Object.entries(weeble.allAnime).forEach(([animeId, animeInfo]) => {
         const { studios, episodes, source, format, year } = animeInfo;
-        if (episodes < epsRange.min) {
-          epsRange.min = episodes;
-        } else if (episodes > epsRange.max) {
-          epsRange.max = episodes;
+        if (episodes < weeble.ranges.episodes.min) {
+          weeble.ranges.episodes.min = episodes;
+        } else if (episodes > weeble.ranges.episodes.max) {
+          weeble.ranges.episodes.max = episodes;
         }
         studios.forEach((studio) => {
           possibleStudios.add(studio);
         })
         sources.add(source);
         formats.add(format);
-        if (year < yearRange.min) {
-          yearRange.min = year;
-        } else if (year > yearRange.max) {
-          yearRange.max = year;
+        if (year < weeble.ranges.year.min) {
+          weeble.ranges.year.min = year;
+        } else if (year > weeble.ranges.year.max) {
+          weeble.ranges.year.max = year;
         }
 
         if (useAnime(animeInfo)) {
-          possibleAnimeAnswers[animeId] = animeInfo;
+          weeble.possibleAnime[animeId] = animeInfo;
         }
       });
 
-      epsRange.low = epsRange.min;
-      epsRange.high = epsRange.max;
-      document.getElementById('episodes-low').textContent = epsRange.min;
-      document.getElementById('episodes-high').textContent = epsRange.max;
+      weeble.ranges.episodes.low = weeble.ranges.episodes.min;
+      weeble.ranges.episodes.high = weeble.ranges.episodes.max;
+      document.getElementById('episodes-low').textContent = weeble.ranges.episodes.min;
+      document.getElementById('episodes-high').textContent = weeble.ranges.episodes.max;
 
       const sourcesGroup = document.getElementById('sources');
       [...sources].forEach((source) => {
@@ -113,12 +111,12 @@ const loadAnime = function () {
         formatsGroup.appendChild(formatBtn);
       });
 
-      yearRange.low = yearRange.min;
-      yearRange.high = yearRange.max;
-      document.getElementById('year-low').textContent = yearRange.min;
-      document.getElementById('year-high').textContent = yearRange.max;
+      weeble.ranges.year.low = weeble.ranges.year.min;
+      weeble.ranges.year.high = weeble.ranges.year.max;
+      document.getElementById('year-low').textContent = weeble.ranges.year.min;
+      document.getElementById('year-high').textContent = weeble.ranges.year.max;
 
-      window.anime = randomAnime();
+      weeble.anime = randomAnime();
     })
     .catch((err) => console.log(err));
 };

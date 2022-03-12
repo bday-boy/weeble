@@ -6,7 +6,7 @@ const guessInfo = {
     progressObj: possibleStudios,
     fltr (studiosVal) {
       const guessStudios = new Set(studiosVal);
-      const answerStudios = new Set(window.anime.studios);
+      const answerStudios = new Set(weeble.anime.studios);
       return setFilter(guessStudios, answerStudios, this.progressObj);
     },
     checkAnswer () {
@@ -16,7 +16,7 @@ const guessInfo = {
       updateProgressSet(this.guessObj, this.progressObj, this.name);
     },
     tooltipText () {
-      const answerSet = new Set(window.anime.studios)
+      const answerSet = new Set(weeble.anime.studios)
       const guessSet = new Set(this.guessObj);
       let answer = '';
       const incorrect = Array.from(setDif(guessSet, answerSet)).join(', ');
@@ -39,7 +39,7 @@ const guessInfo = {
     active: true,
     threshold: 0,
     guessObj: undefined,
-    progressObj: epsRange,
+    progressObj: weeble.ranges.episodes,
     fltr (episodesVal) {
       return numFilter(this.progressObj, episodesVal);
     },
@@ -47,7 +47,7 @@ const guessInfo = {
       return numCompare(this.guessObj, this.name);
     },
     updateProgress () {
-      const dif = this.guessObj - window.anime[this.name];
+      const dif = this.guessObj - weeble.anime[this.name];
       updateNumRange(this.guessObj, dif, this.threshold, this.progressObj, this.name);
     },
     tooltipText () {},
@@ -58,7 +58,7 @@ const guessInfo = {
     active: true,
     threshold: 0,
     guessObj: undefined,
-    progressObj: yearRange,
+    progressObj: weeble.ranges.year,
     fltr (yearVal) {
       return numFilter(this.progressObj, yearVal);
     },
@@ -66,26 +66,7 @@ const guessInfo = {
       return numCompare(this.guessObj, this.name);
     },
     updateProgress () {
-      const dif = this.guessObj - window.anime[this.name];
-      updateNumRange(this.guessObj, dif, this.threshold, this.progressObj, this.name);
-    },
-    tooltipText () {},
-  },
-
-  popularity: {
-    name: 'popularity',
-    active: true,
-    threshold: 0,
-    guessObj: undefined,
-    progressObj: popRange,
-    fltr (popularityVal) {
-      return numFilter(this.progressObj, popularityVal);
-    },
-    checkAnswer () {
-      return numCompare(this.guessObj, this.name);
-    },
-    updateProgress () {
-      const dif = this.guessObj - window.anime[this.name];
+      const dif = this.guessObj - weeble.anime[this.name];
       updateNumRange(this.guessObj, dif, this.threshold, this.progressObj, this.name);
     },
     tooltipText () {},
@@ -103,7 +84,7 @@ const guessInfo = {
       return strCompare(this.guessObj, this.name);
     },
     updateProgress () {
-      const status = (this.guessObj === window.anime[this.name]) ? 'correct' : 'incorrect';
+      const status = (this.guessObj === weeble.anime[this.name]) ? 'correct' : 'incorrect';
       updateProgressGroup(this.guessObj, status, this.progressObj, this.name);
     },
     tooltipText () {},
@@ -121,7 +102,7 @@ const guessInfo = {
       return strCompare(this.guessObj, this.name);
     },
     updateProgress () {
-      const status = (this.guessObj === window.anime[this.name]) ? 'correct' : 'incorrect';
+      const status = (this.guessObj === weeble.anime[this.name]) ? 'correct' : 'incorrect';
       updateProgressGroup(this.guessObj, status, this.progressObj, this.name);
     },
     tooltipText () {},
@@ -139,7 +120,7 @@ const guessInfo = {
       return strCompare(this.guessObj, this.name);
     },
     updateProgress () {
-      const status = (this.guessObj === window.anime[this.name]) ? 'correct' : 'incorrect';
+      const status = (this.guessObj === weeble.anime[this.name]) ? 'correct' : 'incorrect';
       updateProgressGroup(this.guessObj, status, this.progressObj, this.name);
     },
     tooltipText () {},

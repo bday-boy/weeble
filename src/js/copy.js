@@ -1,3 +1,7 @@
+const createCopyText = function () {
+
+};
+
 const copyToClipboard = function (copyText) {
   const toast = document.querySelector('.toast');
   const showToast = (success) => {

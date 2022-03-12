@@ -30,7 +30,7 @@ const highlightText = function (text, index) {
 };
 
 const createAnimeLi = function (animeId, title, index) {
-  const anime_info = allAnime[animeId];
+  const anime_info = weeble.allAnime[animeId];
 
   const div = highlightText(title, index);
   div.classList.add('text-wrap');
@@ -72,7 +72,7 @@ const addSuggestion = function (title, animeId, input, idSet) {
 const filterAllTitles = function (input) {
   suggestions = [];
   const idSet = new Set();
-  const { titles, synonyms } = filteredTitles;
+  const { titles, synonyms } = weeble.filteredTitles;
   [titles, synonyms].forEach((titleGroup) => {
     Object.entries(titleGroup).forEach((entry) => {
       const [title, animeId] = entry;
@@ -97,7 +97,7 @@ const suggestAnime = function () {
   while (dropdown.firstChild) {
     dropdown.removeChild(dropdown.firstChild);
   }
-  if (allAnime === undefined || filteredTitles === undefined) {
+  if (weeble.allAnime === undefined || weeble.filteredTitles === undefined) {
     suggestions = [];
   }
   else {
@@ -123,10 +123,10 @@ const filterAndSuggest = () => {
   loadAnime()
     .then(() => loadTitles())
     .then(() => filterAndSuggest())
-    .then(() => fetchTags(window.anime.id))
+    .then(() => fetchTags(weeble.anime.id))
     .then((tags) => {
-      window.anime.tags = tags.sort((a, b) => a.rank < b.rank);
-      window.anime.curTag = 0;
+      weeble.anime.tags = tags.sort((a, b) => a.rank < b.rank);
+      weeble.anime.curTag = 0;
     })
     .catch((error) => console.log(error));
   document.getElementById('apply-filters').addEventListener('change', filterAndSuggest);
