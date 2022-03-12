@@ -23,7 +23,7 @@ const guessTooltips = {
   },
   year: (guess, dif, threshold) => {
     if (Math.abs(dif) <= threshold) {
-      return `The answer was released within ${weeble.thresholds.year} year${weeble.thresholds.year > 1 ? 's' : ''} of ${guess}!`
+      return `The answer was released within ${weeble.thresholds.year} year${weeble.thresholds.year === 1 ? 's' : ''} of ${guess}!`
     } else {
       return `The answer was released at least ${weeble.thresholds.year} years ${dif < 0 ? 'after' : 'before'} ${guess}.`
     }
