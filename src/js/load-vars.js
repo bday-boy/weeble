@@ -159,6 +159,10 @@ const loadPage = function () {
     placeholder.classList.remove('placeholder-glow');
   });
 
+  document.querySelectorAll('.progress-bar-striped.progress-bar-animated').forEach((progressBar) => {
+    progressBar.classList.remove('progress-bar-striped', 'progress-bar-animated');
+  });
+
   document.getElementById('episodes-low').textContent = weeble.ranges.episodes.min;
   document.getElementById('episodes-high').textContent = weeble.ranges.episodes.max;
 
