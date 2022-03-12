@@ -232,6 +232,21 @@ const showEndModal = function (modalTitle) {
 
   const modal = new bootstrap.Modal(document.getElementById('game-end-modal'));
   setTimeout(() => modal.show(), 1000);
+};
+
+const addTag = function (numTags) {
+  let tagCount = 0;
+  const addAllTags = (numTags === undefined || numTags === null);
+  const tagsElement = document.getElementById('tags');
+  while (weeble.anime.curTag < weeble.anime.tags.length && (addAllTags || tagCount < numTags)) {
+    const tag = weeble.anime.tags[weeble.anime.curTag++];
+    const tagText = `${tag.name.toUpperCase()} (${tag.rank}%)`;
+    const nextTag = createNewButton(tagText);
+    nextTag.classList.remove('btn-primary');
+    nextTag.classList.add('btn-success');
+    tagsElement.appendChild(nextTag);
+    tagCount++;
+  }
 }
 
 const handleCorrectAnswer = function () {
@@ -258,15 +273,7 @@ const handleCorrectAnswer = function () {
     return new bootstrap.Tooltip(tooltipTriggerEl)
   });
 
-  const tagsElement = document.getElementById('tags');
-  while (weeble.anime.curTag < weeble.anime.tags.length) {
-    const tag = weeble.anime.tags[weeble.anime.curTag++];
-    const tagText = `${tag.name.toUpperCase()} (${tag.rank}%)`;
-    const nextTag = createNewButton(tagText);
-    nextTag.classList.remove('btn-primary');
-    nextTag.classList.add('btn-success');
-    tagsElement.appendChild(nextTag);
-  }
+  addTag();
 
   showEndModal('You won!');
   weeble.anime = undefined;
@@ -309,12 +316,5 @@ const checkAnswer = function (inputTitle) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
   });
 
-  if (weeble.anime.curTag < weeble.anime.tags.length) {
-    const tag = weeble.anime.tags[weeble.anime.curTag++];
-    const tagText = `${tag.name.toUpperCase()} (${tag.rank}%)`;
-    const nextTag = createNewButton(tagText);
-    nextTag.classList.remove('btn-primary');
-    nextTag.classList.add('btn-success');
-    document.getElementById('tags').appendChild(nextTag);
-  }
+  addTag(1);
 };

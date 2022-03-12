@@ -80,7 +80,7 @@ const loadAnime = function () {
         }
         studios.forEach((studio) => {
           possibleStudios.add(studio);
-        })
+        });
         sources.add(source);
         formats.add(format);
         if (year < weeble.ranges.year.min) {
@@ -96,25 +96,9 @@ const loadAnime = function () {
 
       weeble.ranges.episodes.low = weeble.ranges.episodes.min;
       weeble.ranges.episodes.high = weeble.ranges.episodes.max;
-      document.getElementById('episodes-low').textContent = weeble.ranges.episodes.min;
-      document.getElementById('episodes-high').textContent = weeble.ranges.episodes.max;
-
-      const sourcesGroup = document.getElementById('sources');
-      [...sources].forEach((source) => {
-        const sourceBtn = createNewButton(source);
-        sourcesGroup.appendChild(sourceBtn);
-      });
-
-      const formatsGroup = document.getElementById('formats');
-      [...formats].forEach((format) => {
-        const formatBtn = createNewButton(format);
-        formatsGroup.appendChild(formatBtn);
-      });
 
       weeble.ranges.year.low = weeble.ranges.year.min;
       weeble.ranges.year.high = weeble.ranges.year.max;
-      document.getElementById('year-low').textContent = weeble.ranges.year.min;
-      document.getElementById('year-high').textContent = weeble.ranges.year.max;
 
       weeble.anime = randomAnime();
     })
@@ -165,4 +149,31 @@ const fetchTags = function (animeId) {
       return nonSpoilerTags;
     })
     .catch((error) => console.log(error));
+};
+const loadPage = function () {
+  document.querySelectorAll('.placeholder').forEach((placeholder) => {
+    placeholder.remove();
+  });
+
+  document.querySelectorAll('.placeholder-glow').forEach((placeholder) => {
+    placeholder.classList.remove('placeholder-glow');
+  });
+
+  document.getElementById('episodes-low').textContent = weeble.ranges.episodes.min;
+  document.getElementById('episodes-high').textContent = weeble.ranges.episodes.max;
+
+  const sourcesGroup = document.getElementById('sources');
+  [...sources].forEach((source) => {
+    const sourceBtn = createNewButton(source);
+    sourcesGroup.appendChild(sourceBtn);
+  });
+
+  const formatsGroup = document.getElementById('formats');
+  [...formats].forEach((format) => {
+    const formatBtn = createNewButton(format);
+    formatsGroup.appendChild(formatBtn);
+  });
+
+  document.getElementById('year-low').textContent = weeble.ranges.year.min;
+  document.getElementById('year-high').textContent = weeble.ranges.year.max;
 };

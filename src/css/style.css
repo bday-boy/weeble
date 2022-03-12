@@ -69,7 +69,7 @@ mark {
 }
 
 /* Bootstrap overrides */
-.hint-section .btn {
+.hint-section [type=button] {
   padding: 0.15rem 0.3rem;
 }
 .dropdown-menu {

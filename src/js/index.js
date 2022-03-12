@@ -128,6 +128,14 @@ const filterAndSuggest = () => {
       weeble.anime.tags = tags.sort((a, b) => a.rank < b.rank);
       weeble.anime.curTag = 0;
     })
+    .then(() => loadPage())
+    .then(() => {
+      if (firstImpression()) {
+        const modal = new bootstrap.Modal(document.getElementById('modal-intro'));
+        modal.show();
+        firstImpression(null); // FOR TESTING
+      }
+    })
     .catch((error) => console.log(error));
   document.getElementById('apply-filters').addEventListener('change', filterAndSuggest);
   document.getElementById('apply-filters').checked = true;
