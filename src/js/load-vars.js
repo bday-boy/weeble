@@ -6,16 +6,18 @@ weeble = {
   filteredTitles: {},
   thresholds: {
     episodes: 5,
-    year: 1,
+    year: 0,
   },
   ranges: {
     year: {
+      name: 'year',
       min: 1000000,
       max: 0,
       low: 1000000,
       high: 0,
     },
     episodes: {
+      name: 'episodes',
       min: 1000000,
       max: 0,
       low: 1000000,
@@ -41,17 +43,6 @@ const fetchInit = {
 };
 const filterToggle = document.getElementById('apply-filters');
 const shouldFilter = () => filterToggle.checked;
-const createNewButton = function (text) {
-  const small = document.createElement('small');
-  small.textContent = text;
-
-  const btn = document.createElement('button');
-  btn.appendChild(small);
-  btn.classList.add('btn', 'btn-primary', 'm-1', 'fs-6');
-  btn.type = 'button';
-  btn.id = text;
-  return btn;
-};
 const useAnime = function (anime) {
   return 25000 < anime.popularity;
 };
@@ -165,18 +156,6 @@ const loadPage = function () {
 
   document.getElementById('episodes-low').textContent = weeble.ranges.episodes.min;
   document.getElementById('episodes-high').textContent = weeble.ranges.episodes.max;
-
-  const sourcesGroup = document.getElementById('sources');
-  [...sources].forEach((source) => {
-    const sourceBtn = createNewButton(source);
-    sourcesGroup.appendChild(sourceBtn);
-  });
-
-  const formatsGroup = document.getElementById('formats');
-  [...formats].forEach((format) => {
-    const formatBtn = createNewButton(format);
-    formatsGroup.appendChild(formatBtn);
-  });
 
   document.getElementById('year-low').textContent = weeble.ranges.year.min;
   document.getElementById('year-high').textContent = weeble.ranges.year.max;

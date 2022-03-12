@@ -1,4 +1,5 @@
 const updateProgressSet = function (valArr, possibleSet, knownSet, type) {
+  const rootGroup = document.getElementById(type);
   const correctStudios = new Set(weeble.anime[type]);
   valArr.forEach((val) => {
     if (!correctStudios.has(val)) {
@@ -11,23 +12,22 @@ const updateProgressSet = function (valArr, possibleSet, knownSet, type) {
 };
 
 const updateProgressGroup = function (val, status, set, type) {
-  const rootGroup = document.getElementById(type);
+  const progressGroup = document.getElementById(type);
+  const btn = createNewButton(val);
   if (status === 'correct') {
     set.delete(val);
-    [...set].forEach((val) => {
-      const btn = rootGroup.querySelector(`#${val}`);
-      btn.classList.add('btn-secondary', 'd-none', 'd-md-inline-block');
-      btn.classList.remove('btn-primary');
-      btn.disabled = true;
+    progressGroup.querySelectorAll('.btn-secondary').forEach((incorrectBtn) => {
+      incorrectBtn.parentNode.removeChild(incorrectBtn);
     });
     set.clear();
     set.add(val);
-    rootGroup.querySelector(`#${val}`).classList.add('btn-success');
+    if (!document.getElementById(val)) {
+      btn.classList.add('btn-success');
+      progressGroup.appendChild(btn);
+    }
   } else {
-    const btn = rootGroup.querySelector(`#${val}`);
-    btn.classList.add('btn-secondary', 'd-none', 'd-md-inline-block');
-    btn.classList.remove('btn-primary');
-    btn.disabled = true;
+    btn.classList.add('btn-secondary');
+    progressGroup.appendChild(btn);
     set.delete(val);
   }
 };
@@ -72,6 +72,13 @@ const updateNumRange = function (newVal, dif, threshold, obj, key) {
 
   end.setAttribute('aria-valuenow', `${max - high}`);
   end.style.width = `${((max - high) / total) * 100 }%`;
+
+  if (withinThreshold && threshold === 0) {
+    const leftNum = document.getElementById(`${obj.name}-low`);
+    if (leftNum) {
+      leftNum.textContent = '';
+    }
+  }
 };
 
 const updateNumRangeCorrect = function () {
