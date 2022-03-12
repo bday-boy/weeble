@@ -134,15 +134,20 @@ const filterAndSuggest = () => {
         const modal = new bootstrap.Modal(document.getElementById('modal-intro'));
         modal.show();
       }
-      firstImpression(null); // TODO: DELETE AFTER TESTING
     })
     .catch((error) => console.log(error));
   
   const tdlrCheckbox = document.getElementById('tldr');
+  const weebleAbout = document.getElementById('weeble-about');
+  const weebleSettings = document.getElementById('weeble-settings');
+  const applyFilters = document.getElementById('apply-filters');
+  const userEntry = document.getElementById('anime-entry');
+  const guessBtn = document.getElementById('guess-button');
+
   tdlrCheckbox.checked = false;
   tdlrCheckbox.addEventListener('change', function () {
     const tldr = this.checked;
-    document.querySelectorAll('#modal-intro div[data-tldr=true]').forEach((section) => {
+    document.querySelectorAll('#modal-intro [data-tldr=true]').forEach((section) => {
       if (tldr) {
         section.classList.add('d-none');
       } else {
@@ -151,21 +156,21 @@ const filterAndSuggest = () => {
     });
   });
 
-  document.getElementById('weeble-about').addEventListener('click', () => {
+  weebleAbout.addEventListener('click', () => {
     const modal = new bootstrap.Modal(document.getElementById('modal-intro'));
     modal.show();
   });
-  
-  document.getElementById('weeble-settings').addEventListener('click', () => {
+
+  weebleSettings.addEventListener('click', function () {
     const modal = new bootstrap.Modal(document.getElementById('modal-settings'));
     modal.show();
   });
 
-  document.getElementById('apply-filters').checked = true;
-  document.getElementById('apply-filters').addEventListener('change', filterAndSuggest);
+  applyFilters.checked = true;
+  applyFilters.addEventListener('change', filterAndSuggest);
 
-  document.getElementById('anime-entry').addEventListener('input', suggestAnime);
-  document.getElementById('anime-entry').addEventListener('keydown', (e) => {
+  userEntry.addEventListener('input', suggestAnime);
+  userEntry.addEventListener('keydown', (e) => {
     if (e.key == 'ArrowDown') {
       const dropdown = document.getElementById('anime-suggestions');
       if (dropdown.firstChild) {
@@ -174,8 +179,7 @@ const filterAndSuggest = () => {
     }
   });
 
-  document.getElementById('guess-button').addEventListener('click', () => {
-    const userEntry = document.getElementById('anime-entry');
+  guessBtn.addEventListener('click', () => {
     const guess = userEntry.value;
     userEntry.value = '';
     checkAnswer(guess);
