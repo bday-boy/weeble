@@ -50,6 +50,10 @@ mark {
   left: -5em;
   bottom: 0.75em;
 }
+.text-above-right {
+  right: -5em;
+  bottom: 0.75em;
+}
 .text-below-right {
   right: -5em;
   top: 0.75em;
