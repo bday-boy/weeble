@@ -176,4 +176,6 @@ const loadPage = function () {
 
   document.getElementById('year-low').textContent = weeble.ranges.year.min;
   document.getElementById('year-high').textContent = weeble.ranges.year.max;
+
+  document.getElementById('anime-entry').disabled = false;
 };

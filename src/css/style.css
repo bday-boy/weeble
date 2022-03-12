@@ -69,6 +69,9 @@ mark {
 }
 
 /* Bootstrap overrides */
+span.placeholder {
+  line-height: 1;
+}
 .hint-section [type=button] {
   padding: 0.15rem 0.3rem;
 }
@@ -108,6 +111,7 @@ mark {
 }
 .modal-content {
   background-color: #111 !important;
+  box-shadow: 0 0 1.5rem #666;
 }
 .modal-body p {
   word-wrap: break-word;
