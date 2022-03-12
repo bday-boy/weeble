@@ -47,7 +47,10 @@ const createAnimeLi = function (animeId, title, index) {
 
   const li = document.createElement('li');
   li.appendChild(a);
-  li.addEventListener('click', replaceInput);
+  li.addEventListener('click', function () {
+    replaceInput.call(this);
+    document.getElementById('anime-entry').focus();
+  });
   return li;
 };
 
