@@ -16,7 +16,7 @@ const guessTooltips = {
     return answer;
   },
   episodes: (guess, dif, threshold) => {
-    if (Math.abs(dif) < threshold) {
+    if (Math.abs(dif) <= threshold) {
       return `The answer is within ${threshold} episodes of ${guess}!`;
     } else {
       return `The answer has at least ${weeble.thresholds.episodes + 1} ${dif < 0 ? 'more' : 'fewer'} episodes.`
@@ -194,7 +194,7 @@ const numCompare = function (guessNum, animeKey) {
     icon = `chevron-contract`;
     status = 'almost';
   } else {
-    icon = `chevron-double-${dif < 0 ? 'up' : 'down'}`;
+    icon = `chevron-${dif < 0 ? 'up' : 'down'}`;
     status = 'incorrect';
   }
   const statusNode = createIcon(icon, status);
