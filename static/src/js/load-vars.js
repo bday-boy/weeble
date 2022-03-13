@@ -81,8 +81,16 @@ const loadAnime = function () {
 
       weeble.ranges.year.low = weeble.ranges.year.min;
       weeble.ranges.year.high = weeble.ranges.year.max;
-
-      weeble.anime = randomAnime();
+    })
+    .catch((err) => console.log(err));
+};
+const loadDailyAnime = function () {
+  return fetch('/data/anime-daily.json')
+    .then((response) => response.json())
+    .then((anime_json) => {
+      const [animeId, animeInfo] = Object.entries(anime_json)[0];
+      animeInfo.id = parseInt(animeId);
+      weeble.anime = animeInfo;
     })
     .catch((err) => console.log(err));
 };

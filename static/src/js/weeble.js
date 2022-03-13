@@ -124,6 +124,7 @@ const filterAndSuggest = () => {
 
 (function () {
   loadAnime()
+    .then(() => loadDailyAnime())
     .then(() => loadTitles())
     .then(() => filterAndSuggest())
     .then(() => fetchTags(weeble.anime.id))
