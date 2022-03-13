@@ -3,11 +3,12 @@ import json
 from random import choice
 
 def random_anime():
-    with open('./../data/anime-database.json', 'r') as json_in:
+    with open('./static/data/anime-database.json', 'r') as json_in:
         all_anime = json.load(json_in)
-    anime_title, anime_info = choice(all_anime.items())
-    with open('./../data/anime-daily.json', 'w') as json_out:
-        json.dump({anime_title: anime_info}, json_out)
+    all_anime = filter(lambda x: x[1].get('popularity') > 25000, all_anime.items())
+    anime_title, anime_info = choice(list(all_anime))
+    with open('./static/data/anime-daily.json', 'w') as json_out:
+        json.dump({anime_title: anime_info}, json_out, indent=2)
 
 
 if __name__ == '__main__':
