@@ -4,6 +4,7 @@
 # Heroku stuff
 .env
 node_modules/
+anime-daily.json
 
 # Data folders
 cache/*
