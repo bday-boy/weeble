@@ -6,24 +6,27 @@ data to make a Wordle- or Squirle-like game.
 ## Guessing criteria
 
 - Studio
-- Episode count
-- Year
-- Popularity
 - Format
 - Source
+- Year
+- Episodes
 
 ## TO-DO
 
 ### High-priority
 
-- Add give up button and win/lose screen
-- Make user unable to guess exact ranges of numbers
+- Add give up button
+- Add sharing text
 - Fix guess info badges/tooltips
+- Mess around with thresholds and see what works
 
 ### Low-priority
 
 - Optimize search suggestions
+- Add daily anime/free play
 - Fix on mobile
+- Dropdown show on input
+- Add hardmode/max num of guesses
 
 ## Bugs
 
