@@ -15,6 +15,9 @@ const guessTooltips = {
     return answer;
   },
   episodes: (guess, dif, threshold) => {
+    /* TODO: Fix bug where user lowers episode bar to threshold and then guesses
+     * another amount of episodes and it creates weird tooltip text
+     */
     if (Math.abs(dif) <= threshold) {
       return `The answer is within ${threshold} episodes of ${guess}!`;
     } else {
@@ -119,12 +122,12 @@ const correctProgress = {
   episodes() {
     const correctEpisodes = weeble.anime.episodes;
     const threshold = weeble.thresholds.episodes;
-    updateNumRange(correctEpisodes, 0, threshold, correctEpisodes, 'episodes');
+    updateNumRangeCorrect(correctEpisodes, 0, threshold, weeble.ranges.episodes, 'episodes');
   },
   year() {
     const correctYear = weeble.anime.year;
     const threshold = weeble.thresholds.year;
-    updateNumRange(correctYear, 0, threshold, correctYear, 'year');
+    updateNumRangeCorrect(correctYear, 0, threshold, weeble.ranges.year, 'year');
   },
   format() {
     const correctFormat = weeble.anime.format;

@@ -108,6 +108,19 @@ span.placeholder {
   color: var(--text-color-dark) !important;
   box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.5) !important;
 }
+.popover {
+  background-color: var(--bg-color-input) !important;
+  border-color: rgba(var(--bs-secondary-rgb), 1) !important;
+  color: var(--text-color-dark) !important;
+}
+.popover-header {
+  background-color: var(--bg-color-input) !important;
+  color: var(--text-color-dark) !important;
+}
+.popover-body {
+  color: var(--text-color-dark) !important;
+  text-align: center;
+}
 .btn-success {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;

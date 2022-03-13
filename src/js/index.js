@@ -134,36 +134,41 @@ const filterAndSuggest = () => {
     .then(() => loadPage())
     .then(() => {
       if (firstImpression()) {
-        const modal = new bootstrap.Modal(document.getElementById('modal-intro'));
+        const modal = new bootstrap.Modal(document.getElementById('modal-about'));
         modal.show();
       }
     })
     .catch((error) => console.log(error));
   
-  const tdlrCheckbox = document.getElementById('tldr');
   const weebleAbout = document.getElementById('weeble-about');
+  const tdlrCheckbox = document.getElementById('tldr');
   const weebleSettings = document.getElementById('weeble-settings');
   const highContrast = document.getElementById('high-contrast');
   const darkMode = document.getElementById('dark-mode');
   const applyFilters = document.getElementById('apply-filters');
+  const copyAnilist = document.getElementById('anilist');
+  const copyDiscord = document.getElementById('discord');
+  const copyGeneral = document.getElementById('general');
   const userEntry = document.getElementById('anime-entry');
   const guessBtn = document.getElementById('guess-button');
+
+  weebleAbout.addEventListener('click', () => {
+    const aboutModal = document.getElementById('modal-about');
+    aboutModal.removeAttribute('data-bs-backdrop');
+    const bsModal = new bootstrap.Modal(aboutModal);
+    bsModal.show();
+  });
 
   tdlrCheckbox.checked = false;
   tdlrCheckbox.addEventListener('change', function () {
     const tldr = this.checked;
-    document.querySelectorAll('#modal-intro [data-tldr=true]').forEach((section) => {
+    document.querySelectorAll('#modal-about [data-tldr=true]').forEach((section) => {
       if (tldr) {
         section.classList.add('d-none');
       } else {
         section.classList.remove('d-none');
       }
     });
-  });
-
-  weebleAbout.addEventListener('click', () => {
-    const modal = new bootstrap.Modal(document.getElementById('modal-intro'));
-    modal.show();
   });
 
   weebleSettings.addEventListener('click', function () {
@@ -199,6 +204,21 @@ const filterAndSuggest = () => {
 
   applyFilters.checked = true;
   applyFilters.addEventListener('change', filterAndSuggest);
+
+  copyAnilist.addEventListener('click', function () {
+    const copyText = createCopyText('anilist');
+    copyToClipboard(copyText, this);
+  });
+
+  copyDiscord.addEventListener('click', function () {
+    const copyText = createCopyText('discord');
+    copyToClipboard(copyText, this);
+  });
+
+  copyGeneral.addEventListener('click', function () {
+    const copyText = createCopyText('general');
+    copyToClipboard(copyText, this);
+  });
 
   userEntry.addEventListener('input', suggestAnime);
   userEntry.addEventListener('keydown', (e) => {
