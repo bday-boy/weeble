@@ -9,9 +9,6 @@
   --text-color: var(--text-color-dark);
 }
 
-html {
-  overflow-x: hidden;
-}
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
@@ -73,8 +70,15 @@ mark {
 
 /* Applies to medium devices and below */
 @media (max-width: 991.98px) {
-  html {
+  html, body {
     overflow-x: hidden;
+    overflow-y: visible;
+  }
+  body {
+    position: relative
+  }
+  body {
+    padding-bottom: 30em;
   }
 }
 
