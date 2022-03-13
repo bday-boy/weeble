@@ -1,6 +1,10 @@
 # VSCode stuff
 .vscode/
 
+# Heroku stuff
+.env
+node_modules/
+
 # Data folders
 cache/*
 !cache/README.md
