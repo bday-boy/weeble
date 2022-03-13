@@ -46,7 +46,7 @@ const createCopyText = function (location) {
       copyTexts.push(getGuessEmojis(guessWrapper, location) + '\n');
     }
   });
-  copyTexts.push('http://127.0.0.1:5500/src/');
+  copyTexts.push('https://weeble.herokuapp.com/');
   return copyTexts.join('');
 };
 
