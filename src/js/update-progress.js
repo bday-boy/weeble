@@ -81,6 +81,27 @@ const updateNumRange = function (newVal, dif, threshold, obj, key) {
   }
 };
 
-const updateNumRangeCorrect = function () {
+const updateNumRangeCorrect = function (newVal, dif, threshold, obj, key) {
+  obj.low = obj.high = newVal;
 
+  const { min, max, low, high } = obj;
+  const total = (max - min);
+
+  document.getElementById(`${key}-low`).textContent = low;
+  document.getElementById(`${key}-high`).textContent = high;
+
+  const start = document.getElementById(`${key}-progress-left`);
+  const middle = document.getElementById(`${key}-progress-middle`);
+  const end = document.getElementById(`${key}-progress-right`);
+
+  start.setAttribute('aria-valuenow', `${low - min}`);
+  start.style.width = `${((low - min) / total) * 100 - 5 / 2}%`;
+
+  middle.setAttribute('aria-valuenow', `${high - low}`);
+  middle.style.width = `${((high - low) / total) * 100 + 5}%`;
+
+  end.setAttribute('aria-valuenow', `${max - high}`);
+  end.style.width = `${((max - high) / total) * 100 - 5 / 2}%`;
+
+  document.getElementById(`${obj.name}-low`).textContent = '';
 };
