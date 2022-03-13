@@ -9,7 +9,11 @@
   --text-color: var(--text-color-dark);
 }
 
+html, body {
+  overflow-x: hidden;
+}
 body {
+  position: relative;
   background-color: var(--bg-color);
   color: var(--text-color);
 }
@@ -68,6 +72,17 @@ mark {
   overflow-x: visible;
 }
 
+/* Applies to medium devices and below */
+@media (max-width: 991.98px) {
+  html, body {
+    overflow-x: hidden;
+  }
+  body {
+    position: relative;
+  }
+}
+
+/* Applies to medium devices and above */
 @media (min-width: 768px) {
   #guesses {
     font-size: xx-large;
