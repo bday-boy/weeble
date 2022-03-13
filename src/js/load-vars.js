@@ -6,7 +6,7 @@ weeble = {
   filteredTitles: {},
   thresholds: {
     episodes: 5,
-    year: 0,
+    year: 1,
   },
   ranges: {
     year: {

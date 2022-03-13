@@ -1,18 +1,22 @@
 :root {
   --bg-dark: var(--bs-dark);
   --bg-light: var(--bs-body-bg);
+  --bg-color: var(--bg-dark);
+  --bg-color-input: #343a40;
 
-  --color-dark: whitesmoke;
-  --color-light: var(--bs-body-color);
+  --text-color-dark: rgb(245, 245, 245);
+  --text-color-light: var(--bs-body-color);
+  --text-color: var(--text-color-dark);
 }
 
-body.dark-mode {
-  background-color: var(--bg-dark);
-  color: var(--color-dark);
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 body.light-mode {
-  background-color: var(--bg-light);
-  color: var(--color-light);
+  --bg-color:  var(--bg-light);
+  --bg-color-input: #eee;
+  --text-color: var(--text-color-light);
 }
 mark {
   padding: 0;
@@ -32,15 +36,12 @@ mark {
 }
 .icon-wrapper {
   border-radius: 50%;
-  color: var(--color-light);
+  color: var(--text-color-light);
   height: 1.5em;
   width: 1.5em;
 }
-.text-left {
-  left: -4ch;
-}
-.text-right {
-  left: 0px;
+.hint-section [type=button] {
+  padding: 0.15rem 0.3rem;
 }
 .floating-text-wrapper {
   font-family: var(--bs-font-monospace);
@@ -86,13 +87,34 @@ span.placeholder {
   line-height: 1;
 }
 
+.modal-body textarea.form-control {
+  min-height: 8em;
+}
+.modal-content {
+  background-color: var(--bg-color);
+  box-shadow: 0 0 1.5rem #666;
+}
+.modal-body p {
+  word-wrap: break-word;
+}
+.form-control {
+  background-color: var(--bg-color-input);
+  border-color: rgba(var(--bs-secondary-rgb), 1);
+  color: var(--text-color-dark);
+}
+.form-control:focus {
+  background-color: var(--bg-color-input);
+  border-color: #2a7fff;
+  color: var(--text-color-dark);
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.5);
+}
 .btn-success {
   --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-success-rgb),var(--bs-bg-opacity)) !important;
-  border-color: rgba(var(--bs-success-rgb),var(--bs-bg-opacity)) !important;
+  background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
+  border-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
 }
-.hint-section [type=button] {
-  padding: 0.15rem 0.3rem;
+.btn-success:focus {
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-success-rgb), 0.5) !important;
 }
 .dropdown-menu {
   max-height: 25em;
@@ -114,16 +136,6 @@ span.placeholder {
 }
 .progress > .progress-bar {
   border-radius: .25rem;
-}
-.modal-body textarea.form-control {
-  min-height: 8em;
-}
-.modal-content {
-  background-color: #111 !important;
-  box-shadow: 0 0 1.5rem #666;
-}
-.modal-body p {
-  word-wrap: break-word;
 }
 
 #title .bi {

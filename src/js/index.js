@@ -143,8 +143,9 @@ const filterAndSuggest = () => {
   const tdlrCheckbox = document.getElementById('tldr');
   const weebleAbout = document.getElementById('weeble-about');
   const weebleSettings = document.getElementById('weeble-settings');
-  const applyFilters = document.getElementById('apply-filters');
   const highContrast = document.getElementById('high-contrast');
+  const darkMode = document.getElementById('dark-mode');
+  const applyFilters = document.getElementById('apply-filters');
   const userEntry = document.getElementById('anime-entry');
   const guessBtn = document.getElementById('guess-button');
 
@@ -170,16 +171,34 @@ const filterAndSuggest = () => {
     modal.show();
   });
 
-  applyFilters.checked = true;
-  applyFilters.addEventListener('change', filterAndSuggest);
+  if (darkMode.checked) {
+    document.body.classList.remove('light-mode');
+  } else {
+    document.body.classList.add('light-mode');
+  }
+  darkMode.addEventListener('change', function () {
+    if (this.checked) {
+      document.body.classList.remove('light-mode');
+    } else {
+      document.body.classList.add('light-mode');
+    }
+  });
 
+  if (highContrast.checked) {
+    document.body.classList.add('high-contrast');
+  } else {
+    document.body.classList.remove('high-contrast');
+  }
   highContrast.addEventListener('change', function () {
     if (this.checked) {
       document.body.classList.add('high-contrast');
     } else {
       document.body.classList.remove('high-contrast');
     }
-  })
+  });
+
+  applyFilters.checked = true;
+  applyFilters.addEventListener('change', filterAndSuggest);
 
   userEntry.addEventListener('input', suggestAnime);
   userEntry.addEventListener('keydown', (e) => {
