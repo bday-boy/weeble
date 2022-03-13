@@ -52,9 +52,7 @@ const createCopyText = function (location) {
 
 const copyFallbackFallback = function (copyText) {
   const copyTextarea = document.getElementById('copy-text');
-  copyTextarea.removeAttribute('readonly');
-  copyTextarea.textContent = copyText;
-  copyTextarea.setAttribute('readonly', 'true');
+  copyTextarea.value = copyText;
 };
 
 const copyFallback = function (copyText) {
@@ -102,5 +100,5 @@ const copyToClipboard = function (copyText, copyButton) {
       .then(() => copyPopover(true))
       .catch(() => copyPopover(copyFallback(copyText)));
   }
-  copyFallbackFallback();
+  copyFallbackFallback(copyText);
 };
