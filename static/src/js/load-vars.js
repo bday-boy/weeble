@@ -92,7 +92,7 @@ const loadDailyAnime = function () {
       animeInfo.id = parseInt(animeId);
       weeble.anime = animeInfo;
     })
-    .catch((err) => console.log(err));
+    .catch(() => weeble.anime = randomAnime());
 };
 const fetchTags = function (animeId) {
   const query = `
