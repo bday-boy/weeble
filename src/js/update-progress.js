@@ -95,13 +95,13 @@ const updateNumRangeCorrect = function (newVal, dif, threshold, obj, key) {
   const end = document.getElementById(`${key}-progress-right`);
 
   start.setAttribute('aria-valuenow', `${low - min}`);
-  start.style.width = `${((low - min) / total) * 100 - 5 / 2}%`;
+  start.style.width = `${((low - min) / total) * 100 - 3 / 2}%`;
 
   middle.setAttribute('aria-valuenow', `${high - low}`);
-  middle.style.width = `${((high - low) / total) * 100 + 5}%`;
+  middle.style.width = `${3}%`;
 
   end.setAttribute('aria-valuenow', `${max - high}`);
-  end.style.width = `${((max - high) / total) * 100 - 5 / 2}%`;
+  end.style.width = `${((max - high) / total) * 100 - 3 / 2}%`;
 
   document.getElementById(`${obj.name}-low`).textContent = '';
 };
