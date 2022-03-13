@@ -32,22 +32,13 @@ const formats = new Set();
 const guesses = new Set();
 const guessesAdd = (animeId) => guesses.add(parseInt(animeId));
 const guessesHas = (animeId) => guesses.has(parseInt(animeId));
-const headers = new Headers({
-  'Access-Control-Allow-Origin': 'http://127.0.0.1:5500'
-});
-const fetchInit = {
-  method: 'GET',
-  headers: headers,
-  mode: 'cors',
-  cache: 'default',
-};
 const filterToggle = document.getElementById('apply-filters');
 const shouldFilter = () => filterToggle.checked;
 const useAnime = function (anime) {
   return 25000 < anime.popularity;
 };
 const loadTitles = function () {
-  return fetch('http://127.0.0.1:5500/data/anime-titles.json', fetchInit)
+  return fetch('/data/anime-titles.json')
     .then((response) => response.json())
     .then((anime_json) => {
       const titles = anime_json.titles;
@@ -58,7 +49,7 @@ const loadTitles = function () {
     .catch((err) => console.log(err));
 };
 const loadAnime = function () {
-  return fetch('http://127.0.0.1:5500/data/anime-database.json', fetchInit)
+  return fetch('/data/anime-database.json')
     .then((response) => response.json())
     .then((anime_json) => {
       weeble.allAnime = anime_json;
