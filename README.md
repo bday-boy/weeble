@@ -19,6 +19,9 @@ data to make a Wordle- or Squirle-like game.
 - Add sharing text
 - Fix guess info badges/tooltips
 - Mess around with thresholds and see what works
+- Ignore anime that have titles/synonyms that already exist
+- Fix tooltips so that they don't mention explicit number values anymore and
+  instead just mention the range
 
 ### Low-priority
 
