@@ -5,7 +5,7 @@
   --bg-color-input: #343a40;
 
   --text-color-dark: rgb(245, 245, 245);
-  --text-color-light: var(--bs-body-color);
+  --text-color-light: black;
   --text-color: var(--text-color-dark);
 }
 
@@ -100,25 +100,25 @@ span.placeholder {
 .form-control {
   background-color: var(--bg-color-input) !important;
   border-color: rgba(var(--bs-secondary-rgb), 1) !important;
-  color: var(--text-color-dark) !important;
+  color: var(--text-color) !important;
 }
 .form-control:focus {
   background-color: var(--bg-color-input) !important;
   border-color: #2a7fff !important;
-  color: var(--text-color-dark) !important;
+  color: var(--text-color) !important;
   box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.5) !important;
 }
 .popover {
   background-color: var(--bg-color-input) !important;
   border-color: rgba(var(--bs-secondary-rgb), 1) !important;
-  color: var(--text-color-dark) !important;
+  color: var(--text-color) !important;
 }
 .popover-header {
   background-color: var(--bg-color-input) !important;
-  color: var(--text-color-dark) !important;
+  color: var(--text-color) !important;
 }
 .popover-body {
-  color: var(--text-color-dark) !important;
+  color: var(--text-color) !important;
   text-align: center;
 }
 .btn-success {
@@ -141,6 +141,12 @@ span.placeholder {
 }
 .dropdown-menu > li:nth-child(n+1) {
   border-bottom: 1px solid #6c757d;
+}
+.dropdown-menu-dark {
+  background-color: var(--bg-color-input) !important;
+}
+.dropdown-menu-dark .dropdown-item {
+  color: var(--text-color) !important;
 }
 .progress {
   font-size: 1em;
