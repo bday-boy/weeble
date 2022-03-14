@@ -2,8 +2,8 @@ const isSubset = (A, B) => (![...A].some((x) => !B.has(x)));
 const setDif = (A, B) => new Set([...A].filter((x) => !B.has(x)));
 const setIntersection = (A, B) => new Set([...A].filter((x) => B.has(x)));
 
-const randomAnime = function (animeInfo) {
-  const allAnimeObjs = Object.entries(animeInfo);
+const randomAnime = function (allAnimeObj) {
+  const allAnimeObjs = Object.entries(allAnimeObj);
   const anime = allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
   const [animeId, animeInfo] = anime;
   animeInfo.id = parseInt(animeId);
