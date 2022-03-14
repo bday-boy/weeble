@@ -82,7 +82,6 @@ const fetchDailyAnime = function () {
       } else {
         weeble.anime = randomAnime(weeble.possibleAnime);
       }
-      console.log(dailyAnime);
     })
     .catch(() => weeble.anime = randomAnime(weeble.possibleAnime));
 };

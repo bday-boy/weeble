@@ -157,14 +157,14 @@ const init = function () {
       const dropdownBtn = document.getElementById('toggle-suggestions');
       const userEntry = document.getElementById('anime-entry');
       const guessBtn = document.getElementById('guess-button');
-    
+      
       weebleAbout.addEventListener('click', () => {
         const aboutModal = document.getElementById('modal-about');
         aboutModal.removeAttribute('data-bs-backdrop');
         const bsModal = new bootstrap.Modal(aboutModal);
         bsModal.show();
       });
-    
+      
       tdlrCheckbox.checked = false;
       tdlrCheckbox.addEventListener('change', function () {
         const tldr = this.checked;
@@ -176,12 +176,12 @@ const init = function () {
           }
         });
       });
-    
+      
       weebleSettings.addEventListener('click', function () {
         const modal = new bootstrap.Modal(document.getElementById('modal-settings'));
         modal.show();
       });
-    
+      
       if (darkMode.checked) {
         document.body.classList.remove('light-mode');
       } else {
@@ -194,7 +194,7 @@ const init = function () {
           document.body.classList.add('light-mode');
         }
       });
-    
+      
       if (highContrast.checked) {
         document.body.classList.add('high-contrast');
       } else {
@@ -207,31 +207,31 @@ const init = function () {
           document.body.classList.remove('high-contrast');
         }
       });
-    
+      
       applyFilters.checked = true;
       applyFilters.addEventListener('change', filterAndSuggest);
-    
+      
       copyAnilist.addEventListener('click', function () {
         const copyText = createCopyText('anilist');
         copyToClipboard(copyText, this);
       });
-    
+      
       copyDiscord.addEventListener('click', function () {
         const copyText = createCopyText('discord');
         copyToClipboard(copyText, this);
       });
-    
+      
       copyGeneral.addEventListener('click', function () {
         const copyText = createCopyText('general');
         copyToClipboard(copyText, this);
       });
-    
+      
       userEntry.addEventListener('input', suggestAnime);
       userEntry.addEventListener('keydown', (e) => {
         if (e.defaultPrevented) {
           return;
         }
-    
+        
         switch (e.key) {
           case 'ArrowDown':
           case 'Down':
@@ -249,10 +249,10 @@ const init = function () {
           default:
             return;
         }
-    
+        
         e.preventDefault();
       });
-    
+      
       guessBtn.addEventListener('click', () => {
         const guess = userEntry.value;
         userEntry.value = '';
