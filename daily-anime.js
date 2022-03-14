@@ -6,7 +6,7 @@ const pool = new Pool({
     rejectUnauthorized: false
   }
 });
-const insertQuery = 'INSERT INTO anime VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)';
+const insertQuery = 'INSERT INTO DailyAnime VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)';
 
 const formatArray = function (arr) {
   const newArr = []
