@@ -16,7 +16,7 @@ picture = EXCLUDED.picture, synonyms = EXCLUDED.synonyms,
 format = EXCLUDED.format, year = EXCLUDED.year`;
 
 const formatArray = function (arr) {
-  const newArr = []
+  const newArr = [];
   arr.forEach((el) => {
     newArr.push(`'${el.replaceAll("'", "''")}'`);
   });
@@ -51,7 +51,7 @@ const randomAnime = function (allAnimeObj) {
     });
     const newAnime = randomAnime(validAnime);
     const date = new Date();
-    const insertDate = `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDay()}`;
+    const insertDate = date.toISOString().split('T')[0];
     client.query(insertQuery, [
       newAnime.id,
       newAnime.title,
