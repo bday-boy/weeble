@@ -12,14 +12,14 @@ const getGuessTitle = function (guessWrapper, location) {
 const getIconEmoji = function (iconWrapper, location) {
   if (iconWrapper.classList.contains('bg-success')) {
     if (document.body.classList.contains('high-contrast')) {
-      return location === 'discord' ? ':green_square:' : String.fromCodePoint(0x1F7E6);
+      return String.fromCodePoint(0x1F7E6);
     } else {
-      return location === 'discord' ? ':blue_square:' : String.fromCodePoint(0x1F7E9);
+      return String.fromCodePoint(0x1F7E9);
     }
   } else if (iconWrapper.classList.contains('bg-warning')) {
-    return location === 'discord' ? ':yellow_square:' : String.fromCodePoint(0x1F7E8);
+    return String.fromCodePoint(0x1F7E8);
   } else {
-    return location === 'discord' ? ':red_square:' : String.fromCodePoint(0x1F7E5);
+    return String.fromCodePoint(0x1F7E5);
   }
 };
 
