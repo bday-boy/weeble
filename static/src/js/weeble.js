@@ -122,9 +122,9 @@ const filterAndSuggest = () => {
   suggestAnime();
 };
 
-(function () {
-  fetchAllAnime()
-    .then(() => fetchDailyAnime())
+const init = function (isDaily) {
+  return fetchAllAnime()
+    .then(() => (isDaily ? fetchDailyAnime() : weeble.anime = randomAnime(weeble.possibleAnime)))
     .then(() => fetchAnimeTitles())
     .then(() => filterAndSuggest())
     .then(() => fetchTags(weeble.anime.id))
@@ -140,6 +140,10 @@ const filterAndSuggest = () => {
       }
     })
     .catch((error) => console.log(error));
+};
+
+(function () {
+  init(true);
   
   const weebleAbout = document.getElementById('weeble-about');
   const tdlrCheckbox = document.getElementById('tldr');
