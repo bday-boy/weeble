@@ -6,14 +6,21 @@ const pool = new Pool({
     rejectUnauthorized: false
   }
 });
-const insertQuery = 'INSERT INTO DailyAnime VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)';
+const insertQuery = `INSERT INTO DailyAnime
+VALUES ($1,$2,Array[$3],$4,$5,$6,$7,Array[$8],$9,$10,$11)
+ON CONFLICT (date)
+DO UPDATE SET id = EXCLUDED.id, title = EXCLUDED.title,
+studios = EXCLUDED.studios, popularity = EXCLUDED.popularity,
+episodes = EXCLUDED.episodes, source = EXCLUDED.source,
+picture = EXCLUDED.picture, synonyms = EXCLUDED.synonyms,
+format = EXCLUDED.format, year = EXCLUDED.year`;
 
 const formatArray = function (arr) {
   const newArr = []
   arr.forEach((el) => {
     newArr.push(`'${el.replaceAll("'", "''")}'`);
   });
-  return `ARRAY[${newArr.join(', ')}]`;
+  return newArr.join(', ');
 };
 
 const useAnime = function (animeInfo) {
