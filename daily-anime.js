@@ -55,7 +55,7 @@ const randomAnime = function (allAnimeObj) {
       newAnime.title,
       formatArray(newAnime.studios),
       newAnime.popularity,
-      newAnime.episdes,
+      newAnime.episodes,
       newAnime.source,
       newAnime.picture,
       formatArray(newAnime.synonyms),
