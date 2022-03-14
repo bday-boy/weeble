@@ -139,6 +139,7 @@ const filterAndSuggest = () => {
         modal.show();
       }
     })
+    .then(() => fetchDBTest())
     .catch((error) => console.log(error));
   
   const weebleAbout = document.getElementById('weeble-about');
