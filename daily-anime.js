@@ -16,11 +16,10 @@ picture = EXCLUDED.picture, synonyms = EXCLUDED.synonyms,
 format = EXCLUDED.format, year = EXCLUDED.year`;
 
 const formatArray = function (arr) {
-  const newArr = [];
-  arr.forEach((el) => {
-    newArr.push(`'${el.replaceAll("'", "''")}'`);
+  arr.forEach((elm, index) => {
+    arr[index] = elm.replaceAll("'", "''");
   });
-  return newArr;
+  return arr;
 };
 
 const useAnime = function (animeInfo) {
