@@ -2,10 +2,10 @@ const isSubset = (A, B) => (![...A].some((x) => !B.has(x)));
 const setDif = (A, B) => new Set([...A].filter((x) => !B.has(x)));
 const setIntersection = (A, B) => new Set([...A].filter((x) => B.has(x)));
 
-const randomAnime = function () {
-  const allAnimeObjs = Object.entries(weeble.possibleAnime);
-  const randomAnime = allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
-  const [animeId, animeInfo] = randomAnime;
+const randomAnime = function (animeInfo) {
+  const allAnimeObjs = Object.entries(animeInfo);
+  const anime = allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
+  const [animeId, animeInfo] = anime;
   animeInfo.id = parseInt(animeId);
   return animeInfo;
 };

@@ -92,7 +92,15 @@ const loadDailyAnime = function () {
       animeInfo.id = parseInt(animeId);
       weeble.anime = animeInfo;
     })
-    .catch(() => weeble.anime = randomAnime());
+    .catch(() => weeble.anime = randomAnime(weeble.possibleAnime));
+};
+const fetchDBTest = function () {
+  return fetch('/db')
+    .then((response) => response.json())
+    .then((anime_json) => {
+      console.log(anime_json);
+    })
+    .catch((err) => console.log(err));
 };
 const fetchTags = function (animeId) {
   const query = `
