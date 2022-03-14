@@ -20,13 +20,13 @@ const useAnime = function (animeInfo) {
   return 25000 < animeInfo.popularity;
 };
 
-const randomAnime = function (animeObj) {
-  const allAnimeObjs = Object.entries(animeObj);
-  const randomAnime = allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
-  const [animeId, animeInfo] = randomAnime;
-  animeInfo.id = parseInt(animeId);
-  return animeInfo;
-};
+// const randomAnime = function (animeObj) {
+//   const allAnimeObjs = Object.entries(animeObj);
+//   const randomAnime = allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
+//   const [animeId, animeInfo] = randomAnime;
+//   animeInfo.id = parseInt(animeId);
+//   return animeInfo;
+// };
 
 fetch('./static/data/anime-database.json')
   .then((res) => res.json())
