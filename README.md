@@ -15,7 +15,8 @@ data to make a Wordle- or Squirle-like game.
 
 ### High-priority
 
-- Add give up button
+- Add free play, give up, and show end buttons
+- Add cookies for users who have already done the daily
 - Fix guess info badges/tooltips
 - Mess around with thresholds and see what works
 - Ignore anime that have titles/synonyms that already exist
