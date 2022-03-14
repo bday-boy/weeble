@@ -37,17 +37,6 @@ const shouldFilter = () => filterToggle.checked;
 const useAnime = function (anime) {
   return 25000 < anime.popularity;
 };
-const fetchAnimeTitles = function () {
-  return fetch('/data/anime-titles.json')
-    .then((response) => response.json())
-    .then((anime_json) => {
-      const titles = anime_json.titles;
-      const synonyms = anime_json.synonyms;
-      weeble.titles = {...synonyms, ...titles};
-      weeble.filteredTitles = anime_json;
-    })
-    .catch((err) => console.log(err));
-};
 const fetchAllAnime = function () {
   return fetch('/data/anime-database.json')
     .then((response) => response.json())
@@ -96,6 +85,17 @@ const fetchDailyAnime = function () {
       console.log(dailyAnime);
     })
     .catch(() => weeble.anime = randomAnime(weeble.possibleAnime));
+};
+const fetchAnimeTitles = function () {
+  return fetch('/data/anime-titles.json')
+    .then((response) => response.json())
+    .then((anime_json) => {
+      const titles = anime_json.titles;
+      const synonyms = anime_json.synonyms;
+      weeble.titles = {...synonyms, ...titles};
+      weeble.filteredTitles = anime_json;
+    })
+    .catch((err) => console.log(err));
 };
 const fetchTags = function (animeId) {
   const query = `

@@ -2,6 +2,8 @@ const isSubset = (A, B) => (![...A].some((x) => !B.has(x)));
 const setDif = (A, B) => new Set([...A].filter((x) => !B.has(x)));
 const setIntersection = (A, B) => new Set([...A].filter((x) => B.has(x)));
 
+const endText = (won) => (won ? 'You win!' : 'Better luck tomorrow!');
+
 const randomAnime = function (allAnimeObj) {
   const allAnimeObjs = Object.entries(allAnimeObj);
   const anime = allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
@@ -23,6 +25,13 @@ const createNewButton = function (text, btnClass) {
   btn.type = 'button';
   btn.id = text;
   return btn;
+};
+
+const getNextDay = function () {
+  const date = new Date();
+  date.setDate(date.getDate() + 1);
+  date.setHours(0, 0, 0, 0);
+  return date.toISOString();
 };
 
 const levenshtein = function (s, t) {

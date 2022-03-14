@@ -240,10 +240,11 @@ const showEndModal = function (modalTitle) {
   setTimeout(() => modal.show(), 1000);
 };
 
-const endGame = function () {
+const endGame = function (won) {
   weeble.anime = undefined;
   weeble.titles = undefined;
   weeble.filteredTitles = undefined;
+  didDaily(won);
 };
 
 const addTag = function (numTags) {
@@ -290,8 +291,8 @@ const handleCorrectAnswer = function () {
   });
 
   addAllTags();
-  showEndModal('You won!');
-  endGame();
+  showEndModal(endText(true));
+  endGame(true);
 };
 
 const checkAnswer = function (inputTitle) {
