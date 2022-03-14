@@ -7,7 +7,7 @@ const pool = new Pool({
   }
 });
 const insertQuery = `INSERT INTO DailyAnime
-VALUES ($1,$2,Array[$3],$4,$5,$6,$7,Array[$8],$9,$10,$11)
+VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
 ON CONFLICT (date)
 DO UPDATE SET id = EXCLUDED.id, title = EXCLUDED.title,
 studios = EXCLUDED.studios, popularity = EXCLUDED.popularity,
