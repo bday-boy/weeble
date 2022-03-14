@@ -1,5 +1,4 @@
 const animeJson = require('./static/data/anime-database.json');
-const { randomAnime } = require('./static/src/js/utils');
 const { Pool } = require('pg');
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -19,6 +18,14 @@ const formatArray = function (arr) {
 
 const useAnime = function (animeInfo) {
   return 25000 < animeInfo.popularity;
+};
+
+const randomAnime = function (allAnimeObj) {
+  const allAnimeObjs = Object.entries(allAnimeObj);
+  const anime = allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
+  const [animeId, animeInfo] = anime;
+  animeInfo.id = parseInt(animeId);
+  return animeInfo;
 };
 
 (async function () {
