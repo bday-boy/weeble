@@ -122,9 +122,9 @@ const filterAndSuggest = () => {
   suggestAnime();
 };
 
-const init = function (isDaily) {
+const init = function () {
   return fetchAllAnime()
-    .then(() => (isDaily ? fetchDailyAnime() : weeble.anime = randomAnime(weeble.possibleAnime)))
+    .then(() => fetchDailyAnime())
     .then(() => fetchAnimeTitles())
     .then(() => filterAndSuggest())
     .then(() => fetchTags(weeble.anime.id))
@@ -143,7 +143,7 @@ const init = function (isDaily) {
 };
 
 (function () {
-  init(true)
+  init()
     .then(() => {
       const weebleAbout = document.getElementById('weeble-about');
       const tdlrCheckbox = document.getElementById('tldr');
@@ -265,7 +265,10 @@ const init = function (isDaily) {
         dropdownBtn.disabled = true;
         userEntry.disabled = true;
         guessBtn.disabled = true;
-        showEndModal(endText(done));
+        const todayGuesses = window.localStorage.getItem(getDateToday());
+        todayGuesses.split(':::').forEach((guess) => {
+          checkAnswer(guess);
+        });
       }
     });
 })();

@@ -34,6 +34,11 @@ const getNextDay = function () {
   return date.toISOString();
 };
 
+const getDateToday = function () {
+  const date = new Date();
+  return date.toISOString().split('T')[0];
+};
+
 const levenshtein = function (s, t) {
   if (s === t) {
     return 0;

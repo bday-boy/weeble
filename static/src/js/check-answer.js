@@ -289,6 +289,9 @@ const handleCorrectAnswer = function () {
   const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl);
   });
+  if (!didDaily()) {
+    window.localStorage.setItem(getDateToday(), Array.from(guesses).join(':::'));
+  }
 
   addAllTags();
   showEndModal(endText(true));
