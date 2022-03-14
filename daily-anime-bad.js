@@ -71,4 +71,4 @@ const randomAnime = function (allAnimeObj) {
   } catch (err) {
     console.error(err);
   }
-})().then(() => process.exit());
+})();

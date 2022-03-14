@@ -24,7 +24,12 @@ INSERT INTO DailyAnime VALUES (
     'MOVIE',
     2017,
     '2022-3-13'
-);
+) ON CONFLICT (date)
+DO UPDATE SET id = EXCLUDED.id, title = EXCLUDED.title,
+studios = EXCLUDED.studios, popularity = EXCLUDED.popularity,
+episodes = EXCLUDED.episodes, source = EXCLUDED.source,
+picture = EXCLUDED.picture, synonyms = EXCLUDED.synonyms,
+format = EXCLUDED.format, year = EXCLUDED.year;
 
 SELECT DISTINCT ON ("date") *
 FROM anime
