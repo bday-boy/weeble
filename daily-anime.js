@@ -63,7 +63,7 @@ const randomAnime = function (allAnimeObj) {
       formatArray(newAnime.synonyms),
       newAnime.format,
       newAnime.year,
-      date
+      new Date()
     ]);
     client.release();
   } catch (err) {
