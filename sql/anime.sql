@@ -32,5 +32,7 @@ picture = EXCLUDED.picture, synonyms = EXCLUDED.synonyms,
 format = EXCLUDED.format, year = EXCLUDED.year;
 
 SELECT DISTINCT ON ("date") *
-FROM anime
+FROM DailyAnime
 ORDER BY "date" DESC;
+
+SET client_encoding TO 'UTF8';

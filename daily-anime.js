@@ -20,7 +20,7 @@ const formatArray = function (arr) {
   arr.forEach((el) => {
     newArr.push(`'${el.replaceAll("'", "''")}'`);
   });
-  return newArr.join(', ');
+  return newArr;
 };
 
 const useAnime = function (animeInfo) {
