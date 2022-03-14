@@ -290,7 +290,7 @@ const handleCorrectAnswer = function () {
     return new bootstrap.Tooltip(tooltipTriggerEl);
   });
   if (!didDaily()) {
-    window.localStorage.setItem(getDateToday(), Array.from(guesses).join(':::'));
+    window.localStorage.setItem(getDateToday(), Array.from(guesses).join(':'));
   }
 
   addAllTags();

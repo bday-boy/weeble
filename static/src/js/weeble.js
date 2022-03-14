@@ -266,8 +266,9 @@ const init = function () {
         userEntry.disabled = true;
         guessBtn.disabled = true;
         const todayGuesses = window.localStorage.getItem(getDateToday());
-        todayGuesses.split(':::').forEach((guess) => {
-          checkAnswer(guess);
+        todayGuesses.split(':').forEach((guessId) => {
+          const animeTitle = weeble.allAnime[parseInt(guessId)];
+          checkAnswer(animeTitle);
         });
       }
     });
