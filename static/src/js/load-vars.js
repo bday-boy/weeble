@@ -37,7 +37,7 @@ const shouldFilter = () => filterToggle.checked;
 const useAnime = function (anime) {
   return 25000 < anime.popularity;
 };
-const loadTitles = function () {
+const fetchAnimeTitles = function () {
   return fetch('/data/anime-titles.json')
     .then((response) => response.json())
     .then((anime_json) => {
@@ -48,7 +48,7 @@ const loadTitles = function () {
     })
     .catch((err) => console.log(err));
 };
-const loadAnime = function () {
+const fetchAllAnime = function () {
   return fetch('/data/anime-database.json')
     .then((response) => response.json())
     .then((anime_json) => {
@@ -84,23 +84,18 @@ const loadAnime = function () {
     })
     .catch((err) => console.log(err));
 };
-const loadDailyAnime = function () {
-  return fetch('/data/anime-daily.json')
+const fetchDailyAnime = function () {
+  return fetch('/daily')
     .then((response) => response.json())
-    .then((anime_json) => {
-      const [animeId, animeInfo] = Object.entries(anime_json)[0];
-      animeInfo.id = parseInt(animeId);
-      weeble.anime = animeInfo;
+    .then((dailyAnime) => {
+      if (dailyAnime.daily) {
+        weeble.anime = dailyAnime.daily;
+      } else {
+        weeble.anime = randomAnime(weeble.possibleAnime);
+      }
+      console.log(dailyAnime);
     })
     .catch(() => weeble.anime = randomAnime(weeble.possibleAnime));
-};
-const fetchDBTest = function () {
-  return fetch('/db')
-    .then((response) => response.json())
-    .then((anime_json) => {
-      console.log(anime_json);
-    })
-    .catch((err) => console.log(err));
 };
 const fetchTags = function (animeId) {
   const query = `

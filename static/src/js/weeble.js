@@ -123,9 +123,9 @@ const filterAndSuggest = () => {
 };
 
 (function () {
-  loadAnime()
-    .then(() => loadDailyAnime())
-    .then(() => loadTitles())
+  fetchAllAnime()
+    .then(() => fetchDailyAnime())
+    .then(() => fetchAnimeTitles())
     .then(() => filterAndSuggest())
     .then(() => fetchTags(weeble.anime.id))
     .then((tags) => {
@@ -139,7 +139,6 @@ const filterAndSuggest = () => {
         modal.show();
       }
     })
-    .then(() => fetchDBTest())
     .catch((error) => console.log(error));
   
   const weebleAbout = document.getElementById('weeble-about');
