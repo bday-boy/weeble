@@ -51,7 +51,7 @@ const randomAnime = function (allAnimeObj) {
     });
     const newAnime = randomAnime(validAnime);
     const date = new Date();
-    date.setUTCHours(0, 0, 0, 0);
+    const insertDate = `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDay()}`;
     client.query(insertQuery, [
       newAnime.id,
       newAnime.title,
@@ -63,7 +63,7 @@ const randomAnime = function (allAnimeObj) {
       formatArray(newAnime.synonyms),
       newAnime.format,
       newAnime.year,
-      new Date()
+      insertDate
     ]);
     client.release();
   } catch (err) {

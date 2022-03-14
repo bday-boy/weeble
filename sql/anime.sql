@@ -9,7 +9,7 @@ CREATE TABLE DailyAnime (
     synonyms    TEXT[] NOT NULL,
     format      TEXT NOT NULL,
     year        INTEGER NOT NULL,
-    date        timestamp NOT NULL UNIQUE
+    date        date NOT NULL UNIQUE
 );
 
 INSERT INTO DailyAnime VALUES (
