@@ -1,4 +1,5 @@
-const { randomAnime } = require('./static/src/js/utils')
+const animeJson = require('./static/data/anime-database.json');
+const { randomAnime } = require('./static/src/js/utils');
 const { Pool } = require('pg');
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -20,50 +21,36 @@ const useAnime = function (animeInfo) {
   return 25000 < animeInfo.popularity;
 };
 
-// const randomAnime = function (animeObj) {
-//   const allAnimeObjs = Object.entries(animeObj);
-//   const randomAnime = allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
-//   const [animeId, animeInfo] = randomAnime;
-//   animeInfo.id = parseInt(animeId);
-//   return animeInfo;
-// };
-
-fetch('./static/data/anime-database.json')
-  .then((res) => res.json())
-  .then((animeJson) => {
-    const validAnime = {};
-    Object.entries(animeJson).forEach(([animeId, animeInfo]) => {
-      if (useAnime(animeInfo)) {
-        validAnime[animeId] = animeInfo;
-      }
-    });
-    return validAnime;
-  })
-  .then((validAnime) => {
-    try {
-      const client = await pool.connect();
-      const result = await client.query('SELECT * FROM DailyAnime');
-      result.rows.forEach((row) => {
-        delete validAnime[row.id];
-      });
-      const newAnime = randomAnime(validAnime);
-      client.query(insertQuery, [
-        newAnime.id,
-        newAnime.title,
-        formatArray(newAnime.studios),
-        newAnime.popularity,
-        newAnime.episdes,
-        newAnime.source,
-        newAnime.picture,
-        formatArray(newAnime.synonyms),
-        newAnime.format,
-        newAnime.year,
-        new Date()
-      ]);
-      client.release();
-    } catch (err) {
-      console.error(err);
-      res.send("Error " + err);
+(async function () {
+  const validAnime = {};
+  Object.entries(animeJson).forEach(([animeId, animeInfo]) => {
+    if (useAnime(animeInfo)) {
+      validAnime[animeId] = animeInfo;
     }
-  })
-  .catch((err) => console.log(err));
+  });
+  validAnime;
+  try {
+    const client = await pool.connect();
+    const result = await client.query('SELECT * FROM DailyAnime');
+    result.rows.forEach((row) => {
+      delete validAnime[row.id];
+    });
+    const newAnime = randomAnime(validAnime);
+    client.query(insertQuery, [
+      newAnime.id,
+      newAnime.title,
+      formatArray(newAnime.studios),
+      newAnime.popularity,
+      newAnime.episdes,
+      newAnime.source,
+      newAnime.picture,
+      formatArray(newAnime.synonyms),
+      newAnime.format,
+      newAnime.year,
+      new Date()
+    ]);
+    client.release();
+  } catch (err) {
+    console.error(err);
+  }
+})();
