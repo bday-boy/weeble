@@ -1,7 +1,7 @@
 const getGuessTitle = function (guessWrapper, location) {
   const a = guessWrapper.querySelector('a');
   if (location === 'anilist') {
-    return `~!${a.href}!~\n`; /* TODO: Maybe just do title */
+    return a.href; /* TODO: Maybe just do title */
   } else if (location === 'discord') {
     return `||${a.textContent}||\n`;
   } else {
@@ -28,7 +28,7 @@ const getGuessEmojis = function (guessWrapper) {
   guessWrapper.querySelectorAll('div > div.icon-wrapper').forEach((iconWrapper) => {
     guessEmojis.push(getIconEmoji(iconWrapper));
   });
-  return guessEmojis.join(' ');
+  return guessEmojis.join('');
 };
 
 const createCopyText = function (location) {
@@ -37,15 +37,25 @@ const createCopyText = function (location) {
   guesses.reverse();
   /* TODO: Add something here for which day of weeble/guess limit */
   copyTexts.push(`Weeble ${guesses.length}/10\n`);
-  guesses.forEach((guessWrapper) => {
-    if (location === 'discord') {
+  if (location === 'anilist') {
+    const guessEmojis = [];
+    const guessAnime = [];
+    guesses.forEach((guessWrapper) => {
+      guessEmojis.push(getGuessEmojis(guessWrapper));
+      guessAnime.push(getGuessTitle(guessWrapper, location));
+    });
+    copyTexts.push(`${guessEmojis.join('\n')}\n~!\n${guessAnime.join('\n')}\n!~\n`);
+  } else if (location === 'discord') {
+    guesses.forEach((guessWrapper) => {
       copyTexts.push(getGuessEmojis(guessWrapper) + ' ');
       copyTexts.push(getGuessTitle(guessWrapper, location));
-    } else {
+    });
+  } else if (location === 'general') {
+    guesses.forEach((guessWrapper) => {
       copyTexts.push(getGuessTitle(guessWrapper, location));
       copyTexts.push(getGuessEmojis(guessWrapper) + '\n');
-    }
-  });
+    });
+  }
   copyTexts.push('https://weeble.herokuapp.com/');
   return copyTexts.join('');
 };
