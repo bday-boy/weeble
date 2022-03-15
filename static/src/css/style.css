@@ -180,7 +180,9 @@ span.placeholder {
 
 #title .bi {
   font-size: 1.5rem;
+  transition: transform 0.25s cubic-bezier(.09,.42,.65,1.85);
 }
 #title .bi:hover {
   cursor: pointer;
+  transform: scale(1.2, 1.2);
 }
