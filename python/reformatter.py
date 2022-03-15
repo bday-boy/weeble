@@ -76,6 +76,7 @@ class Reformatter:
         self.data = []
         self.formatted_data = {}
         self.anime_titles = {'titles': {}, 'synonyms': {}}
+        self.all_titles = set()
     
     def save(self, db_file: str = 'anime-database.json',
              titles_file: str = 'anime-titles.json') -> None:
@@ -92,14 +93,11 @@ class Reformatter:
         anime_entry['title'] = get_title(anime)
         anime_entry['studios'] = get_studios(anime)
         anime_entry['popularity'] = anime.get('popularity')
-        # anime_entry['averageScore'] = anime.get('averageScore')
         anime_entry['episodes'] = anime.get('episodes')
         anime_entry['source'] = anime.get('source')
-        # anime_entry['thumbnail'] = anime.get('coverImage').get('medium')
         anime_entry['picture'] = anime.get('coverImage').get('extraLarge')
         anime_entry['synonyms'] = get_synonyms(anime, anime_entry['title'])
         anime_entry['format'] = anime.get('format')
-        # anime_entry['season'] = anime.get('season')
         anime_entry['year'] = anime.get('seasonYear')
         self.formatted_data[(animeId := anime.get('id', 'NO_ID'))] = anime_entry
         self.anime_titles['titles'][anime_entry['title']] = animeId
