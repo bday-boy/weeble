@@ -84,7 +84,7 @@ const correctTooltips = {
     }
   },
   episodes: () => {
-    return `${weeble.anime.title} has ${weeble.anime.episodes} episodes!`;
+    return `${weeble.anime.title} has ${weeble.anime.episodes} episode${(weeble.anime.episodes === 1) ? '' : 's'}!`;
   },
   year: () => {
     return `${weeble.anime.title} was released in ${weeble.anime.year}!`;
