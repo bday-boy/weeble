@@ -9,6 +9,16 @@
 const didDaily = function (winOrLose) {
   const cookie = '_didDaily';
 
+  const getExpiration = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    const day = today.getDate();
+    const expiration = new Date(Date.UTC(year, month, day, 6, 59, 59, 999));
+    expiration.setDate(expiration.getDate() + 1);
+    return expiration.toUTCString();
+  };
+
   const getCookie = () => {
     const cookieFinder = new RegExp(`(?:^|; )${encodeURIComponent(cookie)}=([^;]*)`);
     const result = cookieFinder.exec(document.cookie);
@@ -16,7 +26,7 @@ const didDaily = function (winOrLose) {
   };
 
   const setCookie = () => {
-    const newCookie = `${encodeURIComponent(cookie)}=${encodeURIComponent(winOrLose)}; expires=${getNextDay()}; path=/`;
+    const newCookie = `${encodeURIComponent(cookie)}=${encodeURIComponent(winOrLose)}; expires=${getExpiration()}; path=/`;
     return (document.cookie = newCookie);
   };
 
