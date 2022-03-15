@@ -1,3 +1,6 @@
+import copyToClipboard from './copy.js';
+import applyFilter from './filters.js'
+
 let suggestions = [];
 let inputLen = 0;
 
@@ -102,8 +105,7 @@ const suggestAnime = function () {
   }
   if (weeble.allAnime === undefined || weeble.filteredTitles === undefined) {
     suggestions = [];
-  }
-  else {
+  } else {
     filterAllTitles(input);
   }
 
@@ -151,6 +153,8 @@ const init = function () {
       const highContrast = document.getElementById('high-contrast');
       const darkMode = document.getElementById('dark-mode');
       const applyFilters = document.getElementById('apply-filters');
+      const toastSuccess = document.getElementById('copy-success');
+      const toastDanger = document.getElementById('copy-danger');
       const copyAnilist = document.getElementById('anilist');
       const copyDiscord = document.getElementById('discord');
       const copyGeneral = document.getElementById('general');
@@ -210,20 +214,29 @@ const init = function () {
       
       applyFilters.checked = true;
       applyFilters.addEventListener('change', filterAndSuggest);
+
+      const toastOptions = {
+        delay: 3000
+      };
+      const bsToastSuccess = new bootstrap.Toast(toastSuccess, toastOptions);
+      const bsToastDanger = new bootstrap.Toast(toastDanger, toastOptions);
       
       copyAnilist.addEventListener('click', function () {
-        const copyText = createCopyText('anilist');
-        copyToClipboard(copyText, this);
+        copyToClipboard('anilist').then((success) => {
+          success ? bsToastSuccess.show() : bsToastDanger.show();
+        });
       });
       
       copyDiscord.addEventListener('click', function () {
-        const copyText = createCopyText('discord');
-        copyToClipboard(copyText, this);
+        copyToClipboard('discord').then((success) => {
+          success ? bsToastSuccess.show() : bsToastDanger.show();
+        });
       });
       
       copyGeneral.addEventListener('click', function () {
-        const copyText = createCopyText('general');
-        copyToClipboard(copyText, this);
+        copyToClipboard('general').then((success) => {
+          success ? bsToastSuccess.show() : bsToastDanger.show();
+        });
       });
       
       userEntry.addEventListener('input', suggestAnime);

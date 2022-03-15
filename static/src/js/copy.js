@@ -9,7 +9,7 @@ const getGuessTitle = function (guessWrapper, location) {
   }
 };
 
-const getIconEmoji = function (iconWrapper, location) {
+const getIconEmoji = function (iconWrapper) {
   if (iconWrapper.classList.contains('bg-success')) {
     if (document.body.classList.contains('high-contrast')) {
       return String.fromCodePoint(0x1F7E6);
@@ -23,10 +23,10 @@ const getIconEmoji = function (iconWrapper, location) {
   }
 };
 
-const getGuessEmojis = function (guessWrapper, location) {
+const getGuessEmojis = function (guessWrapper) {
   const guessEmojis = [];
   guessWrapper.querySelectorAll('div > div.icon-wrapper').forEach((iconWrapper) => {
-    guessEmojis.push(getIconEmoji(iconWrapper, location));
+    guessEmojis.push(getIconEmoji(iconWrapper));
   });
   return guessEmojis.join(' ');
 };
@@ -39,11 +39,11 @@ const createCopyText = function (location) {
   copyTexts.push(`Weeble ${guesses.length}/10\n`);
   guesses.forEach((guessWrapper) => {
     if (location === 'discord') {
-      copyTexts.push(getGuessEmojis(guessWrapper, location) + ' ');
+      copyTexts.push(getGuessEmojis(guessWrapper) + ' ');
       copyTexts.push(getGuessTitle(guessWrapper, location));
     } else {
       copyTexts.push(getGuessTitle(guessWrapper, location));
-      copyTexts.push(getGuessEmojis(guessWrapper, location) + '\n');
+      copyTexts.push(getGuessEmojis(guessWrapper) + '\n');
     }
   });
   copyTexts.push('https://weeble.herokuapp.com/');
@@ -79,26 +79,22 @@ const copyFallback = function (copyText) {
   return successful;
 };
 
-const copyToClipboard = function (copyText, copyButton) {
-  const copyPopover = (success) => {
-    const title = success ? 'Copied to clipboard!' : 'Could not copy to clipboard.';
-    const content = success ? "You're good to go!" : 'Try copying from the textbox below.';
-    const popover = new bootstrap.Popover(copyButton, {
-      title,
-      content,
-      placement: 'top',
-      trigger: 'focus'
-    });
-    popover.show();
-  };
-
-  /* TODO: Replace with popups, not alerts */
-  if (!navigator.clipboard) {
-    copyPopover(copyFallback(copyText));
-  } else {
-    navigator.clipboard.writeText(copyText)
-      .then(() => copyPopover(true))
-      .catch(() => copyPopover(copyFallback(copyText)));
-  }
+const copyToClipboard = function (location) {
+  const copyText = createCopyText(location);
   copyFallbackFallback(copyText);
+  if (!navigator.clipboard) {
+    return new Promise((res, rej) => {
+      try {
+        res(copyFallback(copyText));
+      } catch (err) {
+        rej(err);
+      }
+    });
+  } else {
+    return navigator.clipboard.writeText(copyText)
+      .then(() => true)
+      .catch(() => copyFallback(copyText));
+  }
 };
+
+export default copyToClipboard;

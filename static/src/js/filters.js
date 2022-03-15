@@ -58,3 +58,5 @@ const applyFilter = function () {
     filterGuesses();
   }
 };
+
+export default applyFilter;

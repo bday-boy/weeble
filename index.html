@@ -21,6 +21,28 @@
   </head>
 
   <body class="dark-mode">
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+      <div class="toast-container position-absolute top-0 start-50 translate-middle-x p-3">
+        <div class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true" id="copy-success">
+          <div class="d-flex">
+            <div class="toast-body">
+              Successfully copied!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+    
+        <div class="toast bg-danger" role="alert" aria-live="assertive" aria-atomic="true" id="copy-danger">
+          <div class="d-flex">
+            <div class="toast-body">
+              Failed to copy. Please copy from textbox.
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal fade" tabindex="-1" role="dialog" id="modal-end" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -318,8 +340,6 @@
     <script src="/src/js/load-vars.js"></script>
     <script src="/src/js/update-progress.js"></script>
     <script src="/src/js/check-answer.js"></script>
-    <script src="/src/js/filters.js"></script>
-    <script src="/src/js/copy.js"></script>
-    <script src="/src/js/weeble.js"></script>
+    <script type="module" src="/src/js/weeble.js"></script>
   </body>
 </html>
