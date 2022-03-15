@@ -1,3 +1,7 @@
+const checkDif = (dif, threshold, low, high) => (
+  Math.abs(dif) <= threshold || (high - low) <= threshold * 2
+);
+
 const guessTooltips = {
   studios: (A, B) => {
     let answer = '';
@@ -16,7 +20,7 @@ const guessTooltips = {
      * another amount of episodes and it creates weird tooltip text
      */
       const { low, high } = weeble.ranges.episodes;
-    if (Math.abs(dif) <= threshold || (high - low) <= threshold * 2) {
+    if (checkDif(dif, threshold, low, high)) {
       if (threshold === 0) {
         return `The answer has ${low} episodes!`;
       } else {
@@ -29,7 +33,7 @@ const guessTooltips = {
   year: (guess, dif, threshold) => {
     const difAbs = Math.abs(dif);
     const { low, high } = weeble.ranges.year;
-    if (difAbs <= threshold || (high - low) <= threshold * 2) {
+    if (checkDif(dif, threshold, low, high)) {
       if (threshold === 0) {
         return `The answer was released in ${low}!`;
       } else {
@@ -71,6 +75,7 @@ const guessTooltips = {
     }
   },
 };
+
 const correctTooltips = {
   studios: () => {
     const studios = weeble.anime.studios;
@@ -121,6 +126,7 @@ const correctTooltips = {
     }
   },
 };
+
 const guessProgress = {
   studios(guessStudiosSet) {
     updateProgressSet(guessStudiosSet, possibleStudios, knownStudios, 'studios');
@@ -138,6 +144,7 @@ const guessProgress = {
     updateProgressGroup(guessSource, status, sources, 'sources');
   },
 };
+
 const correctProgress = {
   studios() {
     const correctStudios = new Set(weeble.anime.studios);
@@ -165,10 +172,10 @@ const correctProgress = {
 
 const createAnimeLink = function (animeId, animeTitle) {
   const a = document.createElement('a');
+  a.classList.add('mb-1', 'text-wrap', 'text-center');
   a.href = `https://anilist.co/anime/${animeId}/`
   a.target = '_blank';
   a.rel = 'noopener noreferrer';
-  a.classList.add('mb-1', 'text-wrap', 'text-center');
   a.textContent = animeTitle;
   return a;
 };
@@ -221,7 +228,7 @@ const numCompare = function (guessNum, animeKey) {
   const dif = guessNum - answerValue;
   const threshold = weeble.thresholds[animeKey];
   const { low, high } = weeble.ranges[animeKey];
-  if (Math.abs(dif) <= threshold || (high - low) <= threshold * 2) {
+  if (checkDif(dif, threshold, low, high)) {
     icon = `chevron-contract`;
     status = 'bg-warning';
   } else {
