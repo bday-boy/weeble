@@ -56,7 +56,7 @@ const createCopyText = function (location) {
       copyTexts.push(getGuessEmojis(guessWrapper) + '\n');
     });
   }
-  copyTexts.push('https://weeble.herokuapp.com/');
+  copyTexts.push('https://weeble.ninja/');
   return copyTexts.join('');
 };
 
