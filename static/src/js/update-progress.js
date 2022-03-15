@@ -1,5 +1,47 @@
+const getProgressbarWidths = function (obj) {
+  const { min, max, low, high } = obj;
+  let total = (max - min);
+
+  let left = (low - min) / total;
+  let middle = (high - low) / total;
+  let right = (max - high) / total;
+
+  if (left < 0.02) {
+    left = 0;
+  }
+  if (middle < 0.03) {
+    middle = 0.03;
+  }
+  if (right < 0.02) {
+    right = 0;
+  }
+  
+  total = (left + middle + right);
+  left = left * (100 / total);
+  middle = middle * (100 / total);
+  right = right * (100 / total);
+
+  return { left, middle, right };
+};
+
+const setProgressbarWidths = function (obj, key) {
+  const { left: lw, middle: mw, right: rw } = getProgressbarWidths(obj);
+
+  const start = document.getElementById(`${key}-progress-left`);
+  const middle = document.getElementById(`${key}-progress-middle`);
+  const end = document.getElementById(`${key}-progress-right`);
+
+  start.setAttribute('aria-valuenow', `${lw}`);
+  start.style.width = `${lw}%`;
+
+  middle.setAttribute('aria-valuenow', `${mw}`);
+  middle.style.width = `${mw}%`;
+
+  end.setAttribute('aria-valuenow', `${rw}`);
+  end.style.width = `${rw}%`;
+};
+
 const updateProgressSet = function (valArr, possibleSet, knownSet, type) {
-  const rootGroup = document.getElementById(type);
   const correctStudios = new Set(weeble.anime[type]);
   valArr.forEach((val) => {
     if (!correctStudios.has(val)) {
@@ -54,54 +96,25 @@ const updateNumRange = function (newVal, dif, threshold, obj, key) {
     }
   }
 
-  const { min, max, low, high } = obj;
-  const total = (max - min);
-
+  const { low, high } = obj;
   document.getElementById(`${key}-low`).textContent = low;
   document.getElementById(`${key}-high`).textContent = high;
 
-  const start = document.getElementById(`${key}-progress-left`);
-  const middle = document.getElementById(`${key}-progress-middle`);
-  const end = document.getElementById(`${key}-progress-right`);
-
-  start.setAttribute('aria-valuenow', `${low - min}`);
-  start.style.width = `${((low - min) / total) * 100}%`;
-
-  middle.setAttribute('aria-valuenow', `${high - low}`);
-  middle.style.width = `${((high - low) / total) * 100}%`;
-
-  end.setAttribute('aria-valuenow', `${max - high}`);
-  end.style.width = `${((max - high) / total) * 100 }%`;
+  setProgressbarWidths(obj, key);
 
   if (withinThreshold && threshold === 0) {
-    const leftNum = document.getElementById(`${obj.name}-low`);
+    const leftNum = document.getElementById(`${key}-low`);
     if (leftNum) {
       leftNum.textContent = '';
     }
   }
 };
 
-const updateNumRangeCorrect = function (newVal, dif, threshold, obj, key) {
+const updateNumRangeCorrect = function (newVal, obj, key) {
   obj.low = obj.high = newVal;
 
-  const { min, max, low, high } = obj;
-  const total = (max - min);
+  document.getElementById(`${key}-low`).textContent = '';
+  document.getElementById(`${key}-high`).textContent = obj.high;
 
-  document.getElementById(`${key}-low`).textContent = low;
-  document.getElementById(`${key}-high`).textContent = high;
-
-  const start = document.getElementById(`${key}-progress-left`);
-  const middle = document.getElementById(`${key}-progress-middle`);
-  const end = document.getElementById(`${key}-progress-right`);
-
-  start.setAttribute('aria-valuenow', `${low - min}`);
-  start.style.width = `${((low - min) / total) * 100 - 3 / 2}%`;
-
-  middle.setAttribute('aria-valuenow', `${high - low}`);
-  middle.style.width = `${3}%`;
-
-  end.setAttribute('aria-valuenow', `${max - high}`);
-  end.style.width = `${((max - high) / total) * 100 - 3 / 2}%`;
-
-  document.getElementById(`${obj.name}-low`).textContent = '';
+  setProgressbarWidths(obj, key);
 };
