@@ -11,7 +11,7 @@ const strFilter = function (strSet, value) {
 };
 
 const filters = {
-  studios: (studioArr) => setFilter(new Set(studioArr), knownStudios, possibleStudios),
+  studios: (studioArr) => setFilter(new Set(studioArr), weeble.studios.known, weeble.studios.possible),
   episodes: (eps) => numFilter(weeble.ranges.episodes, eps),
   year: (yearVal) => numFilter(weeble.ranges.year, yearVal),
   format: (formatVal) => strFilter(weeble.formats, formatVal),

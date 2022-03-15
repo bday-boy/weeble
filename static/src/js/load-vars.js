@@ -8,6 +8,21 @@ weeble = {
     episodes: 5,
     year: 1,
   },
+  guesses: {
+    set: new Set(),
+    has: function (animeId) {
+      return this.set.has(parseInt(animeId));
+    },
+    add: function (animeId) {
+      return this.set.add(parseInt(animeId));
+    }
+  },
+  studios: {
+    possible: new Set(),
+    known: new Set()
+  },
+  sources: new Set(),
+  formats: new Set(),
   ranges: {
     year: {
       min: 1000000,
@@ -22,20 +37,7 @@ weeble = {
       high: 0,
     },
   },
-  sources: new Set(),
-  formats: new Set(),
-  guesses: {
-    set: new Set(),
-    has: function (animeId) {
-      return this.set.has(parseInt(animeId));
-    },
-    add: function (animeId) {
-      return this.set.add(parseInt(animeId));
-    }
-  }
 };
-const possibleStudios = new Set();
-const knownStudios = new Set();
 const useAnime = function (anime) {
   return 25000 < anime.popularity;
 };
@@ -52,7 +54,7 @@ const fetchAllAnime = function () {
           weeble.ranges.episodes.max = episodes;
         }
         studios.forEach((studio) => {
-          possibleStudios.add(studio);
+          weeble.studios.possible.add(studio);
         });
         weeble.sources.add(source);
         weeble.formats.add(format);

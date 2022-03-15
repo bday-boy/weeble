@@ -125,7 +125,7 @@ const correctTooltips = {
 
 const guessProgress = {
   studios(guessStudiosSet) {
-    updateProgressSet(guessStudiosSet, possibleStudios, knownStudios, 'studios');
+    updateProgressSet(guessStudiosSet, weeble.studios.possible, weeble.studios.known, 'studios');
   },
   episodes(guessEpisodes, dif, threshold) {
     updateNumRange(guessEpisodes, dif, threshold, weeble.ranges.episodes, 'episodes');
@@ -144,7 +144,7 @@ const guessProgress = {
 const correctProgress = {
   studios() {
     const correctStudios = new Set(weeble.anime.studios);
-    updateProgressSet(correctStudios, possibleStudios, correctStudios, 'studios');
+    updateProgressSet(correctStudios, weeble.studios.possible, correctStudios, 'studios');
   },
   episodes() {
     const correctEpisodes = weeble.anime.episodes;
