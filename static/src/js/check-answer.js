@@ -7,10 +7,7 @@ const guessTooltips = {
       answer += `Correct studios: ${correct}`;
     }
     if (incorrect) {
-      if (answer) {
-        answer += '\n';
-      }
-      answer += `Incorrect studios: ${incorrect}`;
+      answer += (answer ? '\n' : '') + `Incorrect studios: ${incorrect}`;
     }
     return answer;
   },
@@ -19,31 +16,58 @@ const guessTooltips = {
      * another amount of episodes and it creates weird tooltip text
      */
     if (Math.abs(dif) <= threshold) {
-      return `The answer is within ${threshold} episodes of ${guess}!`;
+      const { low, high } = weeble.ranges.episodes;
+      if (threshold === 0) {
+        return `The answer has ${low} episodes!`;
+      } else {
+        return `The answer has between ${low} and ${high} episodes!`;
+      }
     } else {
-      return `The answer has at least ${weeble.thresholds.episodes + 1} ${dif < 0 ? 'more' : 'fewer'} episodes.`
+      return `The answer has ${dif < 0 ? 'more' : 'fewer'} than ${guess} episodes.`;
     }
   },
   year: (guess, dif, threshold) => {
     const difAbs = Math.abs(dif);
     if (difAbs <= threshold) {
-      return `The answer was released within ${weeble.thresholds.year} year${weeble.thresholds.year === 1 ? '' : 's'} of ${guess}!`
+      const { low, high } = weeble.ranges.year;
+      if (threshold === 0) {
+        return `The answer was released in ${low}!`;
+      } else {
+        return `The answer was released between ${low} and ${high}!`;
+      }
     } else {
-      return `The answer was released at least ${weeble.thresholds.year} year${difAbs === 1 ? '' : 's'} ${dif < 0 ? 'after' : 'before'} ${guess}.`
+      return `The answer was released ${dif < 0 ? 'after' : 'before'} ${guess}!`;
     }
   },
   format: (formatType, status) => {
-    if (status === 'bg-success') {
-      return `The answer is also a(n) ${formatType}!`;
-    } else {
-      return `The answer is not a(n) ${formatType}!`;
+    const correct = (status === 'bg-success' ? ' ' : ' not ');
+    switch (formatType) {
+      case 'TV':
+        return `The answer was${correct}released as a TV show!`;
+      case 'MOVIE':
+        return `The answer was${correct}released as a movie!`;
+      case 'TV_SHORT':
+        return `The answer was${correct}released as a TV short!`;
+      case 'OVA':
+      case 'ONA':
+        return `The answer was${correct}released as an ${formatType}!`;
+      default:
+        return `The answer was${correct}released as a ${formatType}!`;
     }
   },
   source: (sourceType, status) => {
-    if (status === 'bg-success') {
-      return `The answer's source is also ${sourceType}!`;
-    } else {
-      return `The answer's source is not ${sourceType}!`;
+    const correct = (status === 'bg-success' ? ' ' : ' not ');
+    switch (sourceType) {
+      case 'ORIGINAL':
+        return `The answer is${correct}an anime original!`;
+      case 'OTHER':
+        return `The answer's source is not other.`;
+      case 'LIVE_ACTION':
+        return `The answer is${correct}live action!`;
+      case 'MULTIMEDIA_PROJECT':
+        return `The answer is${correct}a multimedia project!`;
+      default:
+        return `The answer is${correct}based on a ${sourceType.toLowerCase().replaceAll('_', ' ')}!`;
     }
   },
 };
@@ -185,8 +209,8 @@ const setCompare = function (guessIter, animeKey) {
     status = 'bg-danger';
   }
   const statusNode = createIcon(icon, status);
-  addTooltip(statusNode, guessTooltips[animeKey](guessSet, answerSet));
   guessProgress[animeKey](guessSet);
+  addTooltip(statusNode, guessTooltips[animeKey](guessSet, answerSet));
   return statusNode;
 };
 
@@ -204,8 +228,8 @@ const numCompare = function (guessNum, animeKey) {
     status = 'bg-danger';
   }
   const statusNode = createIcon(icon, status);
-  addTooltip(statusNode, guessTooltips[animeKey](guessNum, dif, threshold));
   guessProgress[animeKey](guessNum, dif, threshold);
+  addTooltip(statusNode, guessTooltips[animeKey](guessNum, dif, threshold));
   return statusNode;
 };
 
@@ -221,8 +245,8 @@ const strCompare = function (guessStr, animeKey) {
     status = 'bg-danger';
   }
   const statusNode = createIcon(icon, status);
-  addTooltip(statusNode, guessTooltips[animeKey](guessStr, status));
   guessProgress[animeKey](guessStr, status);
+  addTooltip(statusNode, guessTooltips[animeKey](guessStr, status));
   return statusNode;
 };
 

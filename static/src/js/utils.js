@@ -27,13 +27,6 @@ const createNewButton = function (text, btnClass) {
   return btn;
 };
 
-const getNextDay = function () {
-  const date = new Date();
-  date.setDate(date.getDate() + 1);
-  date.setHours(0, 0, 0, 0);
-  return date.toISOString();
-};
-
 const getDateToday = function () {
   const date = new Date();
   return date.toISOString().split('T')[0];
