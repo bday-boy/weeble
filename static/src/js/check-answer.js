@@ -267,9 +267,6 @@ const showEndModal = function (modalTitle) {
 };
 
 const endGame = function (won) {
-  weeble.anime = undefined;
-  weeble.titles = undefined;
-  weeble.filteredTitles = undefined;
   didDaily(won);
 };
 
