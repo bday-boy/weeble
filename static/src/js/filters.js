@@ -14,8 +14,8 @@ const filters = {
   studios: (studioArr) => setFilter(new Set(studioArr), knownStudios, possibleStudios),
   episodes: (eps) => numFilter(weeble.ranges.episodes, eps),
   year: (yearVal) => numFilter(weeble.ranges.year, yearVal),
-  format: (formatVal) => strFilter(formats, formatVal),
-  source: (sourceVal) => strFilter(sources, sourceVal),
+  format: (formatVal) => strFilter(weeble.formats, formatVal),
+  source: (sourceVal) => strFilter(weeble.sources, sourceVal),
 };
 
 const filterAll = function () {
@@ -24,7 +24,7 @@ const filterAll = function () {
     const [animeId, animeInfo] = entry;
     const ignore = (
       Object.entries(filters).some(([key, fltr]) => !fltr(animeInfo[key]))
-      || guessesHas(animeId)
+      || weeble.guesses.has(animeId)
     );
     if (!ignore) {
       const { title, synonyms } = animeInfo;
@@ -40,7 +40,7 @@ const filterGuesses = function () {
   weeble.filteredTitles = { titles: {}, synonyms: {} };
   Object.entries(weeble.allAnime).forEach((entry) => {
     const [animeId, animeInfo] = entry;
-    const ignore = guessesHas(animeId);
+    const ignore = weeble.guesses.has(animeId);
     if (!ignore) {
       const { title, synonyms } = animeInfo;
       weeble.filteredTitles.titles[title] = animeId;
@@ -51,8 +51,8 @@ const filterGuesses = function () {
   });
 };
 
-const applyFilter = function () {
-  if (shouldFilter()) {
+const applyFilter = function (shouldFilter) {
+  if (shouldFilter) {
     filterAll();
   } else {
     filterGuesses();

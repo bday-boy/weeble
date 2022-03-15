@@ -1,6 +1,8 @@
 import copyToClipboard from './copy.js';
 import applyFilter from './filters.js'
 
+const filterToggle = document.getElementById('apply-filters');
+const shouldFilter = () => filterToggle.checked;
 let suggestions = [];
 let inputLen = 0;
 
@@ -87,14 +89,6 @@ const filterAllTitles = function (input) {
   });
 };
 
-const toggleDropdown = function (dropdown, hide) {
-  if (hide) {
-    dropdown.classList.remove('show');
-  } else {
-    dropdown.classList.add('show');
-  }
-};
-
 const suggestAnime = function () {
   const animeEntry = document.getElementById('anime-entry');
   const input = animeEntry.value.toLowerCase();
@@ -120,7 +114,7 @@ const suggestAnime = function () {
 };
 
 const filterAndSuggest = () => {
-  applyFilter();
+  applyFilter(shouldFilter());
   suggestAnime();
 };
 

@@ -10,30 +10,32 @@ weeble = {
   },
   ranges: {
     year: {
-      name: 'year',
       min: 1000000,
       max: 0,
       low: 1000000,
       high: 0,
     },
     episodes: {
-      name: 'episodes',
       min: 1000000,
       max: 0,
       low: 1000000,
       high: 0,
     },
   },
+  sources: new Set(),
+  formats: new Set(),
+  guesses: {
+    set: new Set(),
+    has: function (animeId) {
+      return this.set.has(parseInt(animeId));
+    },
+    add: function (animeId) {
+      return this.set.add(parseInt(animeId));
+    }
+  }
 };
 const possibleStudios = new Set();
 const knownStudios = new Set();
-const sources = new Set();
-const formats = new Set();
-const guesses = new Set();
-const guessesAdd = (animeId) => guesses.add(parseInt(animeId));
-const guessesHas = (animeId) => guesses.has(parseInt(animeId));
-const filterToggle = document.getElementById('apply-filters');
-const shouldFilter = () => filterToggle.checked;
 const useAnime = function (anime) {
   return 25000 < anime.popularity;
 };
@@ -52,8 +54,8 @@ const fetchAllAnime = function () {
         studios.forEach((studio) => {
           possibleStudios.add(studio);
         });
-        sources.add(source);
-        formats.add(format);
+        weeble.sources.add(source);
+        weeble.formats.add(format);
         if (year < weeble.ranges.year.min) {
           weeble.ranges.year.min = year;
         } else if (year > weeble.ranges.year.max) {

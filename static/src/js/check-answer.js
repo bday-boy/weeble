@@ -16,9 +16,6 @@ const guessTooltips = {
     return answer;
   },
   episodes: (guess, dif, threshold) => {
-    /* TODO: Fix bug where user lowers episode bar to threshold and then guesses
-     * another amount of episodes and it creates weird tooltip text
-     */
       const { low, high } = weeble.ranges.episodes;
     if (checkDif(dif, threshold, low, high)) {
       if (threshold === 0) {
@@ -31,7 +28,6 @@ const guessTooltips = {
     }
   },
   year: (guess, dif, threshold) => {
-    const difAbs = Math.abs(dif);
     const { low, high } = weeble.ranges.year;
     if (checkDif(dif, threshold, low, high)) {
       if (threshold === 0) {
@@ -138,10 +134,10 @@ const guessProgress = {
     updateNumRange(guessYear, dif, threshold, weeble.ranges.year, 'year');
   },
   format(guessFormat, status) {
-    updateProgressGroup(guessFormat, status, formats, 'formats');
+    updateProgressGroup(guessFormat, status, weeble.formats, 'formats');
   },
   source(guessSource, status) {
-    updateProgressGroup(guessSource, status, sources, 'sources');
+    updateProgressGroup(guessSource, status, weeble.sources, 'sources');
   },
 };
 
@@ -152,21 +148,19 @@ const correctProgress = {
   },
   episodes() {
     const correctEpisodes = weeble.anime.episodes;
-    const threshold = weeble.thresholds.episodes;
-    updateNumRangeCorrect(correctEpisodes, 0, threshold, weeble.ranges.episodes, 'episodes');
+    updateNumRangeCorrect(correctEpisodes, weeble.ranges.episodes, 'episodes');
   },
   year() {
     const correctYear = weeble.anime.year;
-    const threshold = weeble.thresholds.year;
-    updateNumRangeCorrect(correctYear, 0, threshold, weeble.ranges.year, 'year');
+    updateNumRangeCorrect(correctYear, weeble.ranges.year, 'year');
   },
   format() {
     const correctFormat = weeble.anime.format;
-    updateProgressGroup(correctFormat, 'bg-success', formats, 'formats');
+    updateProgressGroup(correctFormat, 'bg-success', weeble.formats, 'formats');
   },
   source() {
     const correctSource = weeble.anime.source;
-    updateProgressGroup(correctSource, 'bg-success', sources, 'sources');
+    updateProgressGroup(correctSource, 'bg-success', weeble.sources, 'sources');
   },
 };
 
@@ -322,7 +316,7 @@ const handleCorrectAnswer = function () {
     return new bootstrap.Tooltip(tooltipTriggerEl);
   });
   if (!didDaily()) {
-    window.localStorage.setItem(getDateToday(), Array.from(guesses).join(':'));
+    window.localStorage.setItem(getDateToday(), Array.from(weeble.guesses.set).join(':'));
   }
 
   addAllTags();
@@ -337,7 +331,7 @@ const checkAnswer = function (inputTitle) {
     return false;
   }
   const animeId = weeble.titles[inputTitle];
-  guessesAdd(animeId);
+  weeble.guesses.add(animeId);
   if (animeId === weeble.anime.id) {
     handleCorrectAnswer();
     return;
