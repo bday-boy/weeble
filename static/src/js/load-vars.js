@@ -38,9 +38,12 @@ weeble = {
     },
   },
 };
-const useAnime = function (anime) {
-  return 25000 < anime.popularity;
-};
+
+/**
+ * Fetches the anime-database json and unpacks it into the weeble namespace.
+ * @returns {Promise} A promise that, once resolved, has set all anime data into
+ * the weeble namespace.
+ */
 const fetchAllAnime = function () {
   return fetch('/data/anime-database.json')
     .then((response) => response.json())
@@ -64,7 +67,7 @@ const fetchAllAnime = function () {
           weeble.ranges.year.max = year;
         }
 
-        if (useAnime(animeInfo)) {
+        if (25000 < animeInfo.popularity) {
           weeble.possibleAnime[animeId] = animeInfo;
         }
       });
@@ -77,6 +80,11 @@ const fetchAllAnime = function () {
     })
     .catch((err) => console.log(err));
 };
+
+/**
+ * Queries the server for the current daily anime.
+ * @returns {Promise} A promise that, once resolved, has set the daily anime.
+ */
 const fetchDailyAnime = function () {
   return fetch('/daily')
     .then((response) => response.json())
@@ -89,6 +97,12 @@ const fetchDailyAnime = function () {
     })
     .catch(() => weeble.anime = randomAnime(weeble.possibleAnime));
 };
+
+/**
+ * 
+ * @returns {Promise} A promise that, once resolved, has set all titles into
+ * the weeble namespace.
+ */
 const fetchAnimeTitles = function () {
   return fetch('/data/anime-titles.json')
     .then((response) => response.json())
@@ -100,6 +114,13 @@ const fetchAnimeTitles = function () {
     })
     .catch((err) => console.log(err));
 };
+
+/**
+ * Given the AniList ID of an anime, returns a promise that resolves into an
+ * array of all non-spoiler tags for that anime.
+ * @param {number} animeId - AniList ID of the anime to fetch tags for
+ * @returns {Promise<Array.<Object>} A promise that resolves into an array of tags
+ */
 const fetchTags = function (animeId) {
   const query = `
   query ($id: Int) {
@@ -146,6 +167,10 @@ const fetchTags = function (animeId) {
     })
     .catch((error) => console.log(error));
 };
+
+/**
+ * Removes all bootstrap placeholder items from the document.
+ */
 const removePlaceholders = function () {
   document.querySelectorAll('.placeholder').forEach((placeholder) => {
     placeholder.remove();
