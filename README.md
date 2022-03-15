@@ -27,6 +27,9 @@ data to make a Wordle- or Squirle-like game.
 - Fix on mobile
 - Dropdown show on input
 - Add hardmode/max num of guesses
+- Create Ko-fi
+- Condense how to play section
+- Put how to play and creator info into different modals
 
 ## Bugs
 
