@@ -15,10 +15,9 @@ data to make a Wordle- or Squirle-like game.
 
 ### High-priority
 
-- Add free play, give up, and show end buttons
+- Add show end buttons
 - Mess around with thresholds and see what works
 - Ignore anime that have titles/synonyms that already exist
-- Get weeble.ninja lmao
 - Add player stats
 
 ### Low-priority
