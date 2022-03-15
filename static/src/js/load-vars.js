@@ -142,7 +142,7 @@ const fetchTags = function (animeId) {
     })
     .catch((error) => console.log(error));
 };
-const loadPage = function () {
+const removePlaceholders = function () {
   document.querySelectorAll('.placeholder').forEach((placeholder) => {
     placeholder.remove();
   });
@@ -155,11 +155,11 @@ const loadPage = function () {
     progressBar.classList.remove('progress-bar-striped', 'progress-bar-animated');
   });
 
-  document.getElementById('episodes-low').textContent = weeble.ranges.episodes.min;
-  document.getElementById('episodes-high').textContent = weeble.ranges.episodes.max;
+  const { min: episodesMin, max: episodesMax } = weeble.ranges.episodes;
+  document.getElementById('episodes-low').textContent = episodesMin;
+  document.getElementById('episodes-high').textContent = episodesMax;
 
-  document.getElementById('year-low').textContent = weeble.ranges.year.min;
-  document.getElementById('year-high').textContent = weeble.ranges.year.max;
-
-  document.getElementById('anime-entry').disabled = false;
+  const { min: yearMin, max: yearMax } = weeble.ranges.year;
+  document.getElementById('year-low').textContent = yearMin;
+  document.getElementById('year-high').textContent = yearMax;
 };

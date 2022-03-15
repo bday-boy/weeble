@@ -124,7 +124,96 @@ const filterAndSuggest = () => {
   suggestAnime();
 };
 
-const init = function () {
+const loadPage = function () {
+  const weebleAbout = document.getElementById('weeble-about');
+  const tdlrCheckbox = document.getElementById('tldr');
+  const weebleSettings = document.getElementById('weeble-settings');
+  const highContrast = document.getElementById('high-contrast');
+  const darkMode = document.getElementById('dark-mode');
+  const applyFilters = document.getElementById('apply-filters');
+  const toastSuccess = document.getElementById('copy-success');
+  const toastDanger = document.getElementById('copy-danger');
+  const copyAnilist = document.getElementById('anilist');
+  const copyDiscord = document.getElementById('discord');
+  const copyGeneral = document.getElementById('general');
+  
+  weebleAbout.addEventListener('click', () => {
+    const aboutModal = document.getElementById('modal-about');
+    aboutModal.removeAttribute('data-bs-backdrop');
+    const bsModal = new bootstrap.Modal(aboutModal);
+    bsModal.show();
+  });
+  
+  tdlrCheckbox.checked = false;
+  tdlrCheckbox.addEventListener('change', function () {
+    const tldr = this.checked;
+    document.querySelectorAll('#modal-about [data-tldr=true]').forEach((section) => {
+      if (tldr) {
+        section.classList.add('d-none');
+      } else {
+        section.classList.remove('d-none');
+      }
+    });
+  });
+  
+  weebleSettings.addEventListener('click', function () {
+    const modal = new bootstrap.Modal(document.getElementById('modal-settings'));
+    modal.show();
+  });
+  
+  if (darkMode.checked) {
+    document.body.classList.remove('light-mode');
+  } else {
+    document.body.classList.add('light-mode');
+  }
+  darkMode.addEventListener('change', function () {
+    if (this.checked) {
+      document.body.classList.remove('light-mode');
+    } else {
+      document.body.classList.add('light-mode');
+    }
+  });
+  
+  if (highContrast.checked) {
+    document.body.classList.add('high-contrast');
+  } else {
+    document.body.classList.remove('high-contrast');
+  }
+  highContrast.addEventListener('change', function () {
+    if (this.checked) {
+      document.body.classList.add('high-contrast');
+    } else {
+      document.body.classList.remove('high-contrast');
+    }
+  });
+  
+  applyFilters.checked = true;
+  applyFilters.addEventListener('change', filterAndSuggest);
+
+  const toastOptions = { delay: 3000 };
+  const bsToastSuccess = new bootstrap.Toast(toastSuccess, toastOptions);
+  const bsToastDanger = new bootstrap.Toast(toastDanger, toastOptions);
+  
+  copyAnilist.addEventListener('click', function () {
+    copyToClipboard('anilist').then((success) => {
+      success ? bsToastSuccess.show() : bsToastDanger.show();
+    });
+  });
+  
+  copyDiscord.addEventListener('click', function () {
+    copyToClipboard('discord').then((success) => {
+      success ? bsToastSuccess.show() : bsToastDanger.show();
+    });
+  });
+  
+  copyGeneral.addEventListener('click', function () {
+    copyToClipboard('general').then((success) => {
+      success ? bsToastSuccess.show() : bsToastDanger.show();
+    });
+  });
+};
+
+const loadAnimeData = function () {
   return fetchAllAnime()
     .then(() => fetchDailyAnime())
     .then(() => fetchAnimeTitles())
@@ -134,7 +223,7 @@ const init = function () {
       weeble.anime.tags = tags.sort((a, b) => a.rank < b.rank);
       weeble.anime.curTag = 0;
     })
-    .then(() => loadPage())
+    .then(() => removePlaceholders())
     .then(() => {
       if (firstImpression()) {
         const modal = new bootstrap.Modal(document.getElementById('modal-about'));
@@ -144,145 +233,63 @@ const init = function () {
     .catch((error) => console.log(error));
 };
 
-(function () {
-  init()
-    .then(() => {
-      const weebleAbout = document.getElementById('weeble-about');
-      const tdlrCheckbox = document.getElementById('tldr');
-      const weebleSettings = document.getElementById('weeble-settings');
-      const highContrast = document.getElementById('high-contrast');
-      const darkMode = document.getElementById('dark-mode');
-      const applyFilters = document.getElementById('apply-filters');
-      const toastSuccess = document.getElementById('copy-success');
-      const toastDanger = document.getElementById('copy-danger');
-      const copyAnilist = document.getElementById('anilist');
-      const copyDiscord = document.getElementById('discord');
-      const copyGeneral = document.getElementById('general');
-      const dropdownBtn = document.getElementById('toggle-suggestions');
-      const userEntry = document.getElementById('anime-entry');
-      const guessBtn = document.getElementById('guess-button');
-      
-      weebleAbout.addEventListener('click', () => {
-        const aboutModal = document.getElementById('modal-about');
-        aboutModal.removeAttribute('data-bs-backdrop');
-        const bsModal = new bootstrap.Modal(aboutModal);
-        bsModal.show();
-      });
-      
-      tdlrCheckbox.checked = false;
-      tdlrCheckbox.addEventListener('change', function () {
-        const tldr = this.checked;
-        document.querySelectorAll('#modal-about [data-tldr=true]').forEach((section) => {
-          if (tldr) {
-            section.classList.add('d-none');
-          } else {
-            section.classList.remove('d-none');
-          }
-        });
-      });
-      
-      weebleSettings.addEventListener('click', function () {
-        const modal = new bootstrap.Modal(document.getElementById('modal-settings'));
-        modal.show();
-      });
-      
-      if (darkMode.checked) {
-        document.body.classList.remove('light-mode');
-      } else {
-        document.body.classList.add('light-mode');
-      }
-      darkMode.addEventListener('change', function () {
-        if (this.checked) {
-          document.body.classList.remove('light-mode');
-        } else {
-          document.body.classList.add('light-mode');
-        }
-      });
-      
-      if (highContrast.checked) {
-        document.body.classList.add('high-contrast');
-      } else {
-        document.body.classList.remove('high-contrast');
-      }
-      highContrast.addEventListener('change', function () {
-        if (this.checked) {
-          document.body.classList.add('high-contrast');
-        } else {
-          document.body.classList.remove('high-contrast');
-        }
-      });
-      
-      applyFilters.checked = true;
-      applyFilters.addEventListener('change', filterAndSuggest);
+const startGame = function () {
+  const dropdownBtn = document.getElementById('toggle-suggestions');
+  const userEntry = document.getElementById('anime-entry');
+  const guessBtn = document.getElementById('guess-button');
 
-      const toastOptions = {
-        delay: 3000
-      };
-      const bsToastSuccess = new bootstrap.Toast(toastSuccess, toastOptions);
-      const bsToastDanger = new bootstrap.Toast(toastDanger, toastOptions);
-      
-      copyAnilist.addEventListener('click', function () {
-        copyToClipboard('anilist').then((success) => {
-          success ? bsToastSuccess.show() : bsToastDanger.show();
-        });
-      });
-      
-      copyDiscord.addEventListener('click', function () {
-        copyToClipboard('discord').then((success) => {
-          success ? bsToastSuccess.show() : bsToastDanger.show();
-        });
-      });
-      
-      copyGeneral.addEventListener('click', function () {
-        copyToClipboard('general').then((success) => {
-          success ? bsToastSuccess.show() : bsToastDanger.show();
-        });
-      });
-      
-      userEntry.addEventListener('input', suggestAnime);
-      userEntry.addEventListener('keydown', (e) => {
-        if (e.defaultPrevented) {
-          return;
+  userEntry.addEventListener('input', suggestAnime);
+  userEntry.addEventListener('keydown', (e) => {
+    if (e.defaultPrevented) {
+      return;
+    }
+    
+    switch (e.key) {
+      case 'ArrowDown':
+      case 'Down':
+        const dropdown = document.getElementById('anime-suggestions');
+        if (dropdown.firstChild) {
+          dropdown.firstChild.firstChild.focus();
         }
-        
-        switch (e.key) {
-          case 'ArrowDown':
-          case 'Down':
-            const dropdown = document.getElementById('anime-suggestions');
-            if (dropdown.firstChild) {
-              dropdown.firstChild.firstChild.focus();
-            }
-            break;
-          case 'Enter':
-            const guess = userEntry.value;
-            userEntry.value = '';
-            checkAnswer(guess);
-            filterAndSuggest();
-            break;
-          default:
-            return;
-        }
-        
-        e.preventDefault();
-      });
-      
-      guessBtn.addEventListener('click', () => {
+        break;
+      case 'Enter':
         const guess = userEntry.value;
         userEntry.value = '';
         checkAnswer(guess);
         filterAndSuggest();
-      });
-      
-      const done = didDaily();
-      if (done) {
-        dropdownBtn.disabled = true;
-        userEntry.disabled = true;
-        guessBtn.disabled = true;
-        const todayGuesses = window.localStorage.getItem(getDateToday());
-        todayGuesses.split(':').forEach((guessId) => {
-          const animeTitle = weeble.allAnime[parseInt(guessId)].title;
-          checkAnswer(animeTitle);
-        });
-      }
+        break;
+      default:
+        return;
+    }
+    
+    e.preventDefault();
+  });
+  
+  guessBtn.addEventListener('click', () => {
+    const guess = userEntry.value;
+    userEntry.value = '';
+    checkAnswer(guess);
+    filterAndSuggest();
+  });
+  
+  const done = didDaily();
+  if (done) {
+    dropdownBtn.disabled = true;
+    userEntry.disabled = true;
+    guessBtn.disabled = true;
+    const todayGuesses = window.localStorage.getItem(getDateToday());
+    todayGuesses.split(':').forEach((guessId) => {
+      const animeTitle = weeble.allAnime[parseInt(guessId)].title;
+      checkAnswer(animeTitle);
     });
+  } else {
+    dropdownBtn.disabled = false;
+    userEntry.disabled = false;
+    guessBtn.disabled = false;
+  }
+};
+
+(function () {
+  loadAnimeData().then(() => startGame());
+  loadPage();
 })();
