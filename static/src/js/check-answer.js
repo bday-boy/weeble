@@ -15,8 +15,8 @@ const guessTooltips = {
     /* TODO: Fix bug where user lowers episode bar to threshold and then guesses
      * another amount of episodes and it creates weird tooltip text
      */
-    if (Math.abs(dif) <= threshold) {
       const { low, high } = weeble.ranges.episodes;
+    if (Math.abs(dif) <= threshold || (high - low) <= threshold * 2) {
       if (threshold === 0) {
         return `The answer has ${low} episodes!`;
       } else {
@@ -28,8 +28,8 @@ const guessTooltips = {
   },
   year: (guess, dif, threshold) => {
     const difAbs = Math.abs(dif);
-    if (difAbs <= threshold) {
-      const { low, high } = weeble.ranges.year;
+    const { low, high } = weeble.ranges.year;
+    if (difAbs <= threshold || (high - low) <= threshold * 2) {
       if (threshold === 0) {
         return `The answer was released in ${low}!`;
       } else {
@@ -220,7 +220,8 @@ const numCompare = function (guessNum, animeKey) {
   const answerValue = weeble.anime[animeKey];
   const dif = guessNum - answerValue;
   const threshold = weeble.thresholds[animeKey];
-  if (Math.abs(dif) <= threshold) {
+  const { low, high } = weeble.ranges[animeKey];
+  if (Math.abs(dif) <= threshold || (high - low) <= threshold * 2) {
     icon = `chevron-contract`;
     status = 'bg-warning';
   } else {
