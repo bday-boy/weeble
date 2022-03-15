@@ -23,6 +23,7 @@ data to make a Wordle- or Squirle-like game.
 - Fix tooltips so that they don't mention explicit number values anymore and
   instead just mention the range
 - Get weeble.ninja lmao
+- Add player stats
 
 ### Low-priority
 
