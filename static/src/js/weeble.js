@@ -130,6 +130,7 @@ const loadPage = function () {
   const copyAnilist = document.getElementById('anilist');
   const copyDiscord = document.getElementById('discord');
   const copyGeneral = document.getElementById('general');
+  const resetTimer = document.getElementById('reset-timer');
   
   weebleAbout.addEventListener('click', () => {
     const aboutModal = document.getElementById('modal-about');
@@ -205,6 +206,8 @@ const loadPage = function () {
       success ? bsToastSuccess.show() : bsToastDanger.show();
     });
   });
+
+  startTimer(resetTimer);
 };
 
 const loadAnimeData = function () {

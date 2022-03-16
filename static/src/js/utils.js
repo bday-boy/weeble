@@ -47,11 +47,15 @@ const startTimer = function (timerElement) {
     const now = new Date().getTime();
     const dif = nextRefresh - now;
 
-    const hrs = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const min = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const sec = Math.floor((distance % (1000 * 60)) / 1000);
+    const hrs = Math.floor((dif % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const min = Math.floor((dif % (1000 * 60 * 60)) / (1000 * 60));
+    const sec = Math.floor((dif % (1000 * 60)) / 1000);
 
-    timerElement.textContent = `${hrs}:${min}:${sec}`;
+    const hrsStr = String(hrs).padStart(2, '0');
+    const minStr = String(min).padStart(2, '0');
+    const secStr = String(sec).padStart(2, '0');
+
+    timerElement.textContent = hrsStr + ':' + minStr + ':' + secStr;
   }, 1000);
 };
 
