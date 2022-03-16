@@ -40,7 +40,7 @@ const getNextRefresh = function () {
   return today;
 };
 
-const startTimer = function (timerElement) {
+const startTimer = function (timerElements) {
   const nextRefresh = getNextRefresh();
 
   setInterval(function () {
@@ -55,7 +55,10 @@ const startTimer = function (timerElement) {
     const minStr = String(min).padStart(2, '0');
     const secStr = String(sec).padStart(2, '0');
 
-    timerElement.textContent = hrsStr + ':' + minStr + ':' + secStr;
+    const countdown = hrsStr + ':' + minStr + ':' + secStr;
+    timerElements.forEach((timer) => {
+      timer.textContent = countdown;
+    });
   }, 1000);
 };
 
