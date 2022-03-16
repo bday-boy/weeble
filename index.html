@@ -108,40 +108,29 @@
           </div>
           <div class="modal-body">
             <div class="container-fluid">
-              <div class="row flex-column justify-content-center" data-tldr="true">
-                <div class="col-12 text-start">
-                  <h5>Test your anime knowledge!</h5>
-                  <p>
-                    Welcome to Weeble, an anime guessing game by illdie and Birthday Boy!
-                  </p>
-                </div>
-              </div>
               <div class="row flex-column justify-content-center" id="rules-and-info">
                 <div class="col-12 text-start">
-                  <h5>Rules and Important Game Info</h5>
+                  <h5 class="text-decoration-underline">Rules and Important Game Info</h5>
                   <p>
-                    The way Weeble works is not entirely comparable to Wordle and other Wordle variants, so please take
-                    note of the following:
+                    The way Weeble works is not entirely comparable to Wordle and other variants.
                   </p>
-                  <ul>
-                    <li>
-                      Guessable word-based categories will show the exact answer, but number-based categories will
-                      only be shown down to a certain threshold.
-                    </li>
-                    <li>
-                      Each incorrect guess will reveal one more tag of the correct anime, in order of relevancy. Don't
-                      worry&#8211spoiler tags will <strong>NOT</strong> be shown.
-                    </li>
-                    <li>
-                      Even though tags and genres will show up, they are not included in the filter and cannot be
-                      guessed.
-                    </li>
-                  </ul>
+                  <p>
+                    Guessable word-based categories will show the exact answer, but number-based categories will
+                    only be shown down to a certain threshold.
+                  </p>
+                  <p>
+                    Each incorrect guess will reveal one more tag of the correct anime, in order of relevancy. Don't
+                    worry&#8211spoiler tags will <strong>NOT</strong> be shown.
+                  </p>
+                  <p>
+                    Even though tags and genres will show up, they are not included in the filter and cannot be
+                    guessed.
+                  </p>
                 </div>
               </div>
               <div class="row flex-column justify-content-center" data-tldr="true">
                 <div class="col-12 text-start">
-                  <h5>Cookies and Privacy</h5>
+                  <h5 class="text-decoration-underline">Cookies and Privacy</h5>
                   <p>
                     User information is never sent from Weeble to any server. All information except for the daily anime
                     is stored client side. Various info for weeble is stored in a mix of cookies and local storage, so
@@ -154,6 +143,40 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-success" data-bs-dismiss="modal">I understand</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal-support" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Support</h5>
+            <button type="button" class="btn-close btn-close-white m-0" data-bs-dismiss="modal" aria-label="close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row flex-column justify-content-center">
+                <div class="col-12 text-start">
+                  <p>
+                    Thanks for checking out Weeble, an anime guessing game by illdie and Birthday Boy! We are two
+                    passionate anime fans who found there to be a lack of Wordle-like anime games online, so we decided
+                    to try making our own.
+                  </p>
+                  <p>
+                    If you enjoy Weeble, please consider supporting us or checking out our socials! 
+                  </p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+                  <a href="javascript:;" class="btn btn-success m-2">
+                    Buy us a Ko-fi
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -261,7 +284,7 @@
       <div class="row justify-content-center" id="title">
         <div class="col-xl-6 col-md-8 d-flex justify-content-between align-items-center">
           <i class="bi bi-info-circle-fill" id="weeble-about"></i>
-          <i class="bi bi-heart-fill"></i>
+          <i class="bi bi-heart-fill" id="weeble-support"></i>
           <h1 class="title mt-3">Weeble</h1>
           <i class="bi bi-bar-chart-fill" id="weeble-stats"></i>
           <i class="bi bi-gear-fill" id="weeble-settings"></i>
