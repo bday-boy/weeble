@@ -212,8 +212,11 @@ const loadAnimeData = function () {
     .then(() => fetchDailyAnime())
     .then(() => fetchAnimeTitles())
     .then(() => filterAndSuggest())
-    .then(() => fetchTags(weeble.anime.id))
-    .then((tags) => {
+    .then(() => fetchAnswerData(weeble.anime.id))
+    .then((answerInfo) => {
+      const { tags, genres } = answerInfo;
+      weeble.anime.genres = genres;
+      weeble.anime.curGenre = 0;
       weeble.anime.tags = tags.sort((a, b) => a.rank < b.rank);
       weeble.anime.curTag = 0;
     })

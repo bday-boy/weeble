@@ -270,6 +270,24 @@ const endGame = function (won) {
   didDaily(won);
 };
 
+const addGenre = function (numGenres) {
+  let genreCount = 0;
+  const addAllTags = (numGenres === undefined || numGenres === null);
+  const genresElement = document.getElementById('genres');
+  while (weeble.anime.curGenre < weeble.anime.genres.length && (addAllTags || genreCount < numGenres)) {
+    const genre = weeble.anime.genres[weeble.anime.curGenre++];
+    const genreText = genre.toUpperCase();
+    const nextGenre = createNewButton(genreText);
+    nextGenre.classList.add('btn-success');
+    genresElement.appendChild(nextGenre);
+    genreCount++;
+  }
+};
+
+const addAllGenres = function () {
+  addGenre();
+};
+
 const addTag = function (numTags) {
   let tagCount = 0;
   const addAllTags = (numTags === undefined || numTags === null);
@@ -317,6 +335,7 @@ const handleCorrectAnswer = function () {
   }
 
   addAllTags();
+  addAllGenres();
   showEndModal(endText(true));
   endGame(true);
 };
@@ -358,4 +377,5 @@ const checkAnswer = function (inputTitle) {
   });
 
   addTag(1);
+  addGenre(1);
 };

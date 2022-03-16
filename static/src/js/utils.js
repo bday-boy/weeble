@@ -32,6 +32,29 @@ const getDateToday = function () {
   return date.toISOString().split('T')[0];
 };
 
+const getNextRefresh = function () {
+  const today = new Date();
+  today.setUTCHours(today.getUTCHours() - 7);
+  today.setUTCDate(today.getUTCDate() + 1);
+  today.setUTCHours(6, 59, 59, 999);
+  return today;
+};
+
+const startTimer = function (timerElement) {
+  const nextRefresh = getNextRefresh();
+
+  setInterval(function () {
+    const now = new Date().getTime();
+    const dif = nextRefresh - now;
+
+    const hrs = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const min = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const sec = Math.floor((distance % (1000 * 60)) / 1000);
+
+    timerElement.textContent = `${hrs}:${min}:${sec}`;
+  }, 1000);
+};
+
 const levenshtein = function (s, t) {
   if (s === t) {
     return 0;

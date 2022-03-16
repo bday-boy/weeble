@@ -121,7 +121,7 @@ const fetchAnimeTitles = function () {
  * @param {number} animeId - AniList ID of the anime to fetch tags for
  * @returns {Promise<Array.<Object>} A promise that resolves into an array of tags
  */
-const fetchTags = function (animeId) {
+const fetchAnswerData = function (animeId) {
   const query = `
   query ($id: Int) {
     Media (id: $id, type: ANIME) {
@@ -133,6 +133,8 @@ const fetchTags = function (animeId) {
         isMediaSpoiler
         isAdult
       }
+      genres
+      hashtag
     }
   }
   `;
@@ -160,10 +162,10 @@ const fetchTags = function (animeId) {
         .then((json) => (response.ok ? json : Promise.reject(json)));
     })
     .then((data) => {
-      const tags = data.data.Media.tags;
+      const { tags, genres } = data.data.Media;
       const hasSpoiler = (tag) => (tag.isGeneralSpoiler || tag.isMediaSpoiler);
       const nonSpoilerTags = tags.filter((tag) => !hasSpoiler(tag));
-      return nonSpoilerTags;
+      return { tags: nonSpoilerTags, genres };
     })
     .catch((error) => console.log(error));
 };
