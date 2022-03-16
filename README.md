@@ -30,6 +30,7 @@ data to make a Wordle- or Squirle-like game.
 - Create Ko-fi
 - Condense how to play section
 - Put how to play and creator info into different modals
+- Make copy text say X/8 or something when user loses for the day
 
 ## Bugs
 
