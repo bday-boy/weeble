@@ -20,6 +20,8 @@ data to make a Wordle- or Squirle-like game.
 - Ignore anime that have titles/synonyms that already exist
 - Add player stats
 - Add indicator that there are no tags/genres/etc.
+- Fix row > row in index.html with tags/genres/etc. and make sources/format
+  col-6 on mobile
 
 ### Low-priority
 
