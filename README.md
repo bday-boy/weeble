@@ -19,11 +19,11 @@ data to make a Wordle- or Squirle-like game.
 - Mess around with thresholds and see what works
 - Ignore anime that have titles/synonyms that already exist
 - Add player stats
+- Add indicator that there are no tags/genres/etc.
 
 ### Low-priority
 
 - Optimize search suggestions
-- Add free play
 - Fix on mobile
 - Dropdown show on input
 - Add hardmode/max num of guesses
