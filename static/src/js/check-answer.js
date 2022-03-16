@@ -262,8 +262,7 @@ const showEndModal = function (modalTitle) {
   img.src = weeble.anime.picture;
   img.alt = weeble.anime.title;
 
-  const modal = new bootstrap.Modal(document.getElementById('modal-end'));
-  setTimeout(() => modal.show(), 1000);
+  setTimeout(() => bsElements.modals.end.show(), 1000);
 };
 
 const endGame = function (won) {
@@ -326,7 +325,7 @@ const handleCorrectAnswer = function () {
   div.appendChild(guessWrapper);
 
   guessesDiv.prepend(div);
-  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  const tooltipTriggerList = [].slice.call(div.querySelectorAll('[data-bs-toggle="tooltip"]'))
   const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl);
   });
@@ -371,11 +370,27 @@ const checkAnswer = function (inputTitle) {
   div.appendChild(guessWrapper);
 
   guessesDiv.prepend(div);
-  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  const tooltipTriggerList = [].slice.call(div.querySelectorAll('[data-bs-toggle="tooltip"]'))
   const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
   });
 
   addTag(1);
   addGenre(1);
+
+  if (weeble.guesses.set.size >= weeble.guesses.max) {
+    if (!didDaily()) {
+      window.localStorage.setItem(getDateToday(), Array.from(weeble.guesses.set).join(':'));
+    }
+    addAllTags();
+    addAllGenres();
+    showEndModal(endText(false));
+    endGame(false);
+    const dropdownBtn = document.getElementById('toggle-suggestions');
+    const userEntry = document.getElementById('anime-entry');
+    const guessBtn = document.getElementById('guess-button');
+    dropdownBtn.disabled = true;
+    userEntry.disabled = true;
+    guessBtn.disabled = true;
+  }
 };

@@ -121,12 +121,11 @@ const filterAndSuggest = () => {
 const loadPage = function () {
   const weebleAbout = document.getElementById('weeble-about');
   const tdlrCheckbox = document.getElementById('tldr');
+  const weebleStats = document.getElementById('weeble-stats');
   const weebleSettings = document.getElementById('weeble-settings');
   const highContrast = document.getElementById('high-contrast');
   const darkMode = document.getElementById('dark-mode');
   const applyFilters = document.getElementById('apply-filters');
-  const toastSuccess = document.getElementById('copy-success');
-  const toastDanger = document.getElementById('copy-danger');
   const copyAnilist = document.getElementById('anilist');
   const copyDiscord = document.getElementById('discord');
   const copyGeneral = document.getElementById('general');
@@ -135,10 +134,9 @@ const loadPage = function () {
   weebleAbout.addEventListener('click', () => {
     const aboutModal = document.getElementById('modal-about');
     aboutModal.removeAttribute('data-bs-backdrop');
-    const bsModal = new bootstrap.Modal(aboutModal);
-    bsModal.show();
+    bsElements.modals.about.show();
   });
-  
+
   tdlrCheckbox.checked = false;
   tdlrCheckbox.addEventListener('change', function () {
     const tldr = this.checked;
@@ -150,10 +148,13 @@ const loadPage = function () {
       }
     });
   });
+
+  weebleStats.addEventListener('click', function () {
+    bsElements.modals.stats.show();
+  });
   
   weebleSettings.addEventListener('click', function () {
-    const modal = new bootstrap.Modal(document.getElementById('modal-settings'));
-    modal.show();
+    bsElements.modals.settings.show();
   });
   
   if (darkMode.checked) {
@@ -185,25 +186,25 @@ const loadPage = function () {
   applyFilters.checked = true;
   applyFilters.addEventListener('change', filterAndSuggest);
 
-  const toastOptions = { delay: 3000 };
-  const bsToastSuccess = new bootstrap.Toast(toastSuccess, toastOptions);
-  const bsToastDanger = new bootstrap.Toast(toastDanger, toastOptions);
+  const showCopyModal = (success) => (
+    success ? bsElements.toasts.copySuccess.show() : bsElements.toasts.copyDanger.show()
+  );
   
   copyAnilist.addEventListener('click', function () {
     copyToClipboard('anilist').then((success) => {
-      success ? bsToastSuccess.show() : bsToastDanger.show();
+      showCopyModal(success);
     });
   });
   
   copyDiscord.addEventListener('click', function () {
     copyToClipboard('discord').then((success) => {
-      success ? bsToastSuccess.show() : bsToastDanger.show();
+      showCopyModal(success);
     });
   });
   
   copyGeneral.addEventListener('click', function () {
     copyToClipboard('general').then((success) => {
-      success ? bsToastSuccess.show() : bsToastDanger.show();
+      showCopyModal(success);
     });
   });
 
@@ -226,8 +227,7 @@ const loadAnimeData = function () {
     .then(() => removePlaceholders())
     .then(() => {
       if (firstImpression()) {
-        const modal = new bootstrap.Modal(document.getElementById('modal-about'));
-        modal.show();
+        bsElements.modals.about.show();
       }
     })
     .catch((error) => console.log(error));
@@ -293,3 +293,5 @@ const startGame = function () {
   loadAnimeData().then(() => startGame());
   loadPage();
 })();
+
+// document.cookie = '_didDaily=true; max-age=0'
