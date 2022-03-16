@@ -121,6 +121,7 @@ const filterAndSuggest = () => {
 const loadPage = function () {
   const weebleAbout = document.getElementById('weeble-about');
   const tdlrCheckbox = document.getElementById('tldr');
+  const weebleSupport = document.getElementById('weeble-support');
   const weebleStats = document.getElementById('weeble-stats');
   const weebleSettings = document.getElementById('weeble-settings');
   const highContrast = document.getElementById('high-contrast');
@@ -147,6 +148,10 @@ const loadPage = function () {
         section.classList.remove('d-none');
       }
     });
+  });
+  
+  weebleSupport.addEventListener('click', () => {
+    bsElements.modals.support.show();
   });
 
   weebleStats.addEventListener('click', function () {

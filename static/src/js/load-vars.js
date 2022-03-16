@@ -1,6 +1,7 @@
 bsElements = {
   modals: {
     about: new bootstrap.Modal(document.getElementById('modal-about')),
+    support: new bootstrap.Modal(document.getElementById('modal-support')),
     stats: new bootstrap.Modal(document.getElementById('modal-stats')),
     settings: new bootstrap.Modal(document.getElementById('modal-settings')),
     end: new bootstrap.Modal(document.getElementById('modal-end')),
