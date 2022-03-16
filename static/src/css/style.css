@@ -109,8 +109,14 @@ span.placeholder {
   background-color: var(--bg-color);
   box-shadow: 0 0 1.5rem #666;
 }
+.modal-header {
+  border-bottom: none;
+}
 .modal-body p {
   word-wrap: break-word;
+}
+.modal-footer {
+  border-top: none;
 }
 .form-control {
   background-color: var(--bg-color-input) !important;
