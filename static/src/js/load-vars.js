@@ -6,8 +6,12 @@ bsElements = {
     end: new bootstrap.Modal(document.getElementById('modal-end')),
   },
   toasts: {
-    copySuccess: new bootstrap.Toast(document.getElementById('copy-success'), { delay: 3000 }),
-    copyFailure: new bootstrap.Toast(document.getElementById('copy-danger'), { delay: 3000 }),
+    copySuccess: new bootstrap.Toast(document.getElementById('copy-success'), {
+      delay: 3000
+    }),
+    copyFailure: new bootstrap.Toast(document.getElementById('copy-danger'), {
+      delay: 3000
+    }),
   },
 };
 
