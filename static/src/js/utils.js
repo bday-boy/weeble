@@ -27,17 +27,17 @@ const createNewButton = function (text, btnClass) {
   return btn;
 };
 
-const getDateToday = function () {
-  const date = new Date();
-  return date.toISOString().split('T')[0];
-};
-
 const getNextRefresh = function () {
   const today = new Date();
   today.setUTCHours(today.getUTCHours() - 7);
   today.setUTCDate(today.getUTCDate() + 1);
   today.setUTCHours(6, 59, 59, 999);
   return today;
+};
+
+const getDateToday = function () {
+  const date = getNextRefresh();
+  return date.toISOString().split('T')[0];
 };
 
 const startTimer = function (timerElements) {
