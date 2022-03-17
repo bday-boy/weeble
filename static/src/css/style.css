@@ -40,7 +40,7 @@ mark {
   height: 1.5em;
   width: 1.5em;
 }
-.hint-section [type=button] {
+.hint-section .btn {
   padding: 0.15rem 0.3rem;
 }
 .floating-text-wrapper {
@@ -78,7 +78,14 @@ mark {
     position: relative
   }
   body {
-    padding-bottom: 30em;
+    padding-bottom: 25em;
+  }
+
+  .hint-section .btn {
+    padding: 0.075rem 0.15rem;
+  }
+  .hint-section .btn > small {
+    font-size: 0.75em;
   }
 }
 
