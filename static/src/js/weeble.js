@@ -240,42 +240,9 @@ const loadAnimeData = function () {
 
 const startGame = function () {
   const dropdownBtn = document.getElementById('toggle-suggestions');
+  const dropdown = document.getElementById('anime-suggestions');
   const userEntry = document.getElementById('anime-entry');
   const guessBtn = document.getElementById('guess-button');
-
-  userEntry.addEventListener('input', suggestAnime);
-  userEntry.addEventListener('keydown', (e) => {
-    if (e.defaultPrevented) {
-      return;
-    }
-    
-    switch (e.key) {
-      case 'ArrowDown':
-      case 'Down':
-        const dropdown = document.getElementById('anime-suggestions');
-        if (dropdown.firstChild) {
-          dropdown.firstChild.firstChild.focus();
-        }
-        break;
-      case 'Enter':
-        const guess = userEntry.value;
-        userEntry.value = '';
-        checkAnswer(guess);
-        filterAndSuggest();
-        break;
-      default:
-        return;
-    }
-    
-    e.preventDefault();
-  });
-  
-  guessBtn.addEventListener('click', () => {
-    const guess = userEntry.value;
-    userEntry.value = '';
-    checkAnswer(guess);
-    filterAndSuggest();
-  });
   
   const done = didDaily();
   if (done) {
@@ -291,6 +258,44 @@ const startGame = function () {
     dropdownBtn.disabled = false;
     userEntry.disabled = false;
     guessBtn.disabled = false;
+
+    userEntry.addEventListener('input', function () {
+      suggestAnime();
+      bsElements.dropdown.show();
+      this.focus();
+    });
+    userEntry.addEventListener('keydown', (e) => {
+      if (e.defaultPrevented) {
+        return;
+      }
+      
+      switch (e.key) {
+        case 'ArrowDown':
+        case 'Down':
+          const dropdown = document.getElementById('anime-suggestions');
+          if (dropdown.firstChild) {
+            dropdown.firstChild.firstChild.focus();
+          }
+          break;
+        case 'Enter':
+          const guess = userEntry.value;
+          userEntry.value = '';
+          checkAnswer(guess);
+          filterAndSuggest();
+          break;
+        default:
+          return;
+      }
+      
+      e.preventDefault();
+    });
+    
+    guessBtn.addEventListener('click', () => {
+      const guess = userEntry.value;
+      userEntry.value = '';
+      checkAnswer(guess);
+      filterAndSuggest();
+    });
   }
 };
 

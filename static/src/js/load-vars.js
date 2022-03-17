@@ -14,6 +14,7 @@ bsElements = {
       delay: 3000
     }),
   },
+  dropdown: new bootstrap.Dropdown(document.querySelector('.dropdown-toggle'))
 };
 
 weeble = {
