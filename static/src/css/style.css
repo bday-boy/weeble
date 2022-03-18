@@ -60,6 +60,9 @@ mark {
   right: -5em;
   top: 0.75em;
 }
+.score-label {
+  border-right: 1px solid whitesmoke;
+}
 
 #guess-stats .progress {
   background-color: transparent;
