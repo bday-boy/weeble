@@ -331,6 +331,7 @@ const handleCorrectAnswer = function () {
   });
   if (!didDaily()) {
     window.localStorage.setItem(getDateToday(), Array.from(weeble.guesses.set).join(':'));
+    updateStats(true, weeble.guesses.max, weeble.guesses.set.size);
   }
 
   addAllTags();
@@ -340,11 +341,11 @@ const handleCorrectAnswer = function () {
 };
 
 const checkAnswer = function (inputTitle) {
-  const guessesDiv = document.getElementById('guesses');
   if (!weeble.titles.hasOwnProperty(inputTitle) || weeble.anime === undefined) {
     /* do something here to warn user it's not a valid anime */
     return false;
   }
+  const guessesDiv = document.getElementById('guesses');
   const animeId = weeble.titles[inputTitle];
   weeble.guesses.add(animeId);
   if (animeId === weeble.anime.id) {
@@ -381,6 +382,7 @@ const checkAnswer = function (inputTitle) {
   if (weeble.guesses.set.size >= weeble.guesses.max) {
     if (!didDaily()) {
       window.localStorage.setItem(getDateToday(), Array.from(weeble.guesses.set).join(':'));
+      updateStats(true, weeble.guesses.max);
     }
     addAllTags();
     addAllGenres();

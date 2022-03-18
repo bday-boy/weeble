@@ -61,6 +61,13 @@ mark {
   top: 0.75em;
 }
 
+#guess-stats .progress {
+  background-color: transparent;
+  border-radius: 0;
+}
+#guess-stats .progress-bar {
+  border-radius: 0;
+}
 #guesses {
   font-size: x-large;
 }

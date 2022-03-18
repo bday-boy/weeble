@@ -192,8 +192,8 @@
           </div>
           <div class="modal-body">
             <div class="container-fluid">
-              <div class="row flex-row justify-content-center my-2">
-                <div class="col-12 d-flex align-items-start justify-content-center">
+              <div class="row my-2">
+                <div class="col-12 d-flex align-items-start justify-content-around">
                   <div class="d-flex flex-column justify-content-between">
                     <h4 class="text-center" id="played">1</h4>
                     <small class="text-center">Played</small>
@@ -212,14 +212,20 @@
                   </div>
                 </div>
               </div>
-              <div class="row justify-content-center" id="guess-stats">
-                <div class="col-12 my-1">
-                  <div class="progress" style="font-size: large;">
+              <div id="guess-stats">
+                <div class="row align-items-center justify-content-center">
+                  <div class="col-1 mr-1 text-start">
+                    1
+                  </div>
+                  <div class="progress col-9 px-0" style="font-size: large;">
                     <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                 </div>
-                <div class="col-12 my-1">
-                  <div class="progress" style="font-size: large;">
+                <div class="row align-items-center justify-content-center">
+                  <div class="col-1 mr-1 text-start">
+                    5
+                  </div>
+                  <div class="progress col-9 px-0" style="font-size: large;">
                     <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
                 </div>
@@ -423,6 +429,7 @@
     <script src="/lib/firstImpression/js/first-impression.js"></script>
     <script src="/src/js/utils.js"></script>
     <script src="/src/js/cookies.js"></script>
+    <script src="/src/js/scores.js"></script>
     <script src="/src/js/load-vars.js"></script>
     <script src="/src/js/update-progress.js"></script>
     <script src="/src/js/check-answer.js"></script>

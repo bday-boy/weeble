@@ -118,6 +118,16 @@ const filterAndSuggest = () => {
   suggestAnime();
 };
 
+const showStats = function () {
+  ['played', 'win-percent', 'streak-current', 'streak-max'].forEach((stat) => {
+    const statElement = document.getElementById(stat);
+    showStat(statElement);
+  });
+
+  const guessStats = document.getElementById('guess-stats');
+  showScores(guessStats, weeble.guesses.max);
+};
+
 const loadPage = function () {
   const weebleAbout = document.getElementById('weeble-about');
   const tdlrCheckbox = document.getElementById('tldr');
@@ -154,6 +164,7 @@ const loadPage = function () {
     bsElements.modals.support.show();
   });
 
+  showStats();
   weebleStats.addEventListener('click', function () {
     bsElements.modals.stats.show();
   });
