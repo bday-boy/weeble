@@ -9,7 +9,7 @@ const updateScores = (scores, numGuesses) => {
 
 const createScoreLabel = function (score) {
   const scoreDiv = document.createElement('div');
-  scoreDiv.classList.add('col-1', 'mr-1', 'text-start');
+  scoreDiv.classList.add('col-2', 'text-start');
   scoreDiv.textContent = score;
   return scoreDiv;
 };
@@ -18,20 +18,20 @@ const createScoreProgressBar = function (width) {
   const progressBar = document.createElement('div');
   progressBar.classList.add('progress-bar', 'bg-success');
   progressBar.role = 'progressbar';
-  progressBar.style.width = `${width}%`;
+  progressBar.style.width = `${Math.max(1, width)}%`;
   progressBar.setAttribute('aria-valuenow', '' + width);
   progressBar.setAttribute('aria-valuemin', '0');
   progressBar.setAttribute('aria-valuemax', '100');
 
   const progress = document.createElement('div');
-  progress.classList.add('progress', 'col-9', 'px-0');
+  progress.classList.add('progress', 'col-10', 'px-0');
   progress.appendChild(progressBar);
   return progress;
 };
 
-const createScoreRow = function (score, wins) {
+const createScoreRow = function (score, scoreMax) {
   const scoreDiv = createScoreLabel(score);
-  const scoreBar = createScoreProgressBar((score / wins) * 100);
+  const scoreBar = createScoreProgressBar((score / scoreMax) * 100);
 
   const scoreRow = document.createElement('div');
   scoreRow.classList.add('row', 'align-items-center', 'justify-content-center');
@@ -41,41 +41,25 @@ const createScoreRow = function (score, wins) {
 };
 
 /**
- * Takes in a colon-separated string of numbers, increments the nth number
- * (indexed by 1), and changes its length to newLen.
- * @param {string} scores - Colon-separated string of scores to split into an
- * array of numbers
+ * Takes in the max number of guesses and returns an array of the user's
+ * existing scores.
  * @param {number} maxGuesses - Max number of allowed guesses, will be the
  * length of the new array
- * @returns {Array<number>} Array of scores from user attempts
+ * @returns {string} String of colon-separated scores
  */
-const convertScoresString = function (scores, maxGuesses) {
-  let scoresArrNew;
-  const scoresArr = scores.split(':');
+const getScoresArray = function (maxGuesses) {
+  const scoresString = getStat('scores');
+  const scoresArr = scoresString.split(':');
+  scoresArr.forEach((v, i) => scoresArr[i] = parseInt(v));
   if (scoresArr.length < maxGuesses) {
     const extension = [];
     extension.length = maxGuesses - scoresArr.length;
     extension.fill(0);
-    scoresArrNew = scoresArr.concat(extension);
+    return scoresArr.concat(extension);
   } else {
     scoresArr.length = maxGuesses;
-    scoresArrNew = scoresArr;
+    return scoresArr;
   }
-  scoresArrNew.forEach((v, i) => scoresArrNew[i] = parseInt(v));
-  return scoresArrNew;
-};
-
-/**
- * Takes in the user's number of guesses and the max number of guesses and
- * increases their scores accordingly.
- * @param {number} maxGuesses - Max number of allowed guesses, will be the
- * length of the new array
- * @returns {string} Colon-separated string with the (n-1)-indexed number
- * incremented
- */
-const getScoresArray = function (maxGuesses) {
-  const storageVal = getStat('scores');
-  return convertScoresString(storageVal, maxGuesses);
 };
 
 const updateStats = function (userWon, maxGuesses, numGuesses) {
@@ -101,14 +85,14 @@ const updateStats = function (userWon, maxGuesses, numGuesses) {
 const showScores = function (scoresElement, maxGuesses) {
   // get scores and wins from storage
   const scores = getScoresArray(maxGuesses);
-  const wins = getStatNumber('wins');
+  const scoreMax = Math.max(...scores);
 
   // append scores to scoresElement
   while (scoresElement.firstChild) {
     scoresElement.removeChild(scoresElement.firstChild);
   }
   scores.forEach((score) => {
-    const scoreRow = createScoreRow(score, wins);
+    const scoreRow = createScoreRow(score, scoreMax);
     scoresElement.appendChild(scoreRow);
   });
 
