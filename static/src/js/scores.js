@@ -7,9 +7,16 @@ const updateScores = (scores, numGuesses) => {
   }
 };
 
-const createScoreLabel = function (score) {
+const createScoreIndexLabel = function (scoreIndex) {
   const scoreDiv = document.createElement('div');
-  scoreDiv.classList.add('col-2', 'text-start');
+  scoreDiv.classList.add('col-1', 'text-start', 'score-label', 'px-1');
+  scoreDiv.textContent = scoreIndex;
+  return scoreDiv;
+};
+
+const createScoreAmountLabel = function (score) {
+  const scoreDiv = document.createElement('div');
+  scoreDiv.classList.add('col-2', 'text-end', 'px-1');
   scoreDiv.textContent = score;
   return scoreDiv;
 };
@@ -24,18 +31,20 @@ const createScoreProgressBar = function (width) {
   progressBar.setAttribute('aria-valuemax', '100');
 
   const progress = document.createElement('div');
-  progress.classList.add('progress', 'col-10', 'px-0');
+  progress.classList.add('progress', 'col-9', 'px-0');
   progress.appendChild(progressBar);
   return progress;
 };
 
-const createScoreRow = function (score, scoreMax) {
-  const scoreDiv = createScoreLabel(score);
+const createScoreRow = function (score, scoreIndex, scoreMax) {
+  const scoreIndexDiv = createScoreIndexLabel(scoreIndex);
+  const scoreAmountDiv = createScoreAmountLabel(score);
   const scoreBar = createScoreProgressBar((score / scoreMax) * 100);
 
   const scoreRow = document.createElement('div');
-  scoreRow.classList.add('row', 'align-items-center', 'justify-content-center');
-  scoreRow.appendChild(scoreDiv);
+  scoreRow.classList.add('row', 'align-items-center', 'justify-content-center', 'my-1');
+  scoreRow.appendChild(scoreIndexDiv);
+  scoreRow.appendChild(scoreAmountDiv);
   scoreRow.appendChild(scoreBar);
   return scoreRow;
 };
@@ -91,8 +100,8 @@ const showScores = function (scoresElement, maxGuesses) {
   while (scoresElement.firstChild) {
     scoresElement.removeChild(scoresElement.firstChild);
   }
-  scores.forEach((score) => {
-    const scoreRow = createScoreRow(score, scoreMax);
+  scores.forEach((score, index) => {
+    const scoreRow = createScoreRow(score, index + 1, scoreMax);
     scoresElement.appendChild(scoreRow);
   });
 
