@@ -14,37 +14,39 @@ const createScoreIndexLabel = function (scoreIndex) {
   return scoreDiv;
 };
 
-const createScoreAmountLabel = function (score) {
-  const scoreDiv = document.createElement('div');
-  scoreDiv.classList.add('col-2', 'text-end', 'px-1');
-  scoreDiv.textContent = score;
-  return scoreDiv;
-};
-
-const createScoreProgressBar = function (width) {
+const createScoreProgressBar = function (score, scoreMax) {
+  const minWidth = 5;
+  const width = minWidth + ((score / scoreMax) * (100 - minWidth));
   const progressBar = document.createElement('div');
   progressBar.classList.add('progress-bar', 'bg-success');
   progressBar.role = 'progressbar';
-  progressBar.style.width = `${Math.max(1, width)}%`;
+  progressBar.style.width = `${width}%`;
   progressBar.setAttribute('aria-valuenow', '' + width);
   progressBar.setAttribute('aria-valuemin', '0');
   progressBar.setAttribute('aria-valuemax', '100');
 
+  const textWrapper = document.createElement('div');
+  textWrapper.classList.add('floating-text-wrapper', 'text-left', 'text-end', 'mr-1');
+  textWrapper.textContent = score;
+
+  const scoreText = document.createElement('div');
+  scoreText.classList.add('position-relative');
+  scoreText.appendChild(textWrapper);
+
   const progress = document.createElement('div');
   progress.classList.add('progress', 'col-9', 'px-0');
   progress.appendChild(progressBar);
+  progress.appendChild(scoreText);
   return progress;
 };
 
-const createScoreRow = function (score, scoreIndex, scoreMax) {
+const createScoreRow = function (score, scoreMax, scoreIndex) {
   const scoreIndexDiv = createScoreIndexLabel(scoreIndex);
-  const scoreAmountDiv = createScoreAmountLabel(score);
-  const scoreBar = createScoreProgressBar((score / scoreMax) * 100);
+  const scoreBar = createScoreProgressBar(score, scoreMax);
 
   const scoreRow = document.createElement('div');
   scoreRow.classList.add('row', 'align-items-center', 'justify-content-center', 'my-1');
   scoreRow.appendChild(scoreIndexDiv);
-  scoreRow.appendChild(scoreAmountDiv);
   scoreRow.appendChild(scoreBar);
   return scoreRow;
 };
@@ -101,7 +103,7 @@ const showScores = function (scoresElement, maxGuesses) {
     scoresElement.removeChild(scoresElement.firstChild);
   }
   scores.forEach((score, index) => {
-    const scoreRow = createScoreRow(score, index + 1, scoreMax);
+    const scoreRow = createScoreRow(score, scoreMax, index + 1);
     scoresElement.appendChild(scoreRow);
   });
 
