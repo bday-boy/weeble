@@ -1,3 +1,5 @@
+import { isSubset } from './utils/set.js';
+
 const setFilter = function (guessSet, knownSet, possibleSet) {
   return isSubset(guessSet, possibleSet) && isSubset(knownSet, guessSet);
 };
@@ -59,4 +61,4 @@ const applyFilter = function (shouldFilter) {
   }
 };
 
-export default applyFilter;
+export { applyFilter };

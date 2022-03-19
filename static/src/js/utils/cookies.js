@@ -1,3 +1,5 @@
+import { getNextReset } from './time.js';
+
 /**
  * Returns whether or not the user has completed the daily challenge. If
  * userWon is a truthy value, the cookie will be set to indicate that the user
@@ -16,7 +18,7 @@ const didDaily = function (winOrLose) {
   };
 
   const setCookie = () => {
-    const newCookie = `${encodeURIComponent(cookie)}=${encodeURIComponent(winOrLose)}; expires=${getNextRefresh()}; path=/`;
+    const newCookie = `${encodeURIComponent(cookie)}=${encodeURIComponent(winOrLose)}; expires=${getNextReset()}; path=/`;
     return (document.cookie = newCookie);
   };
 
@@ -26,3 +28,5 @@ const didDaily = function (winOrLose) {
   
   return Boolean(getCookie());
 };
+
+export { didDaily };

@@ -1,3 +1,6 @@
+import { createNewButton } from './utils/dom.js';
+import { setIntersection } from './utils/set.js';
+
 const getProgressbarWidths = function (obj) {
   const { min, max, low, high } = obj;
   let total = (max - min);
@@ -59,7 +62,7 @@ const updateProgressGroup = function (val, status, set, type) {
   if (status === 'bg-success') {
     set.delete(val);
     progressGroup.querySelectorAll('.btn-secondary').forEach((incorrectBtn) => {
-      incorrectBtn.parentNode.removeChild(incorrectBtn);
+      incorrectBtn.remove();
     });
     set.clear();
     set.add(val);
@@ -118,3 +121,5 @@ const updateNumRangeCorrect = function (newVal, obj, key) {
 
   setProgressbarWidths(obj, key);
 };
+
+export { updateProgressSet, updateProgressGroup, updateNumRange, updateNumRangeCorrect };

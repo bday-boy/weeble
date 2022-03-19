@@ -107,4 +107,4 @@ const copyToClipboard = function (location) {
   }
 };
 
-export default copyToClipboard;
+export { copyToClipboard };

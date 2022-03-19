@@ -60,19 +60,19 @@ mark {
   border-right: 2px solid whitesmoke;
 }
 
-#guess-stats .progress {
+#guess-scores .progress {
   background-color: transparent;
   border-radius: 0;
   height: 1.25rem;
 }
-#guess-stats .progress > div > .floating-text-wrapper.text-left {
+#guess-scores .progress > div > .floating-text-wrapper.text-left {
   --text-size: 1rem;
   font-size: var(--text-size);
   bottom: -0.125rem;
   left: -3.125em;
   width: 3em;
 }
-#guess-stats .progress-bar {
+#guess-scores .progress-bar {
   border-radius: 0;
 }
 #guesses {

@@ -1,12 +1,19 @@
+import { didDaily } from './utils/cookies.js';
+import { createNewButton } from './utils/dom.js';
+import { isSubset, setDif, setIntersection } from './utils/set.js';
+import { getDateToday } from './utils/time.js';
+import { updateProgressSet, updateProgressGroup, updateNumRange, updateNumRangeCorrect } from './update-progress.js';
+import { updateStats } from './scores.js';
+
 const checkDif = (dif, threshold, low, high) => (
   Math.abs(dif) <= threshold || (high - low) <= threshold * 2
 );
 
 const guessTooltips = {
-  studios: (A, B) => {
+  studios: (guessSet, answerSet) => {
     let answer = '';
-    const incorrect = Array.from(setDif(A, B)).join(', ');
-    const correct = Array.from(setIntersection(A, B)).join(', ');
+    const incorrect = Array.from(setDif(guessSet, answerSet)).join(', ');
+    const correct = Array.from(setIntersection(guessSet, answerSet)).join(', ');
     if (correct) {
       answer += `Correct studios: ${correct}`;
     }
@@ -175,14 +182,13 @@ const createAnimeLink = function (animeId, animeTitle) {
 };
 
 const createIcon = function (iconName, status) {
-  /* create icon wrapper */
-  const div = document.createElement('div');
-  div.classList.add('icon-wrapper', status, 'd-flex', 'align-items-center', 'justify-content-center');
-
   /* create the icon */
   const i = document.createElement('i');
   i.classList.add('bi', `bi-${iconName}`);
 
+  /* create icon wrapper */
+  const div = document.createElement('div');
+  div.classList.add('icon-wrapper', status, 'd-flex', 'align-items-center', 'justify-content-center');
   div.appendChild(i);
   return div;
 };
@@ -203,7 +209,7 @@ const setCompare = function (guessIter, animeKey) {
     icon = 'check2-circle';
     status = 'bg-success';
   } else if (setIntersection(guessSet, answerSet).size > 0) {
-    icon = 'asterisk';
+    icon = 'chevron-up';
     status = 'bg-warning';
   } else {
     icon = 'x-circle';
@@ -265,13 +271,9 @@ const showEndModal = function (modalTitle) {
   setTimeout(() => bsElements.modals.end.show(), 1000);
 };
 
-const endGame = function (won) {
-  didDaily(won);
-};
-
 const addGenre = function (numGenres) {
   let genreCount = 0;
-  const addAllTags = (numGenres === undefined || numGenres === null);
+  const addAllTags = (numGenres === undefined);
   const genresElement = document.getElementById('genres');
   while (weeble.anime.curGenre < weeble.anime.genres.length && (addAllTags || genreCount < numGenres)) {
     const genre = weeble.anime.genres[weeble.anime.curGenre++];
@@ -289,7 +291,7 @@ const addAllGenres = function () {
 
 const addTag = function (numTags) {
   let tagCount = 0;
-  const addAllTags = (numTags === undefined || numTags === null);
+  const addAllTags = (numTags === undefined);
   const tagsElement = document.getElementById('tags');
   while (weeble.anime.curTag < weeble.anime.tags.length && (addAllTags || tagCount < numTags)) {
     const tag = weeble.anime.tags[weeble.anime.curTag++];
@@ -303,6 +305,25 @@ const addTag = function (numTags) {
 
 const addAllTags = function () {
   addTag();
+};
+
+const endGame = function (won) {
+  if (!didDaily()) {
+    window.localStorage.setItem(getDateToday(), Array.from(weeble.guesses.set).join(':'));
+    updateStats(won, weeble.guesses.max, won ? weeble.guesses.set.size : undefined);
+  }
+  
+  const dropdownBtn = document.getElementById('toggle-suggestions');
+  const userEntry = document.getElementById('anime-entry');
+  const guessBtn = document.getElementById('guess-button');
+  dropdownBtn.disabled = true;
+  userEntry.disabled = true;
+  guessBtn.disabled = true;
+
+  addAllTags();
+  addAllGenres();
+  showEndModal(won ? 'You win!' : 'Better luck tomorrow!');
+  didDaily(won);
 };
 
 const handleCorrectAnswer = function () {
@@ -323,20 +344,13 @@ const handleCorrectAnswer = function () {
   div.classList.add('col-md-10', 'my-2', 'd-flex', 'flex-column', 'align-items-center', 'justify-content-center');
   div.appendChild(a);
   div.appendChild(guessWrapper);
-
   guessesDiv.prepend(div);
+
   const tooltipTriggerList = [].slice.call(div.querySelectorAll('[data-bs-toggle="tooltip"]'))
   const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl);
   });
-  if (!didDaily()) {
-    window.localStorage.setItem(getDateToday(), Array.from(weeble.guesses.set).join(':'));
-    updateStats(true, weeble.guesses.max, weeble.guesses.set.size);
-  }
 
-  addAllTags();
-  addAllGenres();
-  showEndModal(endText(true));
   endGame(true);
 };
 
@@ -369,8 +383,8 @@ const checkAnswer = function (inputTitle) {
   div.classList.add('col-md-10', 'my-2', 'd-flex', 'flex-column', 'align-items-center', 'justify-content-center');
   div.appendChild(a);
   div.appendChild(guessWrapper);
-
   guessesDiv.prepend(div);
+
   const tooltipTriggerList = [].slice.call(div.querySelectorAll('[data-bs-toggle="tooltip"]'))
   const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
@@ -380,19 +394,8 @@ const checkAnswer = function (inputTitle) {
   addGenre(1);
 
   if (weeble.guesses.set.size >= weeble.guesses.max) {
-    if (!didDaily()) {
-      window.localStorage.setItem(getDateToday(), Array.from(weeble.guesses.set).join(':'));
-      updateStats(true, weeble.guesses.max);
-    }
-    addAllTags();
-    addAllGenres();
-    showEndModal(endText(false));
     endGame(false);
-    const dropdownBtn = document.getElementById('toggle-suggestions');
-    const userEntry = document.getElementById('anime-entry');
-    const guessBtn = document.getElementById('guess-button');
-    dropdownBtn.disabled = true;
-    userEntry.disabled = true;
-    guessBtn.disabled = true;
   }
 };
+
+export { checkAnswer };

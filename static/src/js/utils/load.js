@@ -1,64 +1,3 @@
-bsElements = {
-  modals: {
-    about: new bootstrap.Modal(document.getElementById('modal-about')),
-    support: new bootstrap.Modal(document.getElementById('modal-support')),
-    stats: new bootstrap.Modal(document.getElementById('modal-stats')),
-    settings: new bootstrap.Modal(document.getElementById('modal-settings')),
-    end: new bootstrap.Modal(document.getElementById('modal-end')),
-  },
-  toasts: {
-    copySuccess: new bootstrap.Toast(document.getElementById('copy-success'), {
-      delay: 3000
-    }),
-    copyFailure: new bootstrap.Toast(document.getElementById('copy-danger'), {
-      delay: 3000
-    }),
-  },
-  dropdown: new bootstrap.Dropdown(document.querySelector('.dropdown-toggle'))
-};
-
-weeble = {
-  anime: undefined,
-  allAnime: {},
-  possibleAnime: {},
-  titles: {},
-  filteredTitles: {},
-  thresholds: {
-    episodes: 5,
-    year: 1,
-  },
-  guesses: {
-    max: 8,
-    set: new Set(),
-    has: function (animeId) {
-      return this.set.has(parseInt(animeId));
-    },
-    add: function (animeId) {
-      return this.set.add(parseInt(animeId));
-    }
-  },
-  studios: {
-    possible: new Set(),
-    known: new Set()
-  },
-  sources: new Set(),
-  formats: new Set(),
-  ranges: {
-    year: {
-      min: 1000000,
-      max: 0,
-      low: 1000000,
-      high: 0,
-    },
-    episodes: {
-      min: 1000000,
-      max: 0,
-      low: 1000000,
-      high: 0,
-    },
-  },
-};
-
 /**
  * Selects a random anime from the given object.
  * @param {Object} allAnimeObj - Object with all anime in it
@@ -140,7 +79,7 @@ const fetchAnimeTitles = function () {
     .then((anime_json) => {
       const titles = anime_json.titles;
       const synonyms = anime_json.synonyms;
-      weeble.titles = {...synonyms, ...titles};
+      weeble.titles = { ...synonyms, ...titles };
       weeble.filteredTitles = anime_json;
     })
     .catch((err) => console.log(err));
@@ -150,25 +89,26 @@ const fetchAnimeTitles = function () {
  * Given the AniList ID of an anime, returns a promise that resolves into an
  * array of all non-spoiler tags for that anime.
  * @param {number} animeId - AniList ID of the anime to fetch tags for
- * @returns {Promise<Array.<Object>} A promise that resolves into an array of tags
+ * @returns {Promise<Array.<Object>} A promise that resolves into an array of
+ * tags
  */
 const fetchAnswerData = function (animeId) {
   const query = `
-  query ($id: Int) {
-    Media (id: $id, type: ANIME) {
-      tags {
-        name
-        category
-        rank
-        isGeneralSpoiler
-        isMediaSpoiler
-        isAdult
+    query ($id: Int) {
+      Media (id: $id, type: ANIME) {
+        tags {
+          name
+          category
+          rank
+          isGeneralSpoiler
+          isMediaSpoiler
+          isAdult
+        }
+        genres
+        hashtag
       }
-      genres
-      hashtag
     }
-  }
-  `;
+    `;
   const variables = {
     id: animeId
   };
@@ -225,3 +165,5 @@ const removePlaceholders = function () {
   document.getElementById('year-low').textContent = yearMin;
   document.getElementById('year-high').textContent = yearMax;
 };
+
+export { fetchAllAnime, fetchDailyAnime, fetchAnimeTitles, fetchAnswerData, removePlaceholders };

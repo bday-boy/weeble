@@ -1,11 +1,13 @@
-const getStat = (stat) => (localStorage.getItem(stat) || '0');
-const getStatNumber = (stat) => parseInt(getStat(stat));
-const setStat = (stat, newVal) => localStorage.setItem(stat, newVal);
-const updateScores = (scores, numGuesses) => {
-  if (numGuesses) {
-    scores[numGuesses - 1]++;
-  }
-};
+const defaultObj = JSON.stringify({
+  played: 0,
+  wins: 0,
+  'win-percent': '0%',
+  'streak-current': 0,
+  'streak-max': 0,
+  scores: []
+});
+const getItemObj = (key) => JSON.parse(localStorage.getItem(key) || defaultObj);
+const setItemObj = (key, obj) => localStorage.setItem(key, JSON.stringify(obj));
 
 const createScoreIndexLabel = function (scoreIndex) {
   const scoreDiv = document.createElement('div');
@@ -58,44 +60,57 @@ const createScoreRow = function (score, scoreMax, scoreIndex) {
  * length of the new array
  * @returns {string} String of colon-separated scores
  */
-const getScoresArray = function (maxGuesses) {
-  const scoresString = getStat('scores');
-  const scoresArr = scoresString.split(':');
-  scoresArr.forEach((v, i) => scoresArr[i] = parseInt(v));
-  if (scoresArr.length < maxGuesses) {
+const fixScores = function (scores, maxGuesses, numGuesses) {
+  scores.forEach((score, index) => {
+    const parsedVal = parseInt(score);
+    if (!isNaN(parsedVal) && 0 <= score) {
+      scores[index] = parseInt(score);
+    } else {
+      scores[index] = 0;
+    }
+  });
+  if (scores.length < maxGuesses) {
     const extension = [];
-    extension.length = maxGuesses - scoresArr.length;
+    extension.length = maxGuesses - scores.length;
     extension.fill(0);
-    return scoresArr.concat(extension);
+    scores.push(...extension);
   } else {
-    scoresArr.length = maxGuesses;
-    return scoresArr;
+    scores.length = maxGuesses;
   }
+  if (numGuesses) {
+    scores[numGuesses - 1]++;
+  }
+  return scores;
 };
 
 const updateStats = function (userWon, maxGuesses, numGuesses) {
-  const played = getStatNumber('played') + 1;
-  setStat('played', played);
+  const {
+    played,
+    wins,
+    'streak-current': streakCurrent,
+    'streak-max': streakMax,
+    scores
+  } = getItemObj('stats');
 
-  const wins = getStatNumber('wins') + userWon;
-  setStat('wins', wins);
-
-  setStat('win-percent', `${((wins / played) * 100).toFixed(0)}%`);
-
-  const streakCurrent = userWon ? getStatNumber('streak-current') + 1 : 0;
-  setStat('streak-current', streakCurrent);
-
-  const streakMax = Math.max(streakCurrent, getStatNumber('streak-max'));
-  setStat('streak-max', streakMax);
-
-  const scores = getScoresArray(maxGuesses);
-  updateScores(scores, numGuesses);
-  setStat('scores', scores.join(':'));
+  setItemObj('stats', {
+    played: played + 1,
+    wins: wins + userWon,
+    'win-percent': `${((wins + userWon / (played + 1)) * 100).toFixed(0)}%`,
+    'streak-current': userWon ? streakCurrent + 1 : 0,
+    'streak-max': Math.max(streakMax, userWon ? streakCurrent + 1 : 0),
+    scores: fixScores(scores, maxGuesses, numGuesses)
+  });
 };
 
-const showScores = function (scoresElement, maxGuesses) {
+const showStats = function (statElements, scoresElement) {
+  const stats = getItemObj('stats');
+  statElements.forEach((statElement) => {
+    const stat = stats[statElement.id];
+    statElement.textContent = stat;
+  });
+
   // get scores and wins from storage
-  const scores = getScoresArray(maxGuesses);
+  const { scores } = stats;
   const scoreMax = Math.max(...scores);
 
   // append scores to scoresElement
@@ -106,21 +121,17 @@ const showScores = function (scoresElement, maxGuesses) {
     const scoreRow = createScoreRow(score, scoreMax, index + 1);
     scoresElement.appendChild(scoreRow);
   });
-
-  // set scores back in storage
-  setStat('scores', scores.join(':'));
-};
-
-const showStat = function (statElement) {
-  const stat = getStat(statElement.id);
-  statElement.textContent = stat;
 };
 
 const debugStats = function () {
-  setStat('played', 10);
-  setStat('wins', 9);
-  setStat('win-percent', '90%');
-  setStat('streak-current', 2);
-  setStat('streak-max', 5);
-  setStat('scores', '0:1:2:0:0:4:2:0');
+  setItemObj('stats', {
+    played: 12,
+    wins: 10,
+    'win-percent': `${((10 / 12) * 100).toFixed(0)}%`,
+    'streak-current': 7,
+    'streak-max': 7,
+    scores: [1, 3, 6, 6, 3, 0, 1, 1]
+  });
 };
+
+export { updateStats, showStats };

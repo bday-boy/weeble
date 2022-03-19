@@ -1,5 +1,71 @@
-import copyToClipboard from './copy.js';
-import applyFilter from './filters.js'
+import { didDaily } from './utils/cookies.js';
+import { copyToClipboard } from './utils/copy.js';
+import { fetchAllAnime, fetchDailyAnime, fetchAnimeTitles, fetchAnswerData, removePlaceholders } from './utils/load.js';
+import { getDateToday, startTimer } from './utils/time.js';
+import { applyFilter } from './filters.js'
+import { checkAnswer } from './check-answer.js';
+import { updateStats, showStats } from './scores.js';
+
+window.bsElements = {
+  modals: {
+    about: new bootstrap.Modal(document.getElementById('modal-about')),
+    support: new bootstrap.Modal(document.getElementById('modal-support')),
+    stats: new bootstrap.Modal(document.getElementById('modal-stats')),
+    settings: new bootstrap.Modal(document.getElementById('modal-settings')),
+    end: new bootstrap.Modal(document.getElementById('modal-end')),
+  },
+  toasts: {
+    copySuccess: new bootstrap.Toast(document.getElementById('copy-success'), {
+      delay: 3000
+    }),
+    copyFailure: new bootstrap.Toast(document.getElementById('copy-danger'), {
+      delay: 3000
+    }),
+  },
+  dropdown: new bootstrap.Dropdown(document.querySelector('.dropdown-toggle'))
+};
+
+window.weeble = {
+  anime: undefined,
+  allAnime: {},
+  possibleAnime: {},
+  titles: {},
+  filteredTitles: {},
+  thresholds: {
+    episodes: 5,
+    year: 1,
+  },
+  guesses: {
+    max: 8,
+    set: new Set(),
+    has: function (animeId) {
+      return this.set.has(parseInt(animeId));
+    },
+    add: function (animeId) {
+      return this.set.add(parseInt(animeId));
+    }
+  },
+  studios: {
+    possible: new Set(),
+    known: new Set()
+  },
+  sources: new Set(),
+  formats: new Set(),
+  ranges: {
+    year: {
+      min: 1000000,
+      max: 0,
+      low: 1000000,
+      high: 0,
+    },
+    episodes: {
+      min: 1000000,
+      max: 0,
+      low: 1000000,
+      high: 0,
+    },
+  },
+};
 
 const filterToggle = document.getElementById('apply-filters');
 const shouldFilter = () => filterToggle.checked;
@@ -118,21 +184,13 @@ const filterAndSuggest = () => {
   suggestAnime();
 };
 
-const showStats = function () {
-  ['played', 'win-percent', 'streak-current', 'streak-max'].forEach((stat) => {
-    const statElement = document.getElementById(stat);
-    showStat(statElement);
-  });
-
-  const guessStats = document.getElementById('guess-stats');
-  showScores(guessStats, weeble.guesses.max);
-};
-
 const loadPage = function () {
   const weebleAbout = document.getElementById('weeble-about');
   const tdlrCheckbox = document.getElementById('tldr');
   const weebleSupport = document.getElementById('weeble-support');
   const weebleStats = document.getElementById('weeble-stats');
+  const statsElement = document.querySelectorAll('#stats h4[id]');
+  const scoresElement = document.getElementById('guess-scores');
   const weebleSettings = document.getElementById('weeble-settings');
   const highContrast = document.getElementById('high-contrast');
   const darkMode = document.getElementById('dark-mode');
@@ -141,7 +199,7 @@ const loadPage = function () {
   const copyDiscord = document.getElementById('discord');
   const copyGeneral = document.getElementById('general');
   const resetTimers = document.querySelectorAll('[data-timer=true]');
-  
+
   weebleAbout.addEventListener('click', () => {
     const aboutModal = document.getElementById('modal-about');
     aboutModal.removeAttribute('data-bs-backdrop');
@@ -159,20 +217,20 @@ const loadPage = function () {
       }
     });
   });
-  
+
   weebleSupport.addEventListener('click', () => {
     bsElements.modals.support.show();
   });
 
-  showStats();
   weebleStats.addEventListener('click', function () {
     bsElements.modals.stats.show();
   });
-  
+  showStats(statsElement, scoresElement);
+
   weebleSettings.addEventListener('click', function () {
     bsElements.modals.settings.show();
   });
-  
+
   if (darkMode.checked) {
     document.body.classList.remove('light-mode');
   } else {
@@ -185,7 +243,7 @@ const loadPage = function () {
       document.body.classList.add('light-mode');
     }
   });
-  
+
   if (highContrast.checked) {
     document.body.classList.add('high-contrast');
   } else {
@@ -198,26 +256,26 @@ const loadPage = function () {
       document.body.classList.remove('high-contrast');
     }
   });
-  
+
   applyFilters.checked = true;
   applyFilters.addEventListener('change', filterAndSuggest);
 
   const showCopyModal = (success) => (
     success ? bsElements.toasts.copySuccess.show() : bsElements.toasts.copyDanger.show()
   );
-  
+
   copyAnilist.addEventListener('click', function () {
     copyToClipboard('anilist').then((success) => {
       showCopyModal(success);
     });
   });
-  
+
   copyDiscord.addEventListener('click', function () {
     copyToClipboard('discord').then((success) => {
       showCopyModal(success);
     });
   });
-  
+
   copyGeneral.addEventListener('click', function () {
     copyToClipboard('general').then((success) => {
       showCopyModal(success);
@@ -254,7 +312,7 @@ const startGame = function () {
   const dropdown = document.getElementById('anime-suggestions');
   const userEntry = document.getElementById('anime-entry');
   const guessBtn = document.getElementById('guess-button');
-  
+
   const done = didDaily();
   if (done) {
     dropdownBtn.disabled = true;
@@ -279,11 +337,10 @@ const startGame = function () {
       if (e.defaultPrevented) {
         return;
       }
-      
+
       switch (e.key) {
         case 'ArrowDown':
         case 'Down':
-          const dropdown = document.getElementById('anime-suggestions');
           if (dropdown.firstChild) {
             dropdown.firstChild.firstChild.focus();
           }
@@ -297,10 +354,10 @@ const startGame = function () {
         default:
           return;
       }
-      
+
       e.preventDefault();
     });
-    
+
     guessBtn.addEventListener('click', () => {
       const guess = userEntry.value;
       userEntry.value = '';
