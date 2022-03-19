@@ -59,6 +59,12 @@ weeble = {
   },
 };
 
+const randomAnime = function (allAnimeObj) {
+  const allAnimeObjs = Object.entries(allAnimeObj);
+  const anime = allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
+  return anime[1];
+};
+
 /**
  * Fetches the anime-database json and unpacks it into the weeble namespace.
  * @returns {Promise} A promise that, once resolved, has set all anime data into

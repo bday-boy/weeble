@@ -22,9 +22,7 @@ const useAnime = function (animeInfo) {
 const randomAnime = function (allAnimeObj) {
   const allAnimeObjs = Object.entries(allAnimeObj);
   const anime = allAnimeObjs[Math.floor(Math.random() * allAnimeObjs.length)];
-  const [animeId, animeInfo] = anime;
-  animeInfo.id = parseInt(animeId);
-  return animeInfo;
+  return anime[1];
 };
 
 (async function () {
@@ -38,12 +36,10 @@ const randomAnime = function (allAnimeObj) {
   try {
     const client = await pool.connect();
     const result = await client.query('SELECT * FROM DailyAnime');
-    // result.rows.forEach((row) => {
-    //   delete validAnime[row.id];
-    // });
-    // const newAnime = randomAnime(validAnime);
-    const newAnime = validAnime['14813'] || validAnime[14813];
-    newAnime.id = 14813;
+    result.rows.forEach((row) => {
+      delete validAnime[row.id];
+    });
+    const newAnime = randomAnime(validAnime);
     const date = new Date();
     const insertDate = date.toISOString().split('T')[0];
     client.query(insertQuery, [

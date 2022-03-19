@@ -90,6 +90,7 @@ class Reformatter:
     
     def add_anime(self, anime: dict) -> None:
         anime_entry = {}
+        anime_entry['id'] = int(animeId := anime.get('id', 'NO_ID'))
         anime_entry['title'] = get_title(anime)
         anime_entry['studios'] = get_studios(anime)
         anime_entry['popularity'] = anime.get('popularity')
@@ -99,7 +100,7 @@ class Reformatter:
         anime_entry['synonyms'] = get_synonyms(anime, anime_entry['title'])
         anime_entry['format'] = anime.get('format')
         anime_entry['year'] = anime.get('seasonYear')
-        self.formatted_data[(animeId := anime.get('id', 'NO_ID'))] = anime_entry
+        self.formatted_data[animeId] = anime_entry
         self.anime_titles['titles'][anime_entry['title']] = animeId
         for synonym in anime_entry['synonyms']:
             self.anime_titles['synonyms'][synonym] = animeId
