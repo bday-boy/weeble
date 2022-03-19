@@ -18,35 +18,35 @@ const fetchAllAnime = function () {
   return fetch('/data/anime-database.json')
     .then((response) => response.json())
     .then((anime_json) => {
-      weeble.allAnime = anime_json;
-      Object.entries(weeble.allAnime).forEach(([animeId, animeInfo]) => {
+      this.allAnime = anime_json;
+      Object.entries(this.allAnime).forEach(([animeId, animeInfo]) => {
         const { studios, episodes, source, format, year } = animeInfo;
-        if (episodes < weeble.ranges.episodes.min) {
-          weeble.ranges.episodes.min = episodes;
-        } else if (episodes > weeble.ranges.episodes.max) {
-          weeble.ranges.episodes.max = episodes;
+        if (episodes < this.ranges.episodes.min) {
+          this.ranges.episodes.min = episodes;
+        } else if (episodes > this.ranges.episodes.max) {
+          this.ranges.episodes.max = episodes;
         }
         studios.forEach((studio) => {
-          weeble.studios.possible.add(studio);
+          this.studios.possible.add(studio);
         });
-        weeble.sources.add(source);
-        weeble.formats.add(format);
-        if (year < weeble.ranges.year.min) {
-          weeble.ranges.year.min = year;
-        } else if (year > weeble.ranges.year.max) {
-          weeble.ranges.year.max = year;
+        this.sources.add(source);
+        this.formats.add(format);
+        if (year < this.ranges.year.min) {
+          this.ranges.year.min = year;
+        } else if (year > this.ranges.year.max) {
+          this.ranges.year.max = year;
         }
 
         if (25000 < animeInfo.popularity) {
-          weeble.possibleAnime[animeId] = animeInfo;
+          this.possibleAnime[animeId] = animeInfo;
         }
       });
 
-      weeble.ranges.episodes.low = weeble.ranges.episodes.min;
-      weeble.ranges.episodes.high = weeble.ranges.episodes.max;
+      this.ranges.episodes.low = this.ranges.episodes.min;
+      this.ranges.episodes.high = this.ranges.episodes.max;
 
-      weeble.ranges.year.low = weeble.ranges.year.min;
-      weeble.ranges.year.high = weeble.ranges.year.max;
+      this.ranges.year.low = this.ranges.year.min;
+      this.ranges.year.high = this.ranges.year.max;
     })
     .catch((err) => console.log(err));
 };
@@ -60,12 +60,12 @@ const fetchDailyAnime = function () {
     .then((response) => response.json())
     .then((dailyAnime) => {
       if (dailyAnime.daily) {
-        weeble.anime = dailyAnime.daily;
+        this.anime = dailyAnime.daily;
       } else {
-        weeble.anime = randomAnime(weeble.possibleAnime);
+        this.anime = randomAnime(this.possibleAnime);
       }
     })
-    .catch(() => weeble.anime = randomAnime(weeble.possibleAnime));
+    .catch(() => this.anime = randomAnime(this.possibleAnime));
 };
 
 /**
@@ -79,8 +79,8 @@ const fetchAnimeTitles = function () {
     .then((anime_json) => {
       const titles = anime_json.titles;
       const synonyms = anime_json.synonyms;
-      weeble.titles = { ...synonyms, ...titles };
-      weeble.filteredTitles = anime_json;
+      this.titles = { ...synonyms, ...titles };
+      this.filteredTitles = anime_json;
     })
     .catch((err) => console.log(err));
 };
@@ -88,11 +88,10 @@ const fetchAnimeTitles = function () {
 /**
  * Given the AniList ID of an anime, returns a promise that resolves into an
  * array of all non-spoiler tags for that anime.
- * @param {number} animeId - AniList ID of the anime to fetch tags for
  * @returns {Promise<Array.<Object>} A promise that resolves into an array of
  * tags
  */
-const fetchAnswerData = function (animeId) {
+const fetchAnswerData = function () {
   const query = `
     query ($id: Int) {
       Media (id: $id, type: ANIME) {
@@ -110,7 +109,7 @@ const fetchAnswerData = function (animeId) {
     }
     `;
   const variables = {
-    id: animeId
+    id: this.anime.id
   };
   const url = 'https://graphql.anilist.co';
   const headers = new Headers({
@@ -138,6 +137,13 @@ const fetchAnswerData = function (animeId) {
       const nonSpoilerTags = tags.filter((tag) => !hasSpoiler(tag));
       return { tags: nonSpoilerTags, genres };
     })
+    .then((answerInfo) => {
+      const { tags, genres } = answerInfo;
+      this.anime.genres = genres;
+      this.anime.curGenre = 0;
+      this.anime.tags = tags.sort((a, b) => a.rank < b.rank);
+      this.anime.curTag = 0;
+    })
     .catch((error) => console.log(error));
 };
 
@@ -157,13 +163,30 @@ const removePlaceholders = function () {
     progressBar.classList.remove('progress-bar-striped', 'progress-bar-animated');
   });
 
-  const { min: episodesMin, max: episodesMax } = weeble.ranges.episodes;
+  const { min: episodesMin, max: episodesMax } = this.ranges.episodes;
   document.getElementById('episodes-low').textContent = episodesMin;
   document.getElementById('episodes-high').textContent = episodesMax;
 
-  const { min: yearMin, max: yearMax } = weeble.ranges.year;
+  const { min: yearMin, max: yearMax } = this.ranges.year;
   document.getElementById('year-low').textContent = yearMin;
   document.getElementById('year-high').textContent = yearMax;
 };
 
-export { fetchAllAnime, fetchDailyAnime, fetchAnimeTitles, fetchAnswerData, removePlaceholders };
+/**
+ * Loads anime data into whatever context is bound to this function.
+ * @returns {Promise} A promise that, once resolved, has set all data into
+ * whatever object was bound to this call.
+ */
+const loadAnimeData = function () {
+  if (!this) {
+    return Promise.reject('This function must be bound to a context.');
+  }
+  return fetchAllAnime.call(this)
+    .then(() => fetchDailyAnime.call(this))
+    .then(() => fetchAnimeTitles.call(this))
+    .then(() => fetchAnswerData.call(this))
+    .then(() => removePlaceholders.call(this))
+    .catch((error) => console.log(error));
+};
+
+export { loadAnimeData };

@@ -1,6 +1,6 @@
 import { didDaily } from './utils/cookies.js';
 import { copyToClipboard } from './utils/copy.js';
-import { fetchAllAnime, fetchDailyAnime, fetchAnimeTitles, fetchAnswerData, removePlaceholders } from './utils/load.js';
+import { loadAnimeData } from './utils/load.js';
 import { getDateToday, startTimer } from './utils/time.js';
 import { applyFilter } from './filters.js'
 import { checkAnswer } from './check-answer.js';
@@ -285,28 +285,6 @@ const loadPage = function () {
   startTimer(resetTimers);
 };
 
-const loadAnimeData = function () {
-  return fetchAllAnime()
-    .then(() => fetchDailyAnime())
-    .then(() => fetchAnimeTitles())
-    .then(() => filterAndSuggest())
-    .then(() => fetchAnswerData(weeble.anime.id))
-    .then((answerInfo) => {
-      const { tags, genres } = answerInfo;
-      weeble.anime.genres = genres;
-      weeble.anime.curGenre = 0;
-      weeble.anime.tags = tags.sort((a, b) => a.rank < b.rank);
-      weeble.anime.curTag = 0;
-    })
-    .then(() => removePlaceholders())
-    .then(() => {
-      if (firstImpression()) {
-        bsElements.modals.about.show();
-      }
-    })
-    .catch((error) => console.log(error));
-};
-
 const startGame = function () {
   const dropdownBtn = document.getElementById('toggle-suggestions');
   const dropdown = document.getElementById('anime-suggestions');
@@ -368,7 +346,14 @@ const startGame = function () {
 };
 
 (function () {
-  loadAnimeData().then(() => startGame());
+  loadAnimeData.call(weeble).then(() => {
+    filterAndSuggest();
+    startGame();
+
+    if (firstImpression()) {
+      bsElements.modals.about.show();
+    }
+  });
   loadPage();
 })();
 
