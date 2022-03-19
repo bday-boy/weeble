@@ -38,11 +38,11 @@ const randomAnime = function (allAnimeObj) {
   try {
     const client = await pool.connect();
     const result = await client.query('SELECT * FROM DailyAnime');
-    result.rows.forEach((row) => {
-      delete validAnime[row.id];
-    });
+    // result.rows.forEach((row) => {
+    //   delete validAnime[row.id];
+    // });
     // const newAnime = randomAnime(validAnime);
-    const newAnime = validAnime['14813'];
+    const newAnime = validAnime['14813'] || validAnime[14813];
     newAnime.id = 14813;
     const date = new Date();
     const insertDate = date.toISOString().split('T')[0];
