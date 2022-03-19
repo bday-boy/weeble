@@ -15,13 +15,6 @@ episodes = EXCLUDED.episodes, source = EXCLUDED.source,
 picture = EXCLUDED.picture, synonyms = EXCLUDED.synonyms,
 format = EXCLUDED.format, year = EXCLUDED.year`;
 
-const formatArray = function (arr) {
-  arr.forEach((elm, index) => {
-    arr[index] = elm.replaceAll("'", "''");
-  });
-  return arr;
-};
-
 const useAnime = function (animeInfo) {
   return 25000 < animeInfo.popularity;
 };
@@ -48,18 +41,20 @@ const randomAnime = function (allAnimeObj) {
     result.rows.forEach((row) => {
       delete validAnime[row.id];
     });
-    const newAnime = randomAnime(validAnime);
+    // const newAnime = randomAnime(validAnime);
+    const newAnime = validAnime[14813];
+    newAnime.id = 14813;
     const date = new Date();
     const insertDate = date.toISOString().split('T')[0];
     client.query(insertQuery, [
       newAnime.id,
       newAnime.title,
-      formatArray(newAnime.studios),
+      newAnime.studios,
       newAnime.popularity,
       newAnime.episodes,
       newAnime.source,
       newAnime.picture,
-      formatArray(newAnime.synonyms),
+      newAnime.synonyms,
       newAnime.format,
       newAnime.year,
       insertDate
