@@ -42,7 +42,7 @@ const randomAnime = function (allAnimeObj) {
       delete validAnime[row.id];
     });
     // const newAnime = randomAnime(validAnime);
-    const newAnime = validAnime[14813];
+    const newAnime = validAnime['14813'];
     newAnime.id = 14813;
     const date = new Date();
     const insertDate = date.toISOString().split('T')[0];
