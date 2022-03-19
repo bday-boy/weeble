@@ -293,11 +293,6 @@ const loadPage = function () {
 };
 
 const startGame = function () {
-  const dropdownBtn = document.getElementById('toggle-suggestions');
-  const dropdown = document.getElementById('anime-suggestions');
-  const userEntry = document.getElementById('anime-entry');
-  const guessBtn = document.getElementById('guess-button');
-
   const done = didDaily();
   if (done) {
     const todayGuesses = window.localStorage.getItem(getDateToday());
@@ -306,6 +301,11 @@ const startGame = function () {
       checkAnswer(animeTitle);
     });
   } else {
+    const dropdownBtn = document.getElementById('toggle-suggestions');
+    const dropdown = document.getElementById('anime-suggestions');
+    const userEntry = document.getElementById('anime-entry');
+    const guessBtn = document.getElementById('guess-button');
+  
     dropdownBtn.disabled = false;
     userEntry.disabled = false;
     guessBtn.disabled = false;
