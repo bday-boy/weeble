@@ -41,14 +41,14 @@ const setProgressbarWidths = function (obj, key) {
   end.style.width = `${rw}%`;
 };
 
-const updateProgressSet = function (valArr, possibleSet, knownSet, type) {
-  const correctStudios = new Set(weeble.anime[type]);
-  valArr.forEach((val) => {
-    if (!correctStudios.has(val)) {
+const updateProgressSet = function (guessSet, possibleSet, knownSet, type) {
+  const correctSet = new Set(weeble.anime[type]);
+  guessSet.forEach((val) => {
+    if (!correctSet.has(val)) {
       possibleSet.delete(val);
     }
   });
-  [...setIntersection(correctStudios, new Set(valArr))].forEach((elm) => {
+  [...setIntersection(correctSet, new Set(guessSet))].forEach((elm) => {
     knownSet.add(elm);
   });
 };
