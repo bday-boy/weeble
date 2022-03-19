@@ -199,6 +199,9 @@ const loadPage = function () {
   const copyDiscord = document.getElementById('discord');
   const copyGeneral = document.getElementById('general');
   const resetTimers = document.querySelectorAll('[data-weeble=timer]');
+  const dropdownBtn = document.getElementById('toggle-suggestions');
+  const userEntry = document.getElementById('anime-entry');
+  const guessBtn = document.getElementById('guess-button');
 
   weebleAbout.addEventListener('click', () => {
     const aboutModal = document.getElementById('modal-about');
@@ -282,6 +285,10 @@ const loadPage = function () {
     });
   });
 
+  dropdownBtn.disabled = true;
+  userEntry.disabled = true;
+  guessBtn.disabled = true;
+
   startTimer(resetTimers);
 };
 
@@ -293,9 +300,6 @@ const startGame = function () {
 
   const done = didDaily();
   if (done) {
-    dropdownBtn.disabled = true;
-    userEntry.disabled = true;
-    guessBtn.disabled = true;
     const todayGuesses = window.localStorage.getItem(getDateToday());
     todayGuesses.split(':').forEach((guessId) => {
       const animeTitle = weeble.allAnime[parseInt(guessId)].title;
