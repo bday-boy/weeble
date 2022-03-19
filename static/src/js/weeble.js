@@ -189,7 +189,7 @@ const loadPage = function () {
   const tdlrCheckbox = document.getElementById('tldr');
   const weebleSupport = document.getElementById('weeble-support');
   const weebleStats = document.getElementById('weeble-stats');
-  const statsElement = document.querySelectorAll('#stats h4[id]');
+  const statsElement = document.querySelectorAll('#stats [data-weeble=stat]');
   const scoresElement = document.getElementById('guess-scores');
   const weebleSettings = document.getElementById('weeble-settings');
   const highContrast = document.getElementById('high-contrast');
@@ -198,7 +198,7 @@ const loadPage = function () {
   const copyAnilist = document.getElementById('anilist');
   const copyDiscord = document.getElementById('discord');
   const copyGeneral = document.getElementById('general');
-  const resetTimers = document.querySelectorAll('[data-timer=true]');
+  const resetTimers = document.querySelectorAll('[data-weeble=timer]');
 
   weebleAbout.addEventListener('click', () => {
     const aboutModal = document.getElementById('modal-about');
@@ -209,7 +209,7 @@ const loadPage = function () {
   tdlrCheckbox.checked = false;
   tdlrCheckbox.addEventListener('change', function () {
     const tldr = this.checked;
-    document.querySelectorAll('#modal-about [data-tldr=true]').forEach((section) => {
+    document.querySelectorAll('#modal-about [data-weeble=tldr]').forEach((section) => {
       if (tldr) {
         section.classList.add('d-none');
       } else {
