@@ -78,6 +78,12 @@ mark {
 #guesses {
   font-size: x-large;
 }
+#modal-support a:not(.btn) > img {
+  margin-bottom: 0.166em;
+}
+#modal-support a:not(.btn):nth-child(n+1) {
+  margin-left: 0.5em;
+}
 #year-progress-middle {
   overflow-x: visible;
 }
@@ -204,12 +210,21 @@ span.placeholder {
 .toast {
   --bs-bg-opacity: 0.9;
 }
+.bi-twitch {
+  color: #6441A4;
+}
+.bi-twitter {
+  color: #1DA1F2;
+}
+.bi-youtube {
+  color: red;
+}
 
-#title .bi {
+#title .bi, #modal-support a:not(.btn) {
   font-size: 1.5rem;
   transition: transform 0.25s cubic-bezier(.09,.42,.65,1.85);
 }
-#title .bi:hover {
+#title .bi:hover, #modal-support a:not(.btn):hover {
   cursor: pointer;
   transform: scale(1.2, 1.2);
 }
