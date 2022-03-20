@@ -189,7 +189,7 @@ const loadPage = function () {
   const tdlrCheckbox = document.getElementById('tldr');
   const weebleSupport = document.getElementById('weeble-support');
   const weebleStats = document.getElementById('weeble-stats');
-  const statsElement = document.querySelectorAll('#stats [data-weeble=stat]');
+  const statsElement = document.querySelectorAll('[data-weeble=stat]');
   const scoresElement = document.getElementById('guess-scores');
   const weebleSettings = document.getElementById('weeble-settings');
   const highContrast = document.getElementById('high-contrast');
