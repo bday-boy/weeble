@@ -7,7 +7,7 @@
 /* RENAME THIS TO getNextReset */
 const getNextReset = function (resetTime = 7) {
   const today = new Date();
-  today.setUTCHours(today.getUTCHours() - resetTime);
+  today.setUTCHours(today.getUTCHours() - resetTime, 0, 0, 0);
   today.setUTCDate(today.getUTCDate() + 1);
   today.setUTCHours(resetTime);
   return today;
@@ -19,21 +19,21 @@ const getDateToday = function () {
 };
 
 const startTimer = function (timerElements) {
-  const nextRefresh = getNextReset();
+  const nextRefresh = getNextReset().getTime();
 
   setInterval(function () {
     const now = new Date().getTime();
-    const dif = nextRefresh - now;
+    const milliseconds = nextRefresh - now;
 
-    const hrs = Math.floor((dif % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const min = Math.floor((dif % (1000 * 60 * 60)) / (1000 * 60));
-    const sec = Math.floor((dif % (1000 * 60)) / 1000);
+    const sec = Math.floor(milliseconds / 1000);
+    const min = Math.floor(sec / 60);
+    const hrs = Math.floor(min / 60);
 
-    const hrsStr = String(hrs).padStart(2, '0');
-    const minStr = String(min).padStart(2, '0');
-    const secStr = String(sec).padStart(2, '0');
+    const secStr = String(sec % 60).padStart(2, '0');
+    const minStr = String(min % 60).padStart(2, '0');
+    const hrsStr = String(hrs % 24).padStart(2, '0');
 
-    const countdown = hrsStr + ':' + minStr + ':' + secStr;
+    const countdown = `${hrsStr}:${minStr}:${secStr}`;
     timerElements.forEach((timer) => {
       timer.textContent = countdown;
     });
