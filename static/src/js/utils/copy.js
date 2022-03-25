@@ -36,7 +36,7 @@ const createCopyText = function (location) {
   const guesses = Array.from(document.querySelectorAll('#guesses > div'));
   guesses.reverse();
   /* TODO: Add something here for which day of weeble/guess limit */
-  copyTexts.push(`Weeble ${guesses.length}/8\n`);
+  copyTexts.push(`Weeble ${guesses.length}/7\n`);
   if (location === 'anilist') {
     const guessEmojis = [];
     const guessAnime = [];

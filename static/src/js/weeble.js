@@ -36,7 +36,7 @@ window.weeble = {
     year: 1,
   },
   guesses: {
-    max: 8,
+    max: 7,
     set: new Set(),
     has: function (animeId) {
       return this.set.has(parseInt(animeId));
