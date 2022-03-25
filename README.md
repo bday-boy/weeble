@@ -20,17 +20,14 @@ data to make a Wordle- or Squirle-like game.
   - Don't want to ignore an anime just because its title is already a synonym,
     so there should be an initial sweep for titles or something and then just
     throw out synonyms that already exist
-- Add player stats
 - Add indicator that there are no tags/genres/etc.
-- Make scores update after user plays the daily
 
 ### Low-priority
 
 - Optimize search suggestions
 - Fix on mobile
 - Dropdown show on click
-- Add hardmode/max num of guesses
-- Create Ko-fi, add socials to support page
+- Add hardmode
 - Condense how to play section
 - Make copy text say X/8 or something when user loses for the day
 
