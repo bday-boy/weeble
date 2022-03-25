@@ -95,7 +95,7 @@ const updateStats = function (userWon, maxGuesses, numGuesses) {
   setItemObj('stats', {
     played: played + 1,
     wins: wins + userWon,
-    'win-percent': `${((wins + userWon / (played + 1)) * 100).toFixed(0)}%`,
+    'win-percent': `${(((wins + userWon) / (played + 1)) * 100).toFixed(0)}%`,
     'streak-current': userWon ? streakCurrent + 1 : 0,
     'streak-max': Math.max(streakMax, userWon ? streakCurrent + 1 : 0),
     scores: fixScores(scores, maxGuesses, numGuesses)
