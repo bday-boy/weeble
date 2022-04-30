@@ -16,25 +16,29 @@ data to make a Wordle- or Squirle-like game.
 ### High-priority
 
 - Mess around with thresholds and see what works
+- Store guesses in storage rather than cookies since Safari on iPhone clears
+  cookies when closed and the user's daily is deleted
 - Ignore anime that have titles/synonyms that already exist
   - Don't want to ignore an anime just because its title is already a synonym,
     so there should be an initial sweep for titles or something and then just
     throw out synonyms that already exist
-- Add player stats
 - Add indicator that there are no tags/genres/etc.
-- Make scores update after user plays the daily
+- Improve search functionality (make it fuzzier)
+~~- Make scores update after user plays the daily~~
+~~- Add player stats~~
 
 ### Low-priority
 
 - Optimize search suggestions
 - Fix on mobile
 - Dropdown show on click
-- Add hardmode/max num of guesses
-- Create Ko-fi, add socials to support page
 - Condense how to play section
-- Make copy text say X/8 or something when user loses for the day
+- Make copy text say X/[max guesses] or something when user loses for the day
+~~- Add hardmode/max num of guesses~~
+~~- Create Ko-fi, add socials to support page~~
 
 ## Bugs
+- On light mode, X buttons to close popups are hard to see
 
 ## Uncertainties
 
