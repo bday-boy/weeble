@@ -75,40 +75,43 @@ const lcs_table = function (search, text) {
 const lcs_indices = function (search, text, L) {
     const search_len = search.length;
     const text_len = text.length;
-    const indices = [];
+    const strs = [];
     let i = 0;
     let j = 0;
     let prev = false;
     let longest = 0;
-    let cur = 0;
     let l = 0;
-    let r = 0;
 
     while (i < search_len && j < text_len) {
         if (search[i] === text[j]) {
             if (!prev) {
-                l = j;
+                if (l < j) strs.push(text.slice(l, j));
                 prev = true;
+                l = j;
             }
             i++;
             j++;
         } else {
             if (prev) {
-                indices.push([l, j]);
+                if (l < j) strs.push(`<mark>${text.slice(l, j)}</mark>`);
                 prev = false;
+                l = j;
             }
             const inc_i = (L[i + 1][j] >= L[i][j + 1]);
             i += inc_i;
             j += !inc_i;
         }
     }
-    if (prev) {
-        indices.push([l, j]);
+    if (l < j) {
+        strs.push(`<mark>${text.slice(l, j)}</mark>`);
+    }
+    if (j < text_len) {
+        strs.push(text.slice(j, text_len));
     }
 
     return {
         longest,
-        indices
+        html: strs.join('')
     };
 };
 
@@ -124,19 +127,27 @@ const lcs_indices = function (search, text, L) {
  * and the indices of the subsequences.
  */
 const lcs = function (search, text) {
+    if (!search || !text) {
+        return {
+            length: 0,
+            longest_substring: 0,
+            html: '',
+            ratio: 0
+        };
+    }
+
     const L = lcs_table(search, text);
     const {
         longest,
-        indices
+        html
     } = lcs_indices(search, text, L);
 
     return {
         length: L[0][0],
         longest_substring: longest,
-        first_common_char: indices.length > 0 ? indices[0] : -1,
-        indices,
-        ratio: longest / text.length
+        html,
+        ratio: longest / search.length
     };
 };
 
-export { levenshtein, lcs };
+// export { levenshtein, lcs };
