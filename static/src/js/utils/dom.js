@@ -1,3 +1,9 @@
+/**
+ * Creates a new Boostrap button with the given class
+ * @param {string} text - The textContent for the button
+ * @param {string} [btnClass] - A bootstrap button class
+ * @returns {Element}
+ */
 const createNewButton = function (text, btnClass) {
   const small = document.createElement('small');
   small.textContent = text;
@@ -14,7 +20,7 @@ const createNewButton = function (text, btnClass) {
 };
 
 /**
- * @param {String} HTML representing a single element
+ * @param {String} html - HTML representing a single element
  * @return {Element}
  */
 const htmlToElement = function (html) {
@@ -24,7 +30,7 @@ const htmlToElement = function (html) {
 };
 
 /**
- * @param {String} HTML representing any number of sibling elements
+ * @param {String} html - HTML representing any number of sibling elements
  * @return {NodeList} 
  */
 const htmlToElements = function (html) {
@@ -34,7 +40,7 @@ const htmlToElements = function (html) {
 };
 
 /**
- * @param {String} HTML representing any number of sibling elements
+ * @param {String} html - HTML representing any number of sibling elements
  * @return {NodeList} 
  */
 const htmlToDocFragment = function (html) {
