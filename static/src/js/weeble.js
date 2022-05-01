@@ -4,7 +4,8 @@ import { loadAnimeData } from './utils/load.js';
 import { getDateToday, startTimer } from './utils/time.js';
 import { applyFilter } from './filters.js'
 import { checkAnswer } from './check-answer.js';
-import { updateStats, showStats } from './scores.js';
+import { showStats } from './scores.js';
+import { suggestAnime } from './suggest.js';
 
 window.bsElements = {
   modals: {
@@ -69,11 +70,9 @@ window.weeble = {
 
 const filterToggle = document.getElementById('apply-filters');
 const shouldFilter = () => filterToggle.checked;
-let suggestions = [];
-let inputLen = 0;
 
 const replaceInput = function () {
-  /* replaces the text in the input with the clicked suggestion */
+  // replaces the text in the input with the clicked suggestion
   const newValue = this.querySelector('div').textContent;
   document.getElementById('anime-entry').value = newValue;
   const dropdown = this.parentNode;
@@ -83,31 +82,20 @@ const replaceInput = function () {
   dropdown.classList.remove('show');
 };
 
-const highlightText = function (text, index) {
-  /* highlight just the part of the text the user has typed in */
-  const leftSpan = document.createElement('span');
-  leftSpan.textContent = text.slice(0, index);
-  const highlight = document.createElement('mark');
-  highlight.textContent = text.slice(index, index + inputLen);
-  const rightSpan = document.createElement('span');
-  rightSpan.textContent = text.slice(index + inputLen);
-
-  /* wrap all text in a div */
-  const div = document.createElement('div');
-  div.appendChild(leftSpan);
-  div.appendChild(highlight);
-  div.appendChild(rightSpan);
-  return div;
-};
-
-const createAnimeLi = function (animeId, title, index) {
+const createAnimeLi = function (animeId, title) {
   const anime_info = weeble.allAnime[animeId];
 
-  const div = highlightText(title, index);
+  const div = document.createElement('div');
   div.classList.add('text-wrap');
+  div.append(title);
 
   const small = document.createElement('small');
-  small.textContent = `Studio(s): ${anime_info.studios.join(", ")}, Year: ${anime_info.year}, Episodes: ${anime_info.episodes}, Format: ${anime_info.format} Source: ${anime_info.source}`;
+  small.textContent =
+    `Studio(s): ${anime_info.studios.join(", ")}, ` +
+    `Year: ${anime_info.year}, ` +
+    `Episodes: ${anime_info.episodes}, ` +
+    `Format: ${anime_info.format}, ` +
+    `Source: ${anime_info.source}`;
   small.classList.add('text-wrap');
 
   const a = document.createElement('a');
@@ -117,6 +105,8 @@ const createAnimeLi = function (animeId, title, index) {
   a.appendChild(small);
 
   const li = document.createElement('li');
+  li.id = animeId;
+  li.setAttribute('data-ratio', 0);
   li.appendChild(a);
   li.addEventListener('click', function () {
     replaceInput.call(this);
@@ -125,63 +115,26 @@ const createAnimeLi = function (animeId, title, index) {
   return li;
 };
 
-const createSuggestions = function (dropdown_element) {
-  suggestions.forEach((suggestion) => {
-    const [title, animeId, index] = suggestion;
-    const li = createAnimeLi(animeId, title, index);
-    dropdown_element.appendChild(li);
-  });
-};
+const updateDropdown = function (dropdown) {
+  const { titles } = weeble.filteredTitles;
+  const newChildren = [];
 
-const addSuggestion = function (title, animeId, input, idSet) {
-  const foundIndex = title.toLowerCase().indexOf(input);
-  if (foundIndex > -1) {
-    if (!idSet.has(animeId)) {
-      idSet.add(animeId);
-      suggestions.push([title, animeId, foundIndex]);
+  Object.entries(titles).forEach((entry) => {
+    const [title, animeId] = entry;
+    if (animeId == 33) {debugger;}
+    if (!isNaN(animeId)) {
+      const li = createAnimeLi(animeId, title);
+      newChildren.push(li);
     }
-  }
-};
-
-const filterAllTitles = function (input) {
-  suggestions = [];
-  const idSet = new Set();
-  const { titles, synonyms } = weeble.filteredTitles;
-  [titles, synonyms].forEach((titleGroup) => {
-    Object.entries(titleGroup).forEach((entry) => {
-      const [title, animeId] = entry;
-      addSuggestion(title, animeId, input, idSet);
-    });
   });
+
+  dropdown.replaceChildren(...newChildren);
 };
 
-const suggestAnime = function () {
-  const animeEntry = document.getElementById('anime-entry');
-  const input = animeEntry.value.toLowerCase();
-  const dropdown = document.getElementById('anime-suggestions');
-  inputLen = input.length;
-  while (dropdown.firstChild) {
-    dropdown.removeChild(dropdown.firstChild);
-  }
-  if (weeble.allAnime === undefined || weeble.filteredTitles === undefined) {
-    suggestions = [];
-  } else {
-    filterAllTitles(input);
-  }
-
-  /* this makes searches with earlier matches show up sooner */
-  if (input === '') {
-    suggestions.sort((a, b) => a[0].toLowerCase().localeCompare(b[0].toLowerCase()));
-  } else {
-    suggestions.sort((a, b) => a[2] > b[2]);
-  }
-  createSuggestions(dropdown);
-  animeEntry.prevLen = inputLen;
-};
-
-const filterAndSuggest = () => {
+const filterAndSuggest = (dropdown, search) => {
   applyFilter(shouldFilter());
-  suggestAnime();
+  updateDropdown(dropdown)
+  suggestAnime(dropdown, search, weeble.filteredTitles);
 };
 
 const loadPage = function () {
@@ -199,6 +152,7 @@ const loadPage = function () {
   const copyDiscord = document.getElementById('discord');
   const copyGeneral = document.getElementById('general');
   const resetTimers = document.querySelectorAll('[data-weeble=timer]');
+  const dropdown = document.getElementById('anime-suggestions');
   const dropdownBtn = document.getElementById('toggle-suggestions');
   const userEntry = document.getElementById('anime-entry');
   const guessBtn = document.getElementById('guess-button');
@@ -261,27 +215,29 @@ const loadPage = function () {
   });
 
   applyFilters.checked = true;
-  applyFilters.addEventListener('change', filterAndSuggest);
+  applyFilters.addEventListener('change', () => {
+    filterAndSuggest(dropdown, userEntry.value);
+  });
 
-  const showCopyModal = (success) => (
+  const showCopyToast = (success) => (
     success ? bsElements.toasts.copySuccess.show() : bsElements.toasts.copyDanger.show()
   );
 
   copyAnilist.addEventListener('click', function () {
     copyToClipboard('anilist').then((success) => {
-      showCopyModal(success);
+      showCopyToast(success);
     });
   });
 
   copyDiscord.addEventListener('click', function () {
     copyToClipboard('discord').then((success) => {
-      showCopyModal(success);
+      showCopyToast(success);
     });
   });
 
   copyGeneral.addEventListener('click', function () {
     copyToClipboard('general').then((success) => {
-      showCopyModal(success);
+      showCopyToast(success);
     });
   });
 
@@ -305,13 +261,13 @@ const startGame = function () {
     const dropdown = document.getElementById('anime-suggestions');
     const userEntry = document.getElementById('anime-entry');
     const guessBtn = document.getElementById('guess-button');
-  
+
     dropdownBtn.disabled = false;
     userEntry.disabled = false;
     guessBtn.disabled = false;
 
     userEntry.addEventListener('input', function () {
-      suggestAnime();
+      suggestAnime(dropdown, userEntry.value, weeble.filteredTitles);
       bsElements.dropdown.show();
       this.focus();
     });
@@ -331,7 +287,7 @@ const startGame = function () {
           const guess = userEntry.value;
           userEntry.value = '';
           checkAnswer(guess);
-          filterAndSuggest();
+          filterAndSuggest(dropdown, '');
           break;
         default:
           return;
@@ -344,14 +300,14 @@ const startGame = function () {
       const guess = userEntry.value;
       userEntry.value = '';
       checkAnswer(guess);
-      filterAndSuggest();
+      filterAndSuggest(dropdown, '');
     });
+    filterAndSuggest(dropdown, '')
   }
 };
 
 (function () {
   loadAnimeData.call(weeble).then(() => {
-    filterAndSuggest();
     startGame();
 
     if (firstImpression()) {
