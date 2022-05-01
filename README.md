@@ -18,12 +18,12 @@ data to make a Wordle- or Squirle-like game.
 - Mess around with thresholds and see what works
 - Store guesses in storage rather than cookies since Safari on iPhone clears
   cookies when closed and the user's daily is deleted
+- Add indicator that there are no tags/genres/etc.
+- Improve search functionality (make it fuzzier)
 - Ignore anime that have titles/synonyms that already exist
   - Don't want to ignore an anime just because its title is already a synonym,
     so there should be an initial sweep for titles or something and then just
     throw out synonyms that already exist
-- Add indicator that there are no tags/genres/etc.
-- Improve search functionality (make it fuzzier)
 ~~- Make scores update after user plays the daily~~
 ~~- Add player stats~~
 
@@ -39,6 +39,8 @@ data to make a Wordle- or Squirle-like game.
 
 ## Bugs
 - On light mode, X buttons to close popups are hard to see
+- Fix Berserk/Berserk title collision (if main title already exists, try to
+  use a synonym as the title instead)
 
 ## Uncertainties
 
