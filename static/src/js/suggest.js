@@ -22,10 +22,13 @@ const showSuggestedAnime = function (dropdown, search, allTitles) {
         return;
       }
       const li = document.getElementById(animeId);
-      const { html, ratio } = lcs(search, title);
+      // TODO: This is a band-aid solution, real solution should just make it
+      // so there are no title collissions (see Berserk id=33 and id=21560)
+      if (li === null) { return; }
+      const { length, longest_substring, html, ratio } = lcs(search, title);
       if (THRESHOLD <= ratio && num_shown < SHOW_MAX && !isNaN(animeId)) {
         const newChildren = htmlToElements(html);
-        li.setAttribute('data-ratio', ratio);
+        li.setAttribute('data-compare', longest_substring);
         li.querySelector('div.text-wrap').replaceChildren(...newChildren);
         idSet.add(animeId);
         li.style.display = '';
@@ -39,7 +42,7 @@ const showSuggestedAnime = function (dropdown, search, allTitles) {
   });
 
   Array.from(dropdown.querySelectorAll('li:not([style*="display:none"]):not([style*="display: none"])'))
-    .sort((a, b) => a.dataset.ratio < b.dataset.ratio)
+    .sort((a, b) => b.dataset.compare - a.dataset.compare)
     .forEach((li) => dropdown.appendChild(li));
 };
 

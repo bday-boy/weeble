@@ -106,7 +106,7 @@ const createAnimeLi = function (animeId, title) {
 
   const li = document.createElement('li');
   li.id = animeId;
-  li.setAttribute('data-ratio', 0);
+  li.setAttribute('data-compare', 0);
   li.appendChild(a);
   li.addEventListener('click', function () {
     replaceInput.call(this);
@@ -134,7 +134,7 @@ const updateDropdown = function (dropdown) {
 const filterAndSuggest = (dropdown, search) => {
   applyFilter(shouldFilter());
   updateDropdown(dropdown)
-  suggestAnime(dropdown, search, weeble.filteredTitles);
+  suggestAnime(dropdown, search.toLowerCase(), weeble.filteredTitles);
 };
 
 const loadPage = function () {

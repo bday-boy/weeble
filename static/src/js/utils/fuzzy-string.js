@@ -46,9 +46,9 @@ const levenshtein = function (a, b) {
  * @param {string} text - The text to compare with the search.
  * @returns {Array<Array<int>>} A 2-dimensional array of ints.
  */
-const lcsTable = function (search, text) {
+ const lcsTable = function (search, text) {
   const L = Array(search.length + 1).fill()
-              .map(() => Array(text.length + 1).fill(0));
+    .map(() => Array(text.length + 1).fill(0));
 
   for (let i = 1; i <= search.length; i++) {
     for (let j = 1; j <= text.length; j++) {
@@ -87,19 +87,16 @@ const lcsString = function (search, text, L) {
   let j = textLength;
   let prev = false;
   let longest = 0;
-  let r = 0;
+  let r = textLength;
 
   while (0 < i && 0 < j) {
-    if (search[i - 1] === text[j - 1]) {
+    if (search[i - 1] === text[j - 1] || search[i - 1] === text[j - 1].toLowerCase()) {
       if (!prev) {
         if (j < r) {
           strs.push(text.slice(j, r));
         }
         prev = true;
         r = j;
-        if (longest < r - j) {
-          longest = r - j;
-        }
       }
       i--;
       j--;
@@ -109,10 +106,10 @@ const lcsString = function (search, text, L) {
           strs.push(`<mark>${text.slice(j, r)}</mark>`);
         }
         prev = false;
-        r = j;
         if (longest < r - j) {
           longest = r - j;
         }
+        r = j;
       }
       const iIncrease = (L[i - 1][j] >= L[i][j - 1]);
       i -= iIncrease;
@@ -121,10 +118,15 @@ const lcsString = function (search, text, L) {
   }
   if (j < r) {
     strs.push(`<mark>${text.slice(j, r)}</mark>`);
+    if (longest < r - j) {
+      longest = r - j;
+    }
   }
-  if (j < textLength) {
-    strs.push(text.slice(j, textLength));
+  if (0 < j) {
+    strs.push(text.slice(0, j));
   }
+
+  strs.reverse();
 
   const lcsObj = {
     longest,
@@ -155,17 +157,17 @@ const lcs = function (search, text) {
     };
   }
 
-  const L = lcsTable(search, text);
+  const L = lcsTable(search, text.toLowerCase());
   const {
     longest,
     html
   } = lcsString(search, text, L);
 
   return {
-    length: L[0][0],
+    length: L[search.length][text.length],
     longest_substring: longest,
     html,
-    ratio: L[0][0] / search.length
+    ratio: L[search.length][text.length] / search.length
   };
 };
 
