@@ -46,7 +46,7 @@ const levenshtein = function (a, b) {
  * @param {string} text - The text to compare with the search.
  * @returns {Array<Array<int>>} A 2-dimensional array of ints.
  */
- const lcsTable = function (search, text) {
+const lcsTable = function (search, text) {
   const L = Array(search.length + 1).fill()
     .map(() => Array(text.length + 1).fill(0));
 
@@ -86,11 +86,14 @@ const lcsString = function (search, text, L) {
   let i = searchLength;
   let j = textLength;
   let prev = false;
-  let longest = 0;
+  let longestSubstr = 0;
   let r = textLength;
+  let left = textLength;
+  let right = 0;
 
   while (0 < i && 0 < j) {
-    if (search[i - 1] === text[j - 1] || search[i - 1] === text[j - 1].toLowerCase()) {
+    const curCell = L[i][j];
+    if (L[i - 1][j] < curCell && L[i][j - 1] < curCell) {
       if (!prev) {
         if (j < r) {
           strs.push(text.slice(j, r));
@@ -98,6 +101,8 @@ const lcsString = function (search, text, L) {
         prev = true;
         r = j;
       }
+      if (right == 0) { right = j; }
+      left = j;
       i--;
       j--;
     } else {
@@ -106,8 +111,8 @@ const lcsString = function (search, text, L) {
           strs.push(`<mark>${text.slice(j, r)}</mark>`);
         }
         prev = false;
-        if (longest < r - j) {
-          longest = r - j;
+        if (longestSubstr < r - j) {
+          longestSubstr = r - j;
         }
         r = j;
       }
@@ -116,11 +121,13 @@ const lcsString = function (search, text, L) {
       j -= !iIncrease;
     }
   }
+
   if (j < r) {
     strs.push(`<mark>${text.slice(j, r)}</mark>`);
-    if (longest < r - j) {
-      longest = r - j;
+    if (longestSubstr < r - j) {
+      longestSubstr = r - j;
     }
+    left = j;
   }
   if (0 < j) {
     strs.push(text.slice(0, j));
@@ -129,7 +136,9 @@ const lcsString = function (search, text, L) {
   strs.reverse();
 
   const lcsObj = {
-    longest,
+    firstMatch: left,
+    longestSubstr,
+    subsequenceWidth: right - left + 1,
     html: strs.join('')
   };
 
@@ -151,7 +160,7 @@ const lcs = function (search, text) {
   if (!search || !text) {
     return {
       length: 0,
-      longest_substring: 0,
+      longestSubstr: 0,
       html: '',
       ratio: 1
     };
@@ -159,13 +168,17 @@ const lcs = function (search, text) {
 
   const L = lcsTable(search, text.toLowerCase());
   const {
-    longest,
+    firstMatch,
+    longestSubstr,
+    subsequenceWidth,
     html
   } = lcsString(search, text, L);
 
   return {
     length: L[search.length][text.length],
-    longest_substring: longest,
+    firstMatch,
+    longestSubstr,
+    subsequenceWidth,
     html,
     ratio: L[search.length][text.length] / search.length
   };

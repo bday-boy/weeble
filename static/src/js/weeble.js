@@ -121,7 +121,6 @@ const updateDropdown = function (dropdown) {
 
   Object.entries(titles).forEach((entry) => {
     const [title, animeId] = entry;
-    if (animeId == 33) {debugger;}
     if (!isNaN(animeId)) {
       const li = createAnimeLi(animeId, title);
       newChildren.push(li);
