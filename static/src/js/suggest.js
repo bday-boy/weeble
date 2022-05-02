@@ -3,7 +3,7 @@ import { lcs } from './utils/fuzzy-string.js';
 
 const SHOW_MAX = 100;
 const RATIO_THRESHOLD = 0.9;
-const WIDTH_THRESHOLD = 3;
+const SUBSEQUENCE_THRESHOLD = 0.25;
 
 /**
  * Shows suggested anime based on the user's search input.
@@ -12,10 +12,10 @@ const WIDTH_THRESHOLD = 3;
  * @param {Object} allTitles - Object containing actual titles and synonyms
  */
 const showSuggestedAnime = function (dropdown, search, allTitles) {
-  const searchLength = search.length;
   const idSet = new Set();
   const { titles, synonyms } = allTitles;
   const liNodes = [];
+  const searchLower = search.toLocaleLowerCase();
   let num_shown = 0;
 
   [titles, synonyms].forEach((titleGroup) => {
@@ -27,12 +27,20 @@ const showSuggestedAnime = function (dropdown, search, allTitles) {
       const li = document.getElementById(animeId);
       // TODO: This is a band-aid solution, real solution should just make it
       // so there are no title collissions (see Berserk id=33 and id=21560)
-      if (li === null) { return; }
-      const { html, ratio, subsequenceWidth, ...compareData } = lcs(search, title);
+      if (li === null) {
+        return;
+      }
+      const {
+        html,
+        ratio,
+        subsequenceWidth,
+        subsequenceCount,
+        ...compareData
+      } = lcs(searchLower, title);
       if (
         RATIO_THRESHOLD <= ratio
         && num_shown < SHOW_MAX
-        && Math.abs(subsequenceWidth - searchLength) < WIDTH_THRESHOLD
+        && SUBSEQUENCE_THRESHOLD <= (subsequenceWidth / subsequenceCount)
       ) {
         const newChildren = htmlToElements(html);
         li.querySelector('div.text-wrap').replaceChildren(...newChildren);
@@ -54,23 +62,35 @@ const showSuggestedAnime = function (dropdown, search, allTitles) {
  * Unhides all anime in the dropdown.
  * @param {HTMLElement} dropdown - ul element containing all li suggestions
  */
-const showAllAnime = function (allTitles) {
+const showAllAnime = function (dropdown, allTitles) {
+  const liNodes = [];
   const { titles } = allTitles;
   Object.entries(titles).forEach((entry) => {
     const [title, animeId] = entry;
     if (isNaN(animeId)) {
       return;
     }
-    const li = document.getElementById('' + animeId);
+    const li = document.getElementById(animeId);
+    // TODO: This is a band-aid solution, real solution should just make it
+    // so there are no title collissions (see Berserk id=33 and id=21560)
+    if (li === null) {
+      return;
+    }
     const titleNode = document.createTextNode(title);
     li.querySelector('div.text-wrap').replaceChildren(titleNode);
     li.style.display = '';
-  })
+    liNodes.push(li);
+  });
+  liNodes.sort((a, b) => {
+    const textA = a.querySelector('div.text-wrap').textContent;
+    const textB = b.querySelector('div.text-wrap').textContent;
+    return textA.localeCompare(textB);
+  }).forEach((li) => dropdown.appendChild(li));
 };
 
 const suggestAnime = function (dropdown, search, allTitles) {
   if (search === '') {
-    showAllAnime(allTitles);
+    showAllAnime(dropdown, allTitles);
   } else {
     showSuggestedAnime(dropdown, search, allTitles);
   }
