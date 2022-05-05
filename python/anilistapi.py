@@ -92,20 +92,21 @@ query ($pop: Int, $page: Int, $perPage: Int) {
 }
 '''
 
+
 class AniListAPI:
     def __init__(self):
         self.url_match = re.compile(r'https://anilist\.co.*')
         self.url = 'https://graphql.anilist.co'
         self.page = 1
-    
+
     def post(self, query: str, **variables) -> requests.Response:
         return requests.post(self.url, json={
             'query': query, 'variables': variables
         })
-    
+
     def by_id(self, anime_id: int) -> requests.Response:
         return self.post(query=by_id_query, id=anime_id)
-    
+
     def by_popularity(self, popularity: int) -> Generator[dict, None, None]:
         has_next = True
         while has_next:
@@ -120,7 +121,7 @@ class AniListAPI:
             has_next = page_info.get('hasNextPage', False)
             cur_page = page_info.get('currentPage', -1)
             last_page = page_info.get('lastPage')
-            print(f'Yielding page {cur_page} of {last_page}(?)')
+            print(f'Yielding page {cur_page}')
             self.page += 1
             time.sleep(1)
             yield res_json.get('media', {})
