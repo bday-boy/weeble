@@ -19,13 +19,13 @@ def validate_anime(anime: dict) -> bool:
     source = anime.get('source')
     if not source:
         return False
-    
+
     # ignore specials and music vids
     anime_format = anime.get('format')
     if not anime_format or anime_format == 'SPECIAL' \
             or anime_format == 'MUSIC':
         return False
-    
+
     # ignore anime that have no year or season
     year = anime.get('seasonYear')
     if not year:
@@ -36,7 +36,7 @@ def validate_anime(anime: dict) -> bool:
     duration = anime.get('duration') or 0
     if (duration < 8 and episodes <= 8) or episodes == 0:
         return False
-    
+
     # ignore anime without a title
     titles = anime.get('title')
     english = titles.get('english')
@@ -44,7 +44,7 @@ def validate_anime(anime: dict) -> bool:
     native = titles.get('native')
     if not (english or romaji or native or '').strip():
         return False
-    
+
     # ignore anime without a studio
     if not get_studios(anime):
         return False
@@ -77,17 +77,20 @@ class Reformatter:
         self.formatted_data = {}
         self.anime_titles = {'titles': {}, 'synonyms': {}}
         self.all_titles = set()
-    
+
     def save(self, db_file: str = 'anime-database.json',
              titles_file: str = 'anime-titles.json') -> None:
         db_path = osp.normpath(osp.join(self.data_dir, db_file))
         with open(db_path, 'w') as json_out:
             self.data = json.dump(self.formatted_data, json_out, indent=2)
-        
+
         names_path = osp.normpath(osp.join(self.data_dir, titles_file))
         with open(names_path, 'w') as json_out:
             self.data = json.dump(self.anime_titles, json_out, indent=2)
     
+    def get_titles(self, anime: dict) -> tuple[str, list[str]]:
+        pass
+
     def add_anime(self, anime: dict) -> None:
         anime_entry = {}
         anime_entry['id'] = int(animeId := anime.get('id', 'NO_ID'))
@@ -104,9 +107,10 @@ class Reformatter:
         self.anime_titles['titles'][anime_entry['title']] = animeId
         for synonym in anime_entry['synonyms']:
             self.anime_titles['synonyms'][synonym] = animeId
-    
+
     def generate_json(self) -> None:
-        response_gen = self.anilist_api.by_popularity(self.popularity_threshold)
+        response_gen = self.anilist_api.by_popularity(
+            self.popularity_threshold)
         for res in response_gen:
             for anime in res:
                 if validate_anime(anime):
