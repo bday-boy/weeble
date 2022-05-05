@@ -69,7 +69,7 @@ def get_synonyms(anime: dict, title: str) -> list:
     return sorted(synonyms, key=lambda s: max(s))
 
 
-class Reformatter:
+class AnimeJsonifier:
     def __init__(self, data_dir: str, popularity_threshold: int = 10000):
         self.data_dir = data_dir
         self.anilist_api = AniListAPI()
@@ -152,7 +152,7 @@ class Reformatter:
 
 
 def main():
-    data_cleaner = Reformatter('./static/data', popularity_threshold=10000)
+    data_cleaner = AnimeJsonifier('./static/data', popularity_threshold=10000)
     data_cleaner.populate_anime()
     data_cleaner.save()
 
