@@ -24,6 +24,7 @@ data to make a Wordle- or Squirle-like game.
   - Don't want to ignore an anime just because its title is already a synonym,
     so there should be an initial sweep for titles or something and then just
     throw out synonyms that already exist
+- Add indicator that there are no tags/genres/etc.
 
 ### Low-priority
 
