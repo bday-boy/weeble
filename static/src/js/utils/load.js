@@ -141,7 +141,7 @@ const fetchAnswerData = function () {
       const { tags, genres } = answerInfo;
       this.anime.genres = genres;
       this.anime.curGenre = 0;
-      this.anime.tags = tags.sort((a, b) => a.rank < b.rank);
+      this.anime.tags = tags.sort((a, b) => b.rank - a.rank);
       this.anime.curTag = 0;
     })
     .catch((error) => console.log(error));

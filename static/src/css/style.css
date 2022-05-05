@@ -26,14 +26,6 @@ mark {
   font-size: calc(2.375rem + 1.5vw);
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
-.disable-scrollbars::-webkit-scrollbar {
-  background: transparent;
-  width: 0px;
-}
-.disable-scrollbars {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
 .icon-wrapper {
   border-radius: 50%;
   color: var(--text-color-light);
@@ -101,6 +93,14 @@ mark {
     padding-bottom: 25em;
   }
 
+  .disable-scrollbars::-webkit-scrollbar {
+    background: transparent;
+    width: 0px;
+  }
+  .disable-scrollbars {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
   .hint-section .btn {
     padding: 0.075rem 0.15rem;
   }

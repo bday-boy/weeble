@@ -4,7 +4,6 @@ import time
 from typing import Generator
 
 import requests
-import requests_cache
 
 
 by_id_query = '''
