@@ -82,11 +82,19 @@ class Reformatter:
              titles_file: str = 'anime-titles.json') -> None:
         db_path = osp.normpath(osp.join(self.data_dir, db_file))
         with open(db_path, 'w') as json_out:
-            self.data = json.dump(self.formatted_data, json_out, indent=2)
+            self.data = json.dump(
+                self.formatted_data, json_out, indent=2, sort_keys=True
+            )
 
+        titles = self.anime_titles['titles']
+        synonyms = self.anime_titles['synonyms']
+        titles_sorted = {
+            'titles': {k: titles[k] for k in sorted(titles)},
+            'synonyms': {k: synonyms[k] for k in sorted(synonyms)},
+        }
         names_path = osp.normpath(osp.join(self.data_dir, titles_file))
         with open(names_path, 'w') as json_out:
-            self.data = json.dump(self.anime_titles, json_out, indent=2)
+            self.data = json.dump(titles_sorted, json_out, indent=2)
     
     def get_titles(self, anime: dict) -> tuple[str, list[str]]:
         pass
