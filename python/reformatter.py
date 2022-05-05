@@ -62,10 +62,11 @@ def get_title(anime: dict) -> str:
 
 def get_synonyms(anime: dict, title: str) -> list:
     titles = anime.get('title', {})
-    allSynonyms = ({(t[1] or '').strip() for t in titles.items()} - {title}) \
-        | {(syn or '').strip() for syn in anime.get('synonyms')}
-    synonyms = list(filter(lambda x: bool(x), allSynonyms))
-    return sorted(synonyms, key=lambda s: max(list(s)))
+    all_synonyms = {syn.strip() for syn in anime.get('synonyms', []) if syn}
+    all_synonyms.update(t[1].strip() for t in titles.items() if t[1])
+    all_synonyms.remove(title)
+    synonyms = list(all_synonyms)
+    return sorted(synonyms, key=lambda s: max(s))
 
 
 class Reformatter:
