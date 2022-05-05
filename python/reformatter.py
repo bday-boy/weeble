@@ -74,18 +74,15 @@ class Reformatter:
         self.data_dir = data_dir
         self.anilist_api = AniListAPI()
         self.popularity_threshold = popularity_threshold
-        self.data = []
-        self.formatted_data = {}
+        self.anime_data = {}
         self.anime_titles = {'titles': {}, 'synonyms': {}}
-        self.all_titles = set()
+        self.titles_set = set()
 
     def save(self, db_file: str = 'anime-database.json',
              titles_file: str = 'anime-titles.json') -> None:
         db_path = osp.normpath(osp.join(self.data_dir, db_file))
         with open(db_path, 'w') as json_out:
-            self.data = json.dump(
-                self.formatted_data, json_out, indent=2, sort_keys=True
-            )
+            json.dump(self.anime_data, json_out, indent=2, sort_keys=True)
 
         titles = self.anime_titles['titles']
         synonyms = self.anime_titles['synonyms']
@@ -95,40 +92,68 @@ class Reformatter:
         }
         names_path = osp.normpath(osp.join(self.data_dir, titles_file))
         with open(names_path, 'w') as json_out:
-            self.data = json.dump(titles_sorted, json_out, indent=2)
-    
-    def get_titles(self, anime: dict) -> tuple[str, list[str]]:
-        pass
+            json.dump(titles_sorted, json_out, indent=2)
+
+    def get_valid_title(self, all_titles: list[str]) -> list[str]:
+        for first_valid_title in all_titles:
+            if 'berserk' in first_valid_title.lower():
+                a = 1
+            if first_valid_title not in self.titles_set:
+                self.titles_set.add(first_valid_title)
+                return first_valid_title
+
+        return ''
+
+    def get_title_and_synonyms(self, anime: dict) -> tuple[str, list[str]]:
+        title = get_title(anime)
+        synonyms = get_synonyms(anime, title)
+        all_titles = [title] + synonyms
+
+        valid_title = self.get_valid_title(all_titles)
+
+        return valid_title, synonyms
 
     def add_anime(self, anime: dict) -> None:
+        title, synonyms = self.get_title_and_synonyms(anime)
         anime_entry = {}
-        anime_entry['id'] = int(animeId := anime.get('id', 'NO_ID'))
-        anime_entry['title'] = get_title(anime)
+        anime_entry['id'] = int(anime_id := anime.get('id', 'NO_ID'))
+        anime_entry['title'] = title
         anime_entry['studios'] = get_studios(anime)
         anime_entry['popularity'] = anime.get('popularity')
         anime_entry['episodes'] = anime.get('episodes')
         anime_entry['source'] = anime.get('source')
-        anime_entry['picture'] = anime.get('coverImage').get('extraLarge')
-        anime_entry['synonyms'] = get_synonyms(anime, anime_entry['title'])
+        anime_entry['picture'] = anime.get('coverImage', {}).get('extraLarge')
+        anime_entry['synonyms'] = synonyms
         anime_entry['format'] = anime.get('format')
         anime_entry['year'] = anime.get('seasonYear')
-        self.formatted_data[animeId] = anime_entry
-        self.anime_titles['titles'][anime_entry['title']] = animeId
-        for synonym in anime_entry['synonyms']:
-            self.anime_titles['synonyms'][synonym] = animeId
+        self.anime_data[anime_id] = anime_entry
+        self.anime_titles['titles'][title] = anime_id
 
-    def generate_json(self) -> None:
+    def correct_synonyms(self) -> None:
+        synonyms_dict = self.anime_titles['synonyms']
+        for anime_id, anime in self.anime_data.items():
+            synonyms = [syn for syn in anime['synonyms']
+                        if syn not in self.titles_set]
+            anime['synonyms'] = synonyms
+            self.titles_set.update(synonyms)
+            for syn in synonyms:
+                synonyms_dict[syn] = anime_id
+
+    def populate_anime(self) -> None:
         response_gen = self.anilist_api.by_popularity(
             self.popularity_threshold)
+
         for res in response_gen:
             for anime in res:
                 if validate_anime(anime):
                     self.add_anime(anime)
 
+        self.correct_synonyms()
+
 
 def main():
     data_cleaner = Reformatter('./static/data', popularity_threshold=10000)
-    data_cleaner.generate_json()
+    data_cleaner.populate_anime()
     data_cleaner.save()
 
 
