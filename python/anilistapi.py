@@ -1,4 +1,3 @@
-import os.path as osp
 import re
 import time
 from typing import Generator
