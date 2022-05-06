@@ -54,6 +54,9 @@ const showSuggestedAnime = function (dropdown, search, allTitles) {
     });
   });
 
+  // Possible sort criteria: First index of subsequence, longest continuous
+  // subsequence (substring), length of title, ratio of how well the search
+  // matches the string, etc.
   liNodes.sort((a, b) => a[1].firstMatch - b[1].firstMatch || b[1].longestSubstr - a[1].longestSubstr)
     .forEach(([li, _]) => dropdown.appendChild(li));
 };
