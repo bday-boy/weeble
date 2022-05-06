@@ -120,7 +120,6 @@ class AniListAPI:
             page_info = res_json.get('pageInfo', {})
             has_next = page_info.get('hasNextPage', False)
             cur_page = page_info.get('currentPage', -1)
-            last_page = page_info.get('lastPage')
             print(f'Yielding page {cur_page}')
             self.page += 1
             time.sleep(1)
