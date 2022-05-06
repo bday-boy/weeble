@@ -4,17 +4,7 @@ import os.path as osp
 from anilistapi import AniListAPI
 
 
-def get_studios(anime: dict) -> str:
-    main_studios = []
-    studios = anime.get('studios', {}).get('edges', [])
-    for studio in studios:
-        studio_name = studio.get('node', {}).get('name')
-        if studio_name:
-            main_studios.append(studio_name)
-    return main_studios
-
-
-def validate_anime(anime: dict) -> bool:
+def anime_is_valid(anime: dict) -> bool:
     # ignore anime with invalid source
     source = anime.get('source')
     if not source:
@@ -52,6 +42,16 @@ def validate_anime(anime: dict) -> bool:
     return True
 
 
+def get_studios(anime: dict) -> str:
+    main_studios = []
+    studios = anime.get('studios', {}).get('edges', [])
+    for studio in studios:
+        studio_name = studio.get('node', {}).get('name')
+        if studio_name:
+            main_studios.append(studio_name)
+    return main_studios
+
+
 def get_title(anime: dict) -> str:
     titles = anime.get('title', {})
     english = titles.get('english')
@@ -69,7 +69,7 @@ def get_synonyms(anime: dict, title: str) -> list:
     return sorted(synonyms, key=lambda s: max(s))
 
 
-class AnimeJsonifier:
+class AnimeJSONifier:
     def __init__(self, data_dir: str, popularity_threshold: int = 10000):
         self.data_dir = data_dir
         self.anilist_api = AniListAPI()
@@ -145,14 +145,14 @@ class AnimeJsonifier:
 
         for res in response_gen:
             for anime in res:
-                if validate_anime(anime):
+                if anime_is_valid(anime):
                     self.add_anime(anime)
 
         self.correct_synonyms()
 
 
 def main():
-    data_cleaner = AnimeJsonifier('./static/data', popularity_threshold=10000)
+    data_cleaner = AnimeJSONifier('./static/data', popularity_threshold=10000)
     data_cleaner.populate_anime()
     data_cleaner.save()
 
