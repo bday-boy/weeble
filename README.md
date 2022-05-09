@@ -1,15 +1,33 @@
 # Weeble
 
 Uses public APIs to get anime data based on various criteria and then uses that
-data to make a Wordle- or Squirle-like game.
+data to make a Wordle- or Squirle-like game. Can be played
+[here](https://weeble.herokuapp.com/) or by entering https://weeble.ninja/ into
+your browser, which redirects to the actual website.
 
-## Guessing criteria
+## Guessing information
+
+The following information is given to the user:
 
 - Studio
-- Format
+- Tags
+- Genres
 - Source
+- Format
 - Year
 - Episodes
+
+However, there are some important things to note about these:
+
+- Studio, source, and format will all be given exactly to the user. That is,
+  once that criteria is guessed correctly, it will remain revealed, and any
+  anime not fitting that criteria will be filtered out.
+- Tags and genres are not actually guessable, but are shown to the user each
+  time a failed guess is put in.
+- The year and number of episodes are both guessable, but only down to a
+  certain range. The current range for year is 3 (i.e. if the correct answer
+  was released in 2018, the year range might be 2017 - 2019) and the current
+  range for episodes is 11.
 
 ## TO-DO
 
