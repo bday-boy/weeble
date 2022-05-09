@@ -23,7 +23,7 @@ const guessTooltips = {
     return answer;
   },
   episodes: (guess, dif, threshold) => {
-      const { low, high } = weeble.ranges.episodes;
+    const { low, high } = weeble.ranges.episodes;
     if (checkDif(dif, threshold, low, high)) {
       if (threshold === 0) {
         return `The answer has ${low} episodes!`;
@@ -315,7 +315,7 @@ const endGame = function (won) {
     const scoresElement = document.getElementById('guess-scores');
     showStats(statsElements, scoresElement);
   }
-  
+
   const dropdownBtn = document.getElementById('toggle-suggestions');
   const userEntry = document.getElementById('anime-entry');
   const guessBtn = document.getElementById('guess-button');
@@ -327,6 +327,8 @@ const endGame = function (won) {
   addAllGenres();
   showEndModal(won ? 'You win!' : 'Better luck tomorrow!');
   didDaily(won);
+
+  weeble.won = won;
 };
 
 const handleCorrectAnswer = function () {

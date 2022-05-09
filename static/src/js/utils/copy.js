@@ -31,12 +31,12 @@ const getGuessEmojis = function (guessWrapper) {
   return guessEmojis.join('');
 };
 
-const createCopyText = function (location) {
+const createCopyText = function (location, won) {
   const copyTexts = [];
   const guesses = Array.from(document.querySelectorAll('#guesses > div'));
   guesses.reverse();
   /* TODO: Add something here for which day of weeble/guess limit */
-  copyTexts.push(`Weeble ${guesses.length}/7\n`);
+  copyTexts.push(`Weeble ${won ? guesses.length : 'X'}/7\n`);
   if (location === 'anilist') {
     const guessEmojis = [];
     const guessAnime = [];
@@ -89,8 +89,8 @@ const copyFallback = function (copyText) {
   return successful;
 };
 
-const copyToClipboard = function (location) {
-  const copyText = createCopyText(location);
+const copyToClipboard = function (location, won) {
+  const copyText = createCopyText(location, won);
   copyFallbackFallback(copyText);
   if (!navigator.clipboard) {
     return new Promise((res, rej) => {

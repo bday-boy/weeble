@@ -28,6 +28,7 @@ window.bsElements = {
 
 window.weeble = {
   anime: undefined,
+  won: false,
   allAnime: {},
   possibleAnime: {},
   titles: {},
@@ -222,19 +223,19 @@ const loadPage = function () {
   );
 
   copyAnilist.addEventListener('click', function () {
-    copyToClipboard('anilist').then((success) => {
+    copyToClipboard('anilist', weeble.won).then((success) => {
       showCopyToast(success);
     });
   });
 
   copyDiscord.addEventListener('click', function () {
-    copyToClipboard('discord').then((success) => {
+    copyToClipboard('discord', weeble.won).then((success) => {
       showCopyToast(success);
     });
   });
 
   copyGeneral.addEventListener('click', function () {
-    copyToClipboard('general').then((success) => {
+    copyToClipboard('general', weeble.won).then((success) => {
       showCopyToast(success);
     });
   });
