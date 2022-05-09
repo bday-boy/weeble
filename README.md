@@ -33,14 +33,10 @@ However, there are some important things to note about these:
 
 ### High-priority
 
-- Store guesses in storage rather than cookies since Safari on iPhone clears
-  cookies when closed and the user's daily is deleted
 - Add indicator that there are no tags/genres/etc.
-- Fix fuzzy search
 
 ### Low-priority
 
-- Optimize search suggestions
 - Fix on mobile
 - Dropdown show on click
 - Condense how to play section
@@ -49,9 +45,9 @@ However, there are some important things to note about these:
 
 - Add player stats
 - Make scores update after user plays the daily
-- Add hardmode/max num of guesses
+- Add ~~hardmode/~~max num of guesses
 - Create Ko-fi, add socials to support page
-- Make copy text say X/[max guesses] or something when user loses for the day
+- Make copy text say X/[max guesses] or something when user loses
 - Mess around with thresholds and see what works
 - Ignore anime that have titles/synonyms that already exist
   - Don't want to ignore an anime just because its title is already a synonym,
@@ -61,10 +57,6 @@ However, there are some important things to note about these:
 ## Bugs
 
 - On light mode, X buttons to close popups are hard to see
-- Fix Berserk/Berserk title collision (if main title already exists, try to
-  use a synonym as the title instead)
-
-## Uncertainties
 
 ## Funny stuff
 
