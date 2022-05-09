@@ -54,10 +54,6 @@ However, there are some important things to note about these:
     so there should be an initial sweep for titles or something and then just
     throw out synonyms that already exist
 
-## Bugs
-
-- On light mode, X buttons to close popups are hard to see
-
 ## Funny stuff
 
 - A bug caused anime aliases to be prioritized over the English titles so
