@@ -1,472 +1,498 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="msapplication-config" content="/images/browserconfig.xml">
-    <meta name="theme-color" content="#212529">
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-    <link rel="manifest" href="/images/site.webmanifest">
-    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
-    <link rel="shortcut icon" href="/images/favicon.ico">
-    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-    <!-- Commented lines below are just for intellisense to work -->
-    <!-- <link rel="stylesheet" href="/static/lib/bootstrap-5.1.3-dist/css/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="/static/lib/bootstrap-icons-1.8.1/bootstrap-icons.css"> -->
-    <link rel="stylesheet" href="/lib/bootstrap-5.1.3-dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/lib/bootstrap-icons-1.8.1/bootstrap-icons.css">
-    <link rel="stylesheet" href="/src/css/style.css">
-    <title>Weeble | An anime guessing game</title>
-  </head>
 
-  <body class="dark-mode">
-    <div aria-live="polite" aria-atomic="true" class="position-relative">
-      <div class="toast-container position-absolute top-0 start-50 translate-middle-x p-3">
-        <div class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true" id="copy-success">
-          <div class="d-flex">
-            <div class="toast-body">
-              Successfully copied!
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+  <meta name="theme-color" content="#212529">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="manifest" href="/images/site.webmanifest">
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
+  <link rel="shortcut icon" href="/images/favicon.ico">
+  <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+  <!-- Commented lines below are just for intellisense to work -->
+  <!-- <link rel="stylesheet" href="/static/lib/bootstrap-5.1.3-dist/css/bootstrap.min.css"> -->
+  <!-- <link rel="stylesheet" href="/static/lib/bootstrap-icons-1.8.1/bootstrap-icons.css"> -->
+  <link rel="stylesheet" href="/lib/bootstrap-5.1.3-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/lib/bootstrap-icons-1.8.1/bootstrap-icons.css">
+  <link rel="stylesheet" href="/src/css/style.css">
+  <title>Weeble | An anime guessing game</title>
+</head>
+
+<body class="dark-mode">
+  <div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div class="toast-container position-absolute top-0 start-50 translate-middle-x p-3">
+      <div class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true" id="copy-success">
+        <div class="d-flex">
+          <div class="toast-body">
+            Successfully copied!
           </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+            aria-label="Close"></button>
         </div>
-    
-        <div class="toast bg-danger" role="alert" aria-live="assertive" aria-atomic="true" id="copy-danger">
-          <div class="d-flex">
-            <div class="toast-body">
-              Failed to copy. Please copy from textbox.
+      </div>
+
+      <div class="toast bg-danger" role="alert" aria-live="assertive" aria-atomic="true" id="copy-danger">
+        <div class="d-flex">
+          <div class="toast-body">
+            Failed to copy. Please copy from textbox.
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+            aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" role="dialog" id="modal-end" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="game-end-title"></h5>
+          <div class="d-flex flex-column text-center">
+            <small class="text-muted">Next reset:</small>
+            <h5 class="m-0" data-weeble="timer"></h5>
+          </div>
+          <button type="button" class="btn-close btn-close-white m-0" data-bs-dismiss="modal"
+            aria-label="close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row justify-content-center">
+              <div class="col-12 text-center">
+                <h4 id="answer-title"></h4>
+              </div>
+              <div class="col-8 text-center">
+                <img src="" class="img-fluid img-thumbnail" alt="" id="answer-image">
+              </div>
+              <div class="col-12 text-center">
+                <h4 class="my-1">Share your results!</h4>
+              </div>
+              <div class="col-12 text-center">
+                <div class="row">
+                  <div class="col-sm-4 my-1">
+                    <button type="button" class="btn btn-success w-100" data-bs-toggle="popover" data-bs-trigger="focus"
+                      id="anilist">
+                      Copy for AniList
+                    </button>
+                  </div>
+                  <div class="col-sm-4 my-1">
+                    <button type="button" class="btn btn-success w-100" data-bs-toggle="popover" data-bs-trigger="focus"
+                      id="discord">
+                      Copy for Discord
+                    </button>
+                  </div>
+                  <div class="col-sm-4 my-1">
+                    <button type="button" class="btn btn-success w-100" data-bs-toggle="popover" data-bs-trigger="focus"
+                      id="general">
+                      Copy for general use
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <textarea class="form-control disable-scrollbars my-2" id="copy-text"
+                  onclick="this.focus();this.select()" readonly></textarea>
+              </div>
             </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="modal fade" tabindex="-1" role="dialog" id="modal-end" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="game-end-title"></h5>
-            <div class="d-flex flex-column text-center">
-              <small class="text-muted">Next reset:</small>
-              <h5 class="m-0" data-weeble="timer"></h5>
+  <div class="modal fade" tabindex="-1" role="dialog" id="modal-about" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="d-flex flex-column">
+            <h5 class="modal-title">Test Your Anime Knowledge!</h5>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="tldr">
+              <label class="form-check-label text-muted" for="tldr">
+                TL;DR version
+              </label>
             </div>
-            <button type="button" class="btn-close btn-close-white m-0" data-bs-dismiss="modal" aria-label="close"></button>
           </div>
-          <div class="modal-body">
-            <div class="container-fluid">
-              <div class="row justify-content-center">
-                <div class="col-12 text-center">
-                  <h4 id="answer-title"></h4>
-                </div>
-                <div class="col-8 text-center">
-                  <img src="" class="img-fluid img-thumbnail" alt="" id="answer-image">
-                </div>
-                <div class="col-12 text-center">
-                  <h4 class="my-1">Share your results!</h4>
-                </div>
-                <div class="col-12 text-center">
-                  <div class="row">
-                    <div class="col-sm-4 my-1">
-                      <button type="button" class="btn btn-success w-100" data-bs-toggle="popover" data-bs-trigger="focus" id="anilist">
-                        Copy for AniList
-                      </button>
-                    </div>
-                    <div class="col-sm-4 my-1">
-                      <button type="button" class="btn btn-success w-100" data-bs-toggle="popover" data-bs-trigger="focus" id="discord">
-                        Copy for Discord
-                      </button>
-                    </div>
-                    <div class="col-sm-4 my-1">
-                      <button type="button" class="btn btn-success w-100" data-bs-toggle="popover" data-bs-trigger="focus" id="general">
-                        Copy for general use
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12">
-                  <textarea class="form-control disable-scrollbars my-2" id="copy-text" onclick="this.focus();this.select()" readonly></textarea>
-                </div>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row flex-column justify-content-center" id="rules-and-info">
+              <div class="col-12 text-start">
+                <h5 class="text-decoration-underline">Rules and Important Game Info</h5>
+                <p data-weeble="tldr">
+                  The way Weeble works is not entirely comparable to Wordle and other variants.
+                </p>
+                <p>
+                  Guessable word-based categories will show the exact answer, but number-based categories will
+                  only be shown down to a certain threshold, indicated by the yellow
+                  <i class="bi bi-chevron-contract"></i> symbol.
+                </p>
+                <p>
+                  Each incorrect guess will reveal one more tag (in order of relevancy) and genre of the correct
+                  anime. Don't worry&#8211tags marked as spoilers on AniList will <strong>NOT</strong> be shown.
+                </p>
+                <p>
+                  Even though tags and genres will show up, they are not included in the filter and cannot be
+                  guessed.
+                </p>
+              </div>
+            </div>
+            <div class="row flex-column justify-content-center" data-weeble="tldr">
+              <div class="col-12 text-start">
+                <h5 class="text-decoration-underline">Cookies and Privacy</h5>
+                <p>
+                  User information is never sent from Weeble to any server. All information except for the daily anime
+                  is stored client side. Various info for weeble is stored in a mix of cookies and local storage, so
+                  if you clear your cookies or storage, expect for Weeble to forget about you and everyone you've ever
+                  loved as well as your daily guess data.
+                </p>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div class="modal fade" tabindex="-1" role="dialog" id="modal-about" data-bs-backdrop="static" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <div class="d-flex flex-column">
-              <h5 class="modal-title">Test Your Anime Knowledge!</h5>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="tldr">
-                <label class="form-check-label text-muted" for="tldr">
-                  TL;DR version
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="modal-body">
-            <div class="container-fluid">
-              <div class="row flex-column justify-content-center" id="rules-and-info">
-                <div class="col-12 text-start">
-                  <h5 class="text-decoration-underline">Rules and Important Game Info</h5>
-                  <p data-weeble="tldr">
-                    The way Weeble works is not entirely comparable to Wordle and other variants.
-                  </p>
-                  <p>
-                    Guessable word-based categories will show the exact answer, but number-based categories will
-                    only be shown down to a certain threshold, indicated by the yellow
-                    <i class="bi bi-chevron-contract"></i> symbol.
-                  </p>
-                  <p>
-                    Each incorrect guess will reveal one more tag (in order of relevancy) and genre of the correct
-                    anime. Don't worry&#8211tags marked as spoilers on AniList will <strong>NOT</strong> be shown.
-                  </p>
-                  <p>
-                    Even though tags and genres will show up, they are not included in the filter and cannot be
-                    guessed.
-                  </p>
-                </div>
-              </div>
-              <div class="row flex-column justify-content-center" data-weeble="tldr">
-                <div class="col-12 text-start">
-                  <h5 class="text-decoration-underline">Cookies and Privacy</h5>
-                  <p>
-                    User information is never sent from Weeble to any server. All information except for the daily anime
-                    is stored client side. Various info for weeble is stored in a mix of cookies and local storage, so
-                    if you clear your cookies or storage, expect for Weeble to forget about you and everyone you've ever
-                    loved as well as your daily guess data.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-bs-dismiss="modal">I understand</button>
-          </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">I understand</button>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="modal fade" tabindex="-1" role="dialog" id="modal-support" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Support</h5>
-            <button type="button" class="btn-close btn-close-white m-0" data-bs-dismiss="modal" aria-label="close"></button>
-          </div>
-          <div class="modal-body">
-            <div class="container-fluid">
-              <div class="row flex-column justify-content-center">
-                <div class="col-12 text-start">
-                  <p>
-                    Thanks for checking out Weeble, an anime guessing game by illdie and Birthday Boy! We are two
-                    passionate anime fans who found there to be a lack of Wordle-like anime games online, so we decided
-                    to try making our own.
-                  </p>
-                  <p>
-                    If you enjoy Weeble, please consider supporting us or checking out our socials! 
-                  </p>
+  <div class="modal fade" tabindex="-1" role="dialog" id="modal-support" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Support</h5>
+          <button type="button" class="btn-close btn-close-white m-0" data-bs-dismiss="modal"
+            aria-label="close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row flex-column justify-content-center">
+              <div class="col-12 text-start">
+                <p>
+                  Thanks for checking out Weeble, an anime guessing game by illdie and Birthday Boy! We are two
+                  passionate anime fans who found there to be a lack of Wordle-like anime games online, so we decided
+                  to try making our own.
+                </p>
+                <p>
+                  If you enjoy Weeble, please consider supporting us or checking out our socials!
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 d-flex align-items-center justify-content-between">
+                <span>illdie</span>
+                <div class="d-flex">
+                  <a href="https://www.youtube.com/c/illdie314" target="_blank" rel="noopener noreferrer">
+                    <i class="bi bi-youtube"></i>
+                  </a>
+                  <a href="https://twitter.com/illdie314" target="_blank" rel="noopener noreferrer">
+                    <i class="bi bi-twitter"></i>
+                  </a>
+                  <a href="https://anilist.co/user/illdie/" target="_blank" rel="noopener noreferrer">
+                    <img class="rounded" src="/images/anilist.svg" onerror="this.src='/images/anilist.png'"
+                      style="width: 1em; height: 1em;">
+                  </a>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-12 d-flex align-items-center justify-content-between">
-                  <span>illdie</span>
-                  <div class="d-flex">
-                    <a href="https://www.youtube.com/c/illdie314" target="_blank" rel="noopener noreferrer">
-                      <i class="bi bi-youtube"></i>
-                    </a>
-                    <a href="https://twitter.com/illdie314" target="_blank" rel="noopener noreferrer">
-                      <i class="bi bi-twitter"></i>
-                    </a>
-                    <a href="https://anilist.co/user/illdie/" target="_blank" rel="noopener noreferrer">
-                      <img class="rounded" src="/images/anilist.svg" onerror="this.src='/images/anilist.png'" style="width: 1em; height: 1em;">
-                    </a>
-                  </div>
-                </div>
-                <div class="col-12 d-flex align-items-center justify-content-between">
-                  <span>Birthday Boy</span>
-                  <div class="d-flex">
-                    <a href="https://www.twitch.tv/birthday__boy" target="_blank" rel="noopener noreferrer">
-                      <i class="bi bi-twitch"></i>
-                    </a>
-                    <a href="https://anilist.co/user/BirthdayBoy/" target="_blank" rel="noopener noreferrer">
-                      <img class="rounded" src="/images/anilist.svg" onerror="this.src='/images/anilist.png'" style="width: 1em; height: 1em;">
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-12 d-flex justify-content-center">
-                  <a class="btn btn-success m-2" href="https://ko-fi.com/weeblegame" target="_blank" rel="noopener noreferrer">
-                    <img class="border-1" src="/images/kofi.png" style="width: 2em; height: 2em;">
-                    Buy us a Ko-fi
+              <div class="col-12 d-flex align-items-center justify-content-between">
+                <span>Birthday Boy</span>
+                <div class="d-flex">
+                  <a href="https://www.twitch.tv/birthday__boy" target="_blank" rel="noopener noreferrer">
+                    <i class="bi bi-twitch"></i>
+                  </a>
+                  <a href="https://anilist.co/user/BirthdayBoy/" target="_blank" rel="noopener noreferrer">
+                    <img class="rounded" src="/images/anilist.svg" onerror="this.src='/images/anilist.png'"
+                      style="width: 1em; height: 1em;">
                   </a>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" tabindex="-1" role="dialog" id="modal-stats" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Game stats</h5>
-            <div class="d-flex flex-column text-center">
-              <small class="text-muted">Next reset:</small>
-              <h5 class="m-0" data-weeble="timer"></h5>
-            </div>
-            <button type="button" class="btn-close btn-close-white m-0" data-bs-dismiss="modal" aria-label="close"></button>
-          </div>
-          <div class="modal-body">
-            <div class="container-fluid">
-              <div class="row my-2">
-                <div class="col-12 d-flex align-items-start justify-content-around">
-                  <div class="d-flex flex-column justify-content-between">
-                    <h4 class="text-center" data-weeble="stat" id="played">1</h4>
-                    <small class="text-center">Played</small>
-                  </div>
-                  <div class="d-flex flex-column justify-content-between">
-                    <h4 class="text-center" data-weeble="stat" id="win-percent">100%</h4>
-                    <small class="text-center">Win %</small>
-                  </div>
-                  <div class="d-flex flex-column justify-content-between">
-                    <h4 class="text-center" data-weeble="stat" id="streak-current">1</h4>
-                    <small class="text-center">Current<br>streak</small>
-                  </div>
-                  <div class="d-flex flex-column justify-content-between">
-                    <h4 class="text-center" data-weeble="stat" id="streak-max">1</h4>
-                    <small class="text-center">Max<br>streak</small>
-                  </div>
-                </div>
-              </div>
-              <div id="guess-scores">
-                <div class="row align-items-center justify-content-center">
-                  <div class="col-1 mr-1 text-start">
-                    1
-                  </div>
-                  <div class="progress col-9 px-0" style="font-size: large;">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </div>
-                <div class="row align-items-center justify-content-center">
-                  <div class="col-1 mr-1 text-start">
-                    5
-                  </div>
-                  <div class="progress col-9 px-0" style="font-size: large;">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </div>
+            <div class="row">
+              <div class="col-12 d-flex justify-content-center">
+                <a class="btn btn-success m-2" href="https://ko-fi.com/weeblegame" target="_blank"
+                  rel="noopener noreferrer">
+                  <img class="border-1" src="/images/kofi.png" style="width: 2em; height: 2em;">
+                  Buy us a Ko-fi
+                </a>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="modal fade" tabindex="-1" role="dialog" id="modal-settings" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Settings</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="close"></button>
+  <div class="modal fade" tabindex="-1" role="dialog" id="modal-stats" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Game stats</h5>
+          <div class="d-flex flex-column text-center">
+            <small class="text-muted">Next reset:</small>
+            <h5 class="m-0" data-weeble="timer"></h5>
           </div>
-          <div class="modal-body">
-            <div class="container-fluid">
-              <div class="row d-flex align-items-center justify-content-between my-2">
-                <div class="col-12 d-flex justify-content-between">
-                  <div class="d-flex flex-column text-start">
-                    <label class="form-check-label" for="high-contrast">High-contrast Mode</label>
-                    <small class="text-muted">For those whose cones are actin up</small>
-                  </div>
-                  <div class="d-flex align-items-center justify-content-end form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="high-contrast">
-                  </div>
+          <button type="button" class="btn-close btn-close-white m-0" data-bs-dismiss="modal"
+            aria-label="close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row my-2">
+              <div class="col-12 d-flex align-items-start justify-content-around">
+                <div class="d-flex flex-column justify-content-between">
+                  <h4 class="text-center" data-weeble="stat" id="played">1</h4>
+                  <small class="text-center">Played</small>
                 </div>
-              </div>
-              <div class="row d-flex justify-content-between align-items-center my-2">
-                <div class="col-12 d-flex justify-content-between">
-                  <div class="d-flex flex-column text-start">
-                    <label class="form-check-label" for="dark-mode">Dark Mode</label>
-                    <small class="text-muted">For those whose rods are actin up</small>
-                  </div>
-                  <div class="d-flex align-items-center justify-content-end form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="dark-mode" checked>
-                  </div>
+                <div class="d-flex flex-column justify-content-between">
+                  <h4 class="text-center" data-weeble="stat" id="win-percent">100%</h4>
+                  <small class="text-center">Win %</small>
                 </div>
-              </div>
-              <div class="row d-flex justify-content-between align-items-center my-2">
-                <div class="col-12 d-flex justify-content-between">
-                  <div class="d-flex flex-column text-start">
-                    <label class="form-check-label" for="apply-filters">Apply progress to suggestions</label>
-                    <small class="text-muted">HIGHLY recommended, game fr sucks without this</small>
-                  </div>
-                  <div class="d-flex align-items-center justify-content-end form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="apply-filters">
-                  </div>
+                <div class="d-flex flex-column justify-content-between">
+                  <h4 class="text-center" data-weeble="stat" id="streak-current">1</h4>
+                  <small class="text-center">Current<br>streak</small>
+                </div>
+                <div class="d-flex flex-column justify-content-between">
+                  <h4 class="text-center" data-weeble="stat" id="streak-max">1</h4>
+                  <small class="text-center">Max<br>streak</small>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+            <div id="guess-scores">
+              <div class="row align-items-center justify-content-center">
+                <div class="col-1 mr-1 text-start">
+                  1
+                </div>
+                <div class="progress col-9 px-0" style="font-size: large;">
+                  <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"
+                    aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+              <div class="row align-items-center justify-content-center">
+                <div class="col-1 mr-1 text-start">
+                  5
+                </div>
+                <div class="progress col-9 px-0" style="font-size: large;">
+                  <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100"
+                    aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="container-lg pb-5">
-      <div class="row justify-content-center" id="title">
-        <div class="col-xl-6 col-md-8 d-flex justify-content-between align-items-center">
-          <i class="bi bi-info-circle-fill" id="weeble-about"></i>
-          <i class="bi bi-heart-fill" id="weeble-support"></i>
-          <h1 class="title mt-3">Weeble</h1>
-          <i class="bi bi-bar-chart-fill" id="weeble-stats"></i>
-          <i class="bi bi-gear-fill" id="weeble-settings"></i>
+  <div class="modal fade" tabindex="-1" role="dialog" id="modal-settings" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Settings</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="close"></button>
         </div>
-      </div>
-
-      <div class="row justify-content-center">
-        <div class="col-md-5 my-1 text-center hint-section placeholder-glow" id="tags">
-          <h3 class="mb-1">Tags</h3>
-          <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
-            <span class="opacity-0">wwwwwwwww</span>
-          </a>
-          <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
-            <span class="opacity-0">wwww</span>
-          </a>
-          <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
-            <span class="opacity-0">wwwwwww</span>
-          </a>
-        </div>
-        
-        <div class="col-md-5 my-1 text-center hint-section placeholder-glow" id="genres">
-          <h3 class="mb-1">Genres</h3>
-          <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
-            <span class="opacity-0">wwwwww</span>
-          </a>
-          <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
-            <span class="opacity-0">wwww</span>
-          </a>
-          <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
-            <span class="opacity-0">wwwwww</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="row justify-content-center">
-        <div class="col-md-5 col-6 my-1 text-center hint-section placeholder-glow" id="sources">
-          <h3 class="mb-1">Source</h3>
-          <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
-            <span class="opacity-0">www</span>
-          </a>
-          <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
-            <span class="opacity-0">wwwwwww</span>
-          </a>
-          <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
-            <span class="opacity-0">wwww</span>
-          </a>
-          <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
-            <span class="opacity-0">wwwwww</span>
-          </a>
-          <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
-            <span class="opacity-0">www</span>
-          </a>
-        </div>
-
-        <div class="col-md-5 col-6 my-1 text-center hint-section placeholder-glow" id="formats">
-          <h3 class="mb-1">Format</h3>
-          <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
-            <span class="opacity-0">ww</span>
-          </a>
-          <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
-            <span class="opacity-0">www</span>
-          </a>
-          <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
-            <span class="opacity-0">wwwww</span>
-          </a>
-          <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
-            <span class="opacity-0">www</span>
-          </a>
-          <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
-            <span class="opacity-0">wwwwww</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="row justify-content-center">
-        <div class="col-xl-8 col-9 my-1 text-center hint-section">
-          <h3 class="mb-4">Year</h3>
-          <div class="progress placeholder-glow" style="font-size: large;">
-            <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="year-progress-left"></div>
-            <div class="position-relative">
-              <div class="floating-text-wrapper text-above-left text-end">
-                <span class="text-end" id="year-low"><span class="placeholder">wwww</span></span>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row d-flex align-items-center justify-content-between my-2">
+              <div class="col-12 d-flex justify-content-between">
+                <div class="d-flex flex-column text-start">
+                  <label class="form-check-label" for="high-contrast">High-contrast Mode</label>
+                  <small class="text-muted">For those whose cones are actin up</small>
+                </div>
+                <div class="d-flex align-items-center justify-content-end form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="high-contrast">
+                </div>
               </div>
             </div>
-            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" id="year-progress-middle"></div>
-            <div class="position-relative">
-              <div class="floating-text-wrapper text-above-right text-start">
-                <span class="text-end" id="year-high"><span class="placeholder">wwww</span></span>
+            <div class="row d-flex justify-content-between align-items-center my-2">
+              <div class="col-12 d-flex justify-content-between">
+                <div class="d-flex flex-column text-start">
+                  <label class="form-check-label" for="dark-mode">Dark Mode</label>
+                  <small class="text-muted">For those whose rods are actin up</small>
+                </div>
+                <div class="d-flex align-items-center justify-content-end form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="dark-mode" checked>
+                </div>
               </div>
             </div>
-            <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="year-progress-right"></div>
+            <div class="row d-flex justify-content-between align-items-center my-2">
+              <div class="col-12 d-flex justify-content-between">
+                <div class="d-flex flex-column text-start">
+                  <label class="form-check-label" for="apply-filters">Apply progress to suggestions</label>
+                  <small class="text-muted">HIGHLY recommended, game fr sucks without this</small>
+                </div>
+                <div class="d-flex align-items-center justify-content-end form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="apply-filters">
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="row justify-content-center">
-        <div class="col-xl-8 col-9 my-1 text-center hint-section">
-          <h3 class="mb-4">Episode count</h3>
-          <div class="progress placeholder-glow" style="font-size: large;">
-            <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="episodes-progress-left"></div>
-            <div class="position-relative">
-              <div class="floating-text-wrapper text-above-left text-end">
-                <span class="text-end" id="episodes-low"><span class="placeholder">w</span></span>
-              </div>
-            </div>
-            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" id="episodes-progress-middle"></div>
-            <div class="position-relative">
-              <div class="floating-text-wrapper text-above-right text-start">
-                <span class="text-end" id="episodes-high"><span class="placeholder">www</span></span>
-              </div>
-            </div>
-            <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="episodes-progress-right"></div>
-          </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
-
-      <div class="row justify-content-center align-items-center my-3">
-        <div class="col-xl-8 d-flex justify-content-between align-items-center">
-          <div class="input-group">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-auto-close="inside" data-bs-display="static" aria-expanded="false" id="toggle-suggestions" disabled>
-              <span class="d-none d-lg-inline-block">Suggestions</span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-dark disable-scrollbars" id="anime-suggestions"></ul>
-            <input type="text" class="form-control" placeholder="Enter an anime..." aria-label="Anime entry" id="anime-entry" disabled>
-            <button class="btn btn-secondary" type="button" id="guess-button" disabled>
-              <i class="bi bi-arrow-return-left"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="row justify-content-center align-items-center my-3" id="guesses"></div>
     </div>
-    <script src="/lib/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/lib/firstImpression/js/first-impression.js"></script>
-    <script type="module" src="/src/js/update-progress.js"></script>
-    <script type="module" src="/src/js/check-answer.js"></script>
-    <script type="module" src="/src/js/weeble.js"></script>
-  </body>
+  </div>
+
+  <div class="container-lg pb-5">
+    <div class="row justify-content-center" id="title">
+      <div class="col-xl-6 col-md-8 d-flex justify-content-between align-items-center">
+        <i class="bi bi-info-circle-fill" id="weeble-about"></i>
+        <i class="bi bi-heart-fill" id="weeble-support"></i>
+        <h1 class="title mt-3">Weeble</h1>
+        <i class="bi bi-bar-chart-fill" id="weeble-stats"></i>
+        <i class="bi bi-gear-fill" id="weeble-settings"></i>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-5 my-1 text-center hint-section placeholder-glow" id="tags">
+        <h3 class="mb-1">Tags</h3>
+        <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
+          <span class="opacity-0">wwwwwwwww</span>
+        </a>
+        <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
+          <span class="opacity-0">wwww</span>
+        </a>
+        <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
+          <span class="opacity-0">wwwwwww</span>
+        </a>
+      </div>
+
+      <div class="col-md-5 my-1 text-center hint-section placeholder-glow" id="genres">
+        <h3 class="mb-1">Genres</h3>
+        <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
+          <span class="opacity-0">wwwwww</span>
+        </a>
+        <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
+          <span class="opacity-0">wwww</span>
+        </a>
+        <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
+          <span class="opacity-0">wwwwww</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-5 col-6 my-1 text-center hint-section placeholder-glow" id="sources">
+        <h3 class="mb-1">Source</h3>
+        <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
+          <span class="opacity-0">www</span>
+        </a>
+        <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
+          <span class="opacity-0">wwwwwww</span>
+        </a>
+        <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
+          <span class="opacity-0">wwww</span>
+        </a>
+        <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
+          <span class="opacity-0">wwwwww</span>
+        </a>
+        <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
+          <span class="opacity-0">www</span>
+        </a>
+      </div>
+
+      <div class="col-md-5 col-6 my-1 text-center hint-section placeholder-glow" id="formats">
+        <h3 class="mb-1">Format</h3>
+        <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
+          <span class="opacity-0">ww</span>
+        </a>
+        <a href="javascript:;" tabindex="-1" class="btn btn-success disabled placeholder m-1">
+          <span class="opacity-0">www</span>
+        </a>
+        <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
+          <span class="opacity-0">wwwww</span>
+        </a>
+        <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
+          <span class="opacity-0">www</span>
+        </a>
+        <a href="javascript:;" tabindex="-1" class="btn btn-secondary disabled placeholder m-1">
+          <span class="opacity-0">wwwwww</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-xl-8 col-9 my-1 text-center hint-section">
+        <h3 class="mb-4">Year</h3>
+        <div class="progress placeholder-glow" style="font-size: large;">
+          <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+            aria-valuemax="100" id="year-progress-left"></div>
+          <div class="position-relative">
+            <div class="floating-text-wrapper text-above-left text-end">
+              <span class="text-end" id="year-low"><span class="placeholder">wwww</span></span>
+            </div>
+          </div>
+          <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar"
+            style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" id="year-progress-middle">
+          </div>
+          <div class="position-relative">
+            <div class="floating-text-wrapper text-above-right text-start">
+              <span class="text-end" id="year-high"><span class="placeholder">wwww</span></span>
+            </div>
+          </div>
+          <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+            aria-valuemax="100" id="year-progress-right"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-xl-8 col-9 my-1 text-center hint-section">
+        <h3 class="mb-4">Episode count</h3>
+        <div class="progress placeholder-glow" style="font-size: large;">
+          <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+            aria-valuemax="100" id="episodes-progress-left"></div>
+          <div class="position-relative">
+            <div class="floating-text-wrapper text-above-left text-end">
+              <span class="text-end" id="episodes-low"><span class="placeholder">w</span></span>
+            </div>
+          </div>
+          <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar"
+            style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" id="episodes-progress-middle">
+          </div>
+          <div class="position-relative">
+            <div class="floating-text-wrapper text-above-right text-start">
+              <span class="text-end" id="episodes-high"><span class="placeholder">www</span></span>
+            </div>
+          </div>
+          <div class="progress-bar bg-light" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+            aria-valuemax="100" id="episodes-progress-right"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center align-items-center my-3">
+      <div class="col-xl-8 d-flex justify-content-between align-items-center">
+        <div class="input-group">
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+            data-bs-auto-close="inside" data-bs-display="static" aria-expanded="false" id="toggle-suggestions" disabled>
+            <span class="d-none d-lg-inline-block">Suggestions</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark disable-scrollbars" id="anime-suggestions"></ul>
+          <input type="text" class="form-control" placeholder="Enter an anime..." aria-label="Anime entry"
+            id="anime-entry" disabled>
+          <button class="btn btn-secondary" type="button" id="guess-button" disabled>
+            <i class="bi bi-arrow-return-left"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center align-items-center my-3" id="guesses"></div>
+  </div>
+  <script src="/lib/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/lib/firstImpression/js/first-impression.js"></script>
+  <script type="module" src="/src/js/update-progress.js"></script>
+  <script type="module" src="/src/js/check-answer.js"></script>
+  <script type="module" src="/src/js/weeble.js"></script>
+</body>
+
 </html>

@@ -18,7 +18,7 @@ const getProgressbarWidths = function (obj) {
   if (right < 0.02) {
     right = 0;
   }
-  
+
   total = (left + middle + right);
   left = left * (100 / total);
   middle = middle * (100 / total);

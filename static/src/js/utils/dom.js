@@ -24,9 +24,9 @@ const createNewButton = function (text, btnClass) {
  * @return {Element}
  */
 const htmlToElement = function (html) {
-    const template = document.createElement('template');
-    template.innerHTML = html.trim();
-    return template.content.firstChild;
+  const template = document.createElement('template');
+  template.innerHTML = html.trim();
+  return template.content.firstChild;
 };
 
 /**
@@ -34,9 +34,9 @@ const htmlToElement = function (html) {
  * @return {NodeList} 
  */
 const htmlToElements = function (html) {
-    const template = document.createElement('template');
-    template.innerHTML = html.trim();
-    return template.content.childNodes;
+  const template = document.createElement('template');
+  template.innerHTML = html.trim();
+  return template.content.childNodes;
 };
 
 /**
@@ -44,9 +44,9 @@ const htmlToElements = function (html) {
  * @return {NodeList} 
  */
 const htmlToDocFragment = function (html) {
-    const template = document.createElement('template');
-    template.innerHTML = html.trim();
-    return template.content;
+  const template = document.createElement('template');
+  template.innerHTML = html.trim();
+  return template.content;
 };
 
 export { createNewButton, htmlToElement, htmlToElements, htmlToDocFragment };

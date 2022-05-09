@@ -140,7 +140,7 @@ const fetchAnimeTitles = function () {
     .then((anime_json) => {
       const titles = anime_json.titles;
       const synonyms = anime_json.synonyms;
-      weeble.titles = {...synonyms, ...titles};
+      weeble.titles = { ...synonyms, ...titles };
       weeble.filteredTitles = anime_json;
     })
     .catch((err) => console.log(err));

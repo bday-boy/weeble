@@ -25,7 +25,7 @@ const didDaily = function (winOrLose) {
   if (winOrLose !== undefined) {
     setCookie();
   }
-  
+
   return Boolean(getCookie());
 };
 
