@@ -248,52 +248,55 @@ const startGame = function () {
     const animeTitle = weeble.allAnime[parseInt(guessId)].title;
     checkAnswer(animeTitle);
   });
-  const dropdownBtn = document.getElementById('toggle-suggestions');
-  const dropdown = document.getElementById('anime-suggestions');
-  const userEntry = document.getElementById('anime-entry');
-  const guessBtn = document.getElementById('guess-button');
 
-  dropdownBtn.disabled = false;
-  userEntry.disabled = false;
-  guessBtn.disabled = false;
+  if (!didDaily()) {
+    const dropdownBtn = document.getElementById('toggle-suggestions');
+    const dropdown = document.getElementById('anime-suggestions');
+    const userEntry = document.getElementById('anime-entry');
+    const guessBtn = document.getElementById('guess-button');
 
-  userEntry.addEventListener('input', function () {
-    suggestAnime(dropdown, userEntry.value, weeble.filteredTitles);
-    bsElements.dropdown.show();
-    this.focus();
-  });
-  userEntry.addEventListener('keydown', (e) => {
-    if (e.defaultPrevented) {
-      return;
-    }
+    dropdownBtn.disabled = false;
+    userEntry.disabled = false;
+    guessBtn.disabled = false;
 
-    switch (e.key) {
-      case 'ArrowDown':
-      case 'Down':
-        if (dropdown.firstChild) {
-          dropdown.firstChild.firstChild.focus();
-        }
-        break;
-      case 'Enter':
-        const guess = userEntry.value;
-        userEntry.value = '';
-        checkAnswer(guess);
-        filterAndSuggest(dropdown, '');
-        break;
-      default:
+    userEntry.addEventListener('input', function () {
+      suggestAnime(dropdown, userEntry.value, weeble.filteredTitles);
+      bsElements.dropdown.show();
+      this.focus();
+    });
+    userEntry.addEventListener('keydown', (e) => {
+      if (e.defaultPrevented) {
         return;
-    }
+      }
 
-    e.preventDefault();
-  });
+      switch (e.key) {
+        case 'ArrowDown':
+        case 'Down':
+          if (dropdown.firstChild) {
+            dropdown.firstChild.firstChild.focus();
+          }
+          break;
+        case 'Enter':
+          const guess = userEntry.value;
+          userEntry.value = '';
+          checkAnswer(guess);
+          filterAndSuggest(dropdown, '');
+          break;
+        default:
+          return;
+      }
 
-  guessBtn.addEventListener('click', () => {
-    const guess = userEntry.value;
-    userEntry.value = '';
-    checkAnswer(guess);
+      e.preventDefault();
+    });
+
+    guessBtn.addEventListener('click', () => {
+      const guess = userEntry.value;
+      userEntry.value = '';
+      checkAnswer(guess);
+      filterAndSuggest(dropdown, '');
+    });
     filterAndSuggest(dropdown, '');
-  });
-  filterAndSuggest(dropdown, '');
+  }
 };
 
 (function () {
