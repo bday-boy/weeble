@@ -34,18 +34,20 @@ However, there are some important things to note about these:
 ### High-priority
 
 - Add indicator that there are no tags/genres/etc.
+- Clean up the absolute behemoth that is check-answer.js
+  - It is seriously so ugly, some of the worst spaghetti code I've written
+    in my life. Just thinking about how I'm the one who made it makes me cringe
 
 ### Low-priority
 
 - Fix on mobile
 - Dropdown show on click
-- Condense how to play section
 
 ### Done
 
 - Add player stats
 - Make scores update after user plays the daily
-- Add ~~hardmode/~~max num of guesses
+- Add ~~hardmode and~~ max num of guesses
 - Create Ko-fi, add socials to support page
 - Make copy text say X/[max guesses] or something when user loses
 - Mess around with thresholds and see what works
@@ -53,6 +55,7 @@ However, there are some important things to note about these:
   - Don't want to ignore an anime just because its title is already a synonym,
     so there should be an initial sweep for titles or something and then just
     throw out synonyms that already exist
+- Condense how to play section
 
 ## Funny stuff
 
