@@ -143,7 +143,7 @@ const didDaily = function (won) {
 const addGuess = function (guess) {
   const todaysDate = getDateToday();
   const todaysEntry = getItemObj(todaysDate, defaultGuesses);
-  if (todaysEntry.won === undefined) {
+  if (!todaysEntry.guesses.includes(guess)) {
     todaysEntry.guesses.push(guess);
     setItemObj(todaysDate, todaysEntry);
   }
