@@ -56,11 +56,10 @@ const showSuggestedAnime = function (dropdown, search, allTitles) {
   // subsequence (substring), length of title, ratio of how well the search
   // matches the string, etc.
   liNodes.sort((a, b) => (
-      b[1].longestSubstr - a[1].longestSubstr
-      || a[1].firstMatch - b[1].firstMatch
-      || a[1].subsequenceCount - b[1].subsequenceCount
-    ))
-    .forEach(([li, _]) => dropdown.appendChild(li));
+    b[1].longestSubstr - a[1].longestSubstr
+    || a[1].firstMatch - b[1].firstMatch
+    || a[1].subsequenceCount - b[1].subsequenceCount
+  )).forEach(([li, _]) => dropdown.appendChild(li));
 };
 
 /**
