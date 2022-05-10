@@ -1,10 +1,9 @@
-import { didDaily } from './utils/cookies.js';
 import { copyToClipboard } from './utils/copy.js';
 import { loadAnimeData } from './utils/load.js';
-import { getDateToday, startTimer } from './utils/time.js';
+import { startTimer } from './utils/time.js';
 import { applyFilter } from './filters.js'
 import { checkAnswer } from './check-answer.js';
-import { showStats } from './scores.js';
+import { showStats, didDaily, getGuesses } from './scores.js';
 import { suggestAnime } from './suggest.js';
 
 window.bsElements = {
@@ -244,61 +243,57 @@ const loadPage = function () {
 };
 
 const startGame = function () {
-  const done = didDaily();
-  if (done) {
-    const todayGuesses = window.localStorage.getItem(getDateToday());
-    todayGuesses.split(':').forEach((guessId) => {
-      const animeTitle = weeble.allAnime[parseInt(guessId)].title;
-      checkAnswer(animeTitle);
-    });
-  } else {
-    const dropdownBtn = document.getElementById('toggle-suggestions');
-    const dropdown = document.getElementById('anime-suggestions');
-    const userEntry = document.getElementById('anime-entry');
-    const guessBtn = document.getElementById('guess-button');
+  const todayGuesses = getGuesses();
+  todayGuesses.forEach((guessId) => {
+    const animeTitle = weeble.allAnime[parseInt(guessId)].title;
+    checkAnswer(animeTitle);
+  });
+  const dropdownBtn = document.getElementById('toggle-suggestions');
+  const dropdown = document.getElementById('anime-suggestions');
+  const userEntry = document.getElementById('anime-entry');
+  const guessBtn = document.getElementById('guess-button');
 
-    dropdownBtn.disabled = false;
-    userEntry.disabled = false;
-    guessBtn.disabled = false;
+  dropdownBtn.disabled = false;
+  userEntry.disabled = false;
+  guessBtn.disabled = false;
 
-    userEntry.addEventListener('input', function () {
-      suggestAnime(dropdown, userEntry.value, weeble.filteredTitles);
-      bsElements.dropdown.show();
-      this.focus();
-    });
-    userEntry.addEventListener('keydown', (e) => {
-      if (e.defaultPrevented) {
+  userEntry.addEventListener('input', function () {
+    suggestAnime(dropdown, userEntry.value, weeble.filteredTitles);
+    bsElements.dropdown.show();
+    this.focus();
+  });
+  userEntry.addEventListener('keydown', (e) => {
+    if (e.defaultPrevented) {
+      return;
+    }
+
+    switch (e.key) {
+      case 'ArrowDown':
+      case 'Down':
+        if (dropdown.firstChild) {
+          dropdown.firstChild.firstChild.focus();
+        }
+        break;
+      case 'Enter':
+        const guess = userEntry.value;
+        userEntry.value = '';
+        checkAnswer(guess);
+        filterAndSuggest(dropdown, '');
+        break;
+      default:
         return;
-      }
+    }
 
-      switch (e.key) {
-        case 'ArrowDown':
-        case 'Down':
-          if (dropdown.firstChild) {
-            dropdown.firstChild.firstChild.focus();
-          }
-          break;
-        case 'Enter':
-          const guess = userEntry.value;
-          userEntry.value = '';
-          checkAnswer(guess);
-          filterAndSuggest(dropdown, '');
-          break;
-        default:
-          return;
-      }
+    e.preventDefault();
+  });
 
-      e.preventDefault();
-    });
-
-    guessBtn.addEventListener('click', () => {
-      const guess = userEntry.value;
-      userEntry.value = '';
-      checkAnswer(guess);
-      filterAndSuggest(dropdown, '');
-    });
-    filterAndSuggest(dropdown, '')
-  }
+  guessBtn.addEventListener('click', () => {
+    const guess = userEntry.value;
+    userEntry.value = '';
+    checkAnswer(guess);
+    filterAndSuggest(dropdown, '');
+  });
+  filterAndSuggest(dropdown, '');
 };
 
 (function () {
@@ -311,5 +306,3 @@ const startGame = function () {
   });
   loadPage();
 })();
-
-// document.cookie = '_didDaily=true; max-age=0'

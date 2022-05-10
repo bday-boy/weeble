@@ -1,9 +1,8 @@
-import { didDaily } from './utils/cookies.js';
 import { createNewButton } from './utils/dom.js';
 import { isSubset, setDif, setIntersection } from './utils/set.js';
 import { getDateToday } from './utils/time.js';
 import { updateProgressSet, updateProgressGroup, updateNumRange, updateNumRangeCorrect } from './update-progress.js';
-import { updateStats, showStats } from './scores.js';
+import { updateStats, showStats, didDaily, addGuess } from './scores.js';
 
 const checkDif = (dif, threshold, low, high) => (
   Math.abs(dif) <= threshold || (high - low) <= threshold * 2
@@ -309,7 +308,6 @@ const addAllTags = function () {
 
 const endGame = function (won) {
   if (!didDaily()) {
-    window.localStorage.setItem(getDateToday(), Array.from(weeble.guesses.set).join(':'));
     updateStats(won, weeble.guesses.max, won ? weeble.guesses.set.size : undefined);
     const statsElements = document.querySelectorAll('[data-weeble=stat]');
     const scoresElement = document.getElementById('guess-scores');
@@ -366,7 +364,12 @@ const checkAnswer = function (inputTitle) {
   }
   const guessesDiv = document.getElementById('guesses');
   const animeId = weeble.titles[inputTitle];
-  weeble.guesses.add(animeId);
+  if (weeble.guesses.has(animeId)) {
+    return;
+  } else {
+    weeble.guesses.add(animeId);
+  }
+  addGuess(animeId);
   if (animeId === weeble.anime.id) {
     handleCorrectAnswer();
     return;
@@ -397,8 +400,6 @@ const checkAnswer = function (inputTitle) {
 
   addTag(1);
   addGenre(1);
-  // line below is for alternating tag and genre
-  // weeble.guesses.set.size % 2 === 0 ? addTag(1) : addGenre (1);
 
   if (weeble.guesses.set.size >= weeble.guesses.max) {
     endGame(false);

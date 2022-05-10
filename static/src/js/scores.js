@@ -1,4 +1,6 @@
-const defaultObj = JSON.stringify({
+import { getDateToday } from './utils/time.js';
+
+const defaultScores = JSON.stringify({
   played: 0,
   wins: 0,
   'win-percent': '0%',
@@ -6,8 +8,11 @@ const defaultObj = JSON.stringify({
   'streak-max': 0,
   scores: []
 });
-const getItemObj = (key) => JSON.parse(localStorage.getItem(key) || defaultObj);
+const defaultGuesses = JSON.stringify({
+  guesses: []
+});
 const setItemObj = (key, obj) => localStorage.setItem(key, JSON.stringify(obj));
+const getItemObj = (key, defaultObj) => JSON.parse(localStorage.getItem(key) || defaultObj);
 
 const createScoreIndexLabel = function (scoreIndex) {
   const scoreDiv = document.createElement('div');
@@ -90,7 +95,7 @@ const updateStats = function (userWon, maxGuesses, numGuesses) {
     'streak-current': streakCurrent,
     'streak-max': streakMax,
     scores
-  } = getItemObj('stats');
+  } = getItemObj('stats', defaultScores);
 
   setItemObj('stats', {
     played: played + 1,
@@ -103,7 +108,7 @@ const updateStats = function (userWon, maxGuesses, numGuesses) {
 };
 
 const showStats = function (statElements, scoresElement) {
-  const stats = getItemObj('stats');
+  const stats = getItemObj('stats', defaultScores);
   statElements.forEach((statElement) => {
     const stat = stats[statElement.id];
     statElement.textContent = stat;
@@ -123,15 +128,31 @@ const showStats = function (statElements, scoresElement) {
   });
 };
 
-const debugStats = function () {
-  setItemObj('stats', {
-    played: 12,
-    wins: 10,
-    'win-percent': `${((10 / 12) * 100).toFixed(0)}%`,
-    'streak-current': 7,
-    'streak-max': 7,
-    scores: [1, 3, 6, 6, 3, 0, 1, 1]
-  });
+const didDaily = function (won) {
+  const todaysDate = getDateToday();
+  const todaysEntry = getItemObj(todaysDate, defaultGuesses);
+
+  if (won !== undefined) {
+    todaysEntry.won = won;
+    setItemObj(todaysDate, todaysEntry);
+  }
+
+  return todaysEntry.won !== undefined;
 };
 
-export { updateStats, showStats };
+const addGuess = function (guess) {
+  const todaysDate = getDateToday();
+  const todaysEntry = getItemObj(todaysDate, defaultGuesses);
+  if (todaysEntry.won === undefined) {
+    todaysEntry.guesses.push(guess);
+    setItemObj(todaysDate, todaysEntry);
+  }
+};
+
+const getGuesses = function () {
+  const todaysDate = getDateToday();
+  const todaysEntry = getItemObj(todaysDate, defaultGuesses);
+  return todaysEntry.guesses;
+};
+
+export { updateStats, showStats, didDaily, addGuess, getGuesses };
