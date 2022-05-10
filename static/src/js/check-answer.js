@@ -1,6 +1,5 @@
 import { createNewButton } from './utils/dom.js';
 import { isSubset, setDif, setIntersection } from './utils/set.js';
-import { getDateToday } from './utils/time.js';
 import { updateProgressSet, updateProgressGroup, updateNumRange, updateNumRangeCorrect } from './update-progress.js';
 import { updateStats, showStats, didDaily, addGuess } from './scores.js';
 
