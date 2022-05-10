@@ -1,5 +1,5 @@
 import { htmlToElements } from './utils/dom.js';
-import { lcs } from './utils/fuzzy-string.js';
+import { fuzzySearch } from './utils/fuzzy-string.js';
 
 const SHOW_MAX = 100;
 const RATIO_THRESHOLD = 0.9;
@@ -34,13 +34,12 @@ const showSuggestedAnime = function (dropdown, search, allTitles) {
         html,
         ratio,
         subsequenceWidth,
-        subsequenceCount,
         ...compareData
-      } = lcs(searchLower, title);
+      } = fuzzySearch(searchLower, title);
       if (
         RATIO_THRESHOLD <= ratio
         && num_shown < SHOW_MAX
-        && SUBSEQUENCE_THRESHOLD <= (subsequenceWidth / subsequenceCount)
+        && SUBSEQUENCE_THRESHOLD <= (subsequenceWidth / compareData.subsequenceCount)
       ) {
         const newChildren = htmlToElements(html);
         li.querySelector('div.text-wrap').replaceChildren(...newChildren);
@@ -57,7 +56,11 @@ const showSuggestedAnime = function (dropdown, search, allTitles) {
   // Possible sort criteria: First index of subsequence, longest continuous
   // subsequence (substring), length of title, ratio of how well the search
   // matches the string, etc.
-  liNodes.sort((a, b) => a[1].firstMatch - b[1].firstMatch || b[1].longestSubstr - a[1].longestSubstr)
+  liNodes.sort((a, b) => (
+      b[1].longestSubstr - a[1].longestSubstr
+      || a[1].firstMatch - b[1].firstMatch
+      || a[1].subsequenceCount - b[1].subsequenceCount
+    ))
     .forEach(([li, _]) => dropdown.appendChild(li));
 };
 

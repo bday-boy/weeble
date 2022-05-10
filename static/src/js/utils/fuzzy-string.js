@@ -157,6 +157,26 @@ const lcsString = function (search, text) {
  * and the indices of the subsequences.
  */
 const lcs = function (search, text) {
+  const length = lcsTable(search, text.toLocaleLowerCase());
+  const sequenceDataObj = lcsString(search, text);
+
+  return {
+    ...sequenceDataObj,
+    length,
+    ratio: length / search.length
+  };
+};
+
+/**
+ * First searches the text for an exact match, and if no exact match is
+ * found, does an LCS search on the text instead.
+ * @param {string} search - The user's entry to search for in the text
+ * @param {string} text - The text to compare with the search
+ * @returns {object} Various info about the LCS, including the length of the
+ * LCS, the length of the longest substring, the earliest common character,
+ * and the indices of the subsequences.
+ */
+const fuzzySearch = function (search, text) {
   if (!search || !text) {
     return {
       length: NaN,
@@ -169,24 +189,28 @@ const lcs = function (search, text) {
     };
   }
 
-  const length = lcsTable(search, text.toLocaleLowerCase());
-  const {
-    firstMatch,
-    longestSubstr,
-    subsequenceWidth,
-    subsequenceCount,
-    html
-  } = lcsString(search, text);
-
-  return {
-    length,
-    firstMatch,
-    longestSubstr,
-    subsequenceWidth,
-    subsequenceCount,
-    html,
-    ratio: length / search.length
-  };
+  const matchStart = text.toLocaleLowerCase().indexOf(search);
+  if (text.toLocaleLowerCase().indexOf('saiki k.') > -1) {
+    lcs(search, text);
+  }
+  if (matchStart === -1) {
+    return lcs(search, text);
+  } else {
+    const searchLength = search.length;
+    const matchEnd = matchStart + searchLength;
+    const html = text.slice(0, matchStart)
+      + `<mark>${text.slice(matchStart, matchEnd)}</mark>`
+      + text.slice(matchEnd)
+    return {
+      length: searchLength,
+      firstMatch: matchStart,
+      longestSubstr: searchLength,
+      subsequenceWidth: searchLength,
+      subsequenceCount: 1,
+      html,
+      ratio: 1
+    }
+  }
 };
 
-export { levenshtein, lcs };
+export { levenshtein, fuzzySearch };
