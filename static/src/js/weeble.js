@@ -76,11 +76,7 @@ const replaceInput = function () {
   // replaces the text in the input with the clicked suggestion
   const newValue = this.querySelector('div').textContent;
   document.getElementById('anime-entry').value = newValue;
-  const dropdown = this.parentNode;
-  while (dropdown.firstChild) {
-    dropdown.removeChild(dropdown.firstChild);
-  }
-  dropdown.classList.remove('show');
+  bsElements.dropdown.hide();
 };
 
 const createAnimeLi = function (animeId, title) {
