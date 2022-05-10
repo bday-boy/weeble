@@ -2,8 +2,8 @@ import { htmlToElements } from './utils/dom.js';
 import { fuzzySearch } from './utils/fuzzy-string.js';
 
 const SHOW_MAX = 100;
-const RATIO_THRESHOLD = 0.9;
-const SUBSEQUENCE_THRESHOLD = 0.25;
+const RATIO_THRESHOLD = 0.85;
+const MAX_NUM_OF_SUBSEQUENCES = 3;
 
 /**
  * Shows suggested anime based on the user's search input.
@@ -33,13 +33,12 @@ const showSuggestedAnime = function (dropdown, search, allTitles) {
       const {
         html,
         ratio,
-        subsequenceWidth,
         ...compareData
       } = fuzzySearch(searchLower, title);
       if (
         RATIO_THRESHOLD <= ratio
         && num_shown < SHOW_MAX
-        && SUBSEQUENCE_THRESHOLD <= (subsequenceWidth / compareData.subsequenceCount)
+        && compareData.subsequenceCount <= MAX_NUM_OF_SUBSEQUENCES
       ) {
         const newChildren = htmlToElements(html);
         li.querySelector('div.text-wrap').replaceChildren(...newChildren);

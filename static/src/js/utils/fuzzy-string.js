@@ -16,6 +16,25 @@ for (let j = 0; j < MAX_LEN_TITLE; j++) {
 // this even is faster, but it's a way to speed things up in Python
 const fasterMin = Math.min;
 
+const markString = function (indices, str) {
+  indices.unshift(0);
+  indices.push(str.length);
+  const numIndices = indices.length;
+  const strs = [];
+  let arrIndex = 0;
+  while (arrIndex < numIndices - 1) {
+    const strStart = indices[arrIndex];
+    const strEnd = indices[arrIndex + 1];
+    if (arrIndex % 2 === 0) {
+      strs.push(str.slice(strStart, strEnd));
+    } else {
+      strs.push(`<mark>${str.slice(strStart, strEnd)}</mark>`);
+    }
+    arrIndex++;
+  }
+  return strs.join('');
+};
+
 /**
  * Computes the levenshtein distance between two strings. An adjacent character
  * transposition (swapping two characters) counts as one operation.
@@ -82,66 +101,35 @@ const lcsTable = function (search, text) {
  */
 const lcsString = function (search, text) {
   const textLength = text.length;
-  const strs = [];
+  const indices = [];
   let i = search.length;
   let j = textLength;
-  let prev = false;
   let longestSubstr = 0;
-  let r = textLength;
-  let left = textLength;
-  let right = 0;
-  let subsequenceCount = 0;
 
   while (0 < i && 0 < j) {
-    const curCell = L[i][j];
-    if (L[i - 1][j] < curCell && L[i][j - 1] < curCell) {
-      if (!prev) {
-        if (j < r) {
-          strs.push(text.slice(j, r));
-        }
-        prev = true;
-        r = j;
-        subsequenceCount++;
-      }
-      if (right == 0) { right = j; }
-      left = j;
+    if (L[i - 1][j] === L[i][j]) {
       i--;
+    } else if (L[i][j - 1] === L[i][j]) {
       j--;
     } else {
-      if (prev) {
-        if (j < r) {
-          strs.push(`<mark>${text.slice(j, r)}</mark>`);
-        }
-        prev = false;
-        if (longestSubstr < r - j) {
-          longestSubstr = r - j;
-        }
-        r = j;
+      const right = j;
+      i--;
+      j--;
+      while (0 < i && 0 < j && L[i][j - 1] !== L[i][j] && L[i - 1][j] !== L[i][j]) {
+        i--;
+        j--;
       }
-      const iIncrease = (L[i - 1][j] >= L[i][j - 1]);
-      i -= iIncrease;
-      j -= !iIncrease;
+      const left = j;
+      indices.push(right, left);
+      if (longestSubstr < right - left) longestSubstr = right - left;
     }
-  }
-
-  if (j < r) {
-    strs.push(`<mark>${text.slice(j, r)}</mark>`);
-    if (longestSubstr < r - j) {
-      longestSubstr = r - j;
-    }
-    left = j;
-    subsequenceCount++;
-  }
-  if (0 < j) {
-    strs.push(text.slice(0, j));
   }
 
   return {
-    firstMatch: left,
+    firstMatch: 0 < indices.length ? indices[0] : -1,
     longestSubstr,
-    subsequenceWidth: right - left + 1,
-    subsequenceCount,
-    html: strs.reverse().join('')
+    subsequenceCount: Math.floor(indices.length / 2),
+    html: markString(indices.reverse(), text)
   };
 };
 
@@ -182,7 +170,6 @@ const fuzzySearch = function (search, text) {
       length: NaN,
       firstMatch: NaN,
       longestSubstr: NaN,
-      subsequenceWidth: NaN,
       subsequenceCount: NaN,
       html: '',
       ratio: NaN
@@ -198,16 +185,12 @@ const fuzzySearch = function (search, text) {
   } else {
     const searchLength = search.length;
     const matchEnd = matchStart + searchLength;
-    const html = text.slice(0, matchStart)
-      + `<mark>${text.slice(matchStart, matchEnd)}</mark>`
-      + text.slice(matchEnd)
     return {
       length: searchLength,
       firstMatch: matchStart,
       longestSubstr: searchLength,
-      subsequenceWidth: searchLength,
       subsequenceCount: 1,
-      html,
+      html: markString([matchStart, matchEnd], text),
       ratio: 1
     }
   }
