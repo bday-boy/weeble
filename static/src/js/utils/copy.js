@@ -1,13 +1,4 @@
-const getGuessTitle = function (guessWrapper, location) {
-  const a = guessWrapper.querySelector('a');
-  if (location === 'anilist') {
-    return a.href; /* TODO: Maybe just do title */
-  } else if (location === 'discord') {
-    return `||${a.textContent}||\n`;
-  } else {
-    return '';
-  }
-};
+import { constrainString } from './string.js';
 
 const getIconEmoji = function (iconWrapper) {
   if (iconWrapper.classList.contains('bg-success')) {
@@ -29,6 +20,17 @@ const getGuessEmojis = function (guessWrapper) {
     guessEmojis.push(getIconEmoji(iconWrapper));
   });
   return guessEmojis.join('');
+};
+
+const getGuessTitle = function (guessWrapper, location) {
+  const a = guessWrapper.querySelector('a');
+  if (location === 'anilist') {
+    return a.href; /* TODO: Maybe just do title */
+  } else if (location === 'discord') {
+    return `||${constrainString(a.textContent)}||\n`;
+  } else {
+    return '';
+  }
 };
 
 const createCopyText = function (location, won) {

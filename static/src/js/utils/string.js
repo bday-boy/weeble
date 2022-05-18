@@ -193,4 +193,63 @@ const fuzzySearch = function (search, text) {
   }
 };
 
-export { levenshtein, fuzzySearch };
+/**
+ * Uses a dummy canvas to find the width of the text on a screen.
+ * @param {string} text
+ * @param {string} fontFamily
+ * @param {number|string} fontSize
+ * @returns {number} The width of the text on screen
+ */
+const getWidthOfText = function (text, fontFamily, fontSize) {
+  const fontspec = (fontSize || 12) + ' ' + (fontFamily || 'Arial');
+
+  if (getWidthOfText.c === undefined) {
+    getWidthOfText.c = document.createElement('canvas');
+    getWidthOfText.ctx = getWidthOfText.c.getContext('2d');
+  }
+
+  if (getWidthOfText.ctx.font !== fontspec) {
+    getWidthOfText.ctx.font = fontspec;
+  }
+
+  return getWidthOfText.ctx.measureText(text).width;
+};
+
+const maxLength = getWidthOfText('wwwwwwwwwwwwwwwwww');
+
+const padString = function (text) {
+  const paddingLength = maxLength - getWidthOfText(text + '...');
+  if (paddingLength <= 0) {
+    return '';
+  } else {
+    return '-'.repeat(Math.floor(paddingLength / getWidthOfText('-')))
+  }
+};
+
+/**
+ * Constrains a string to a certain length.
+ * @param {string} text 
+ * @returns {string} The text constrained to a maximum length.
+ */
+const constrainString = function (text) {
+  let left = 0;
+  let right = text.length;
+  let mid;
+
+  while (left < right) {
+    mid = Math.floor((left + right) / 2);
+    const textWidth = getWidthOfText(text.slice(0, mid + 1));
+    if (textWidth < maxLength) {
+      left = mid + 1;
+    } else if (maxLength < textWidth) {
+      right = mid - 1;
+    } else {
+      return `${text.slice(0, mid + 1)}${mid + 1 < text.length ? '...' : ''}`;
+    }
+  }
+
+  // TODO: Add padding for shorter titles
+  return `${text.slice(0, mid + 1)}${mid + 1 < text.length ? '...' : ''}`;
+};
+
+export { levenshtein, fuzzySearch, constrainString };
