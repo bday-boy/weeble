@@ -6,14 +6,22 @@ const pool = new Pool({
     rejectUnauthorized: false
   }
 });
-const insertQuery = `INSERT INTO DailyAnime
+const insertQuery = `
+INSERT INTO DailyAnime
 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
 ON CONFLICT (date)
-DO UPDATE SET id = EXCLUDED.id, title = EXCLUDED.title,
-studios = EXCLUDED.studios, popularity = EXCLUDED.popularity,
-episodes = EXCLUDED.episodes, source = EXCLUDED.source,
-picture = EXCLUDED.picture, synonyms = EXCLUDED.synonyms,
-format = EXCLUDED.format, year = EXCLUDED.year`;
+DO UPDATE SET
+  id = EXCLUDED.id,
+  title = EXCLUDED.title,
+  studios = EXCLUDED.studios,
+  popularity = EXCLUDED.popularity,
+  episodes = EXCLUDED.episodes,
+  source = EXCLUDED.source,
+  picture = EXCLUDED.picture,
+  synonyms = EXCLUDED.synonyms,
+  format = EXCLUDED.format,
+  year = EXCLUDED.year;
+`;
 
 const useAnime = function (animeInfo) {
   return 25000 < animeInfo.popularity;
@@ -32,27 +40,26 @@ const randomAnime = function (allAnimeObj) {
       validAnime[animeId] = animeInfo;
     }
   });
-  validAnime;
   try {
     const client = await pool.connect();
     const result = await client.query('SELECT * FROM DailyAnime');
     result.rows.forEach((row) => {
       delete validAnime[row.id];
     });
-    const newAnime = randomAnime(validAnime);
+    const dailyAnime = randomAnime(validAnime);
     const date = new Date();
     const insertDate = date.toISOString().split('T')[0];
     client.query(insertQuery, [
-      newAnime.id,
-      newAnime.title,
-      newAnime.studios,
-      newAnime.popularity,
-      newAnime.episodes,
-      newAnime.source,
-      newAnime.picture,
-      newAnime.synonyms,
-      newAnime.format,
-      newAnime.year,
+      dailyAnime.id,
+      dailyAnime.title,
+      dailyAnime.studios,
+      dailyAnime.popularity,
+      dailyAnime.episodes,
+      dailyAnime.source,
+      dailyAnime.picture,
+      dailyAnime.synonyms,
+      dailyAnime.format,
+      dailyAnime.year,
       insertDate
     ]);
     client.release();

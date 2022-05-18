@@ -218,19 +218,19 @@ const loadPage = function () {
   );
 
   copyAnilist.addEventListener('click', function () {
-    copyToClipboard('anilist', weeble.won).then((success) => {
+    copyToClipboard('anilist', weeble.won, weeble.anime.count).then((success) => {
       showCopyToast(success);
     });
   });
 
   copyDiscord.addEventListener('click', function () {
-    copyToClipboard('discord', weeble.won).then((success) => {
+    copyToClipboard('discord', weeble.won, weeble.anime.count).then((success) => {
       showCopyToast(success);
     });
   });
 
   copyGeneral.addEventListener('click', function () {
-    copyToClipboard('general', weeble.won).then((success) => {
+    copyToClipboard('general', weeble.won, weeble.anime.count).then((success) => {
       showCopyToast(success);
     });
   });

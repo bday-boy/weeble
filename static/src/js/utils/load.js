@@ -61,8 +61,10 @@ const fetchDailyAnime = function () {
     .then((dailyAnime) => {
       if (dailyAnime.daily) {
         this.anime = dailyAnime.daily;
+        this.anime.count = parseInt(dailyAnime.count.daily_count);
       } else {
         this.anime = randomAnime(this.possibleAnime);
+        this.anime.count = -1;
       }
     })
     .catch(() => this.anime = randomAnime(this.possibleAnime));

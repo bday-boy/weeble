@@ -25,7 +25,7 @@ const getGuessEmojis = function (guessWrapper) {
 const getGuessTitle = function (guessWrapper, location) {
   const a = guessWrapper.querySelector('a');
   if (location === 'anilist') {
-    return a.href; /* TODO: Maybe just do title */
+    return a.href;
   } else if (location === 'discord') {
     return `||${constrainString(a.textContent)}||\n`;
   } else {
@@ -33,12 +33,12 @@ const getGuessTitle = function (guessWrapper, location) {
   }
 };
 
-const createCopyText = function (location, won) {
+const createCopyText = function (location, won, dailyCount) {
   const copyTexts = [];
   const guesses = Array.from(document.querySelectorAll('#guesses > div'));
   guesses.reverse();
-  /* TODO: Add something here for which day of weeble/guess limit */
-  copyTexts.push(`Weeble ${won ? guesses.length : 'X'}/7\n`);
+  // TODO: Add something here for which day of weeble/guess limit
+  copyTexts.push(`Weeble ${dailyCount || -1} ${won ? guesses.length : 'X'}/7\n`);
   if (location === 'anilist') {
     const guessEmojis = [];
     const guessAnime = [];
@@ -91,8 +91,8 @@ const copyFallback = function (copyText) {
   return successful;
 };
 
-const copyToClipboard = function (location, won) {
-  const copyText = createCopyText(location, won);
+const copyToClipboard = function (location, won, dailyCount) {
+  const copyText = createCopyText(location, won, dailyCount);
   copyFallbackFallback(copyText);
   if (!navigator.clipboard) {
     return new Promise((res, rej) => {
