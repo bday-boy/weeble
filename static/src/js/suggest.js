@@ -1,5 +1,5 @@
 import { htmlToElements } from './utils/dom.js';
-import { fuzzySearch } from './utils/fuzzy-string.js';
+import { fuzzySearch } from './utils/string.js';
 
 const SHOW_MAX = 100;
 const RATIO_THRESHOLD = 0.85;
