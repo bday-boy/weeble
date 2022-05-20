@@ -1,7 +1,7 @@
 import { createNewButton } from './utils/dom.js';
 import { isSubset, setDif, setIntersection } from './utils/set.js';
 import { updateProgressSet, updateProgressGroup, updateNumRange, updateNumRangeCorrect } from './update-progress.js';
-import { updateStats, showStats, didDaily, addGuess } from './scores.js';
+import { updateStats, showStats, didDaily, addGuess } from './storage.js';
 
 const checkDif = (dif, threshold, low, high) => (
   Math.abs(dif) <= threshold || (high - low) <= threshold * 2

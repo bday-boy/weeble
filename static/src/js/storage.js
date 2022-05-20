@@ -128,18 +128,6 @@ const showStats = function (statElements, scoresElement) {
   });
 };
 
-const didDaily = function (won) {
-  const todaysDate = getDateToday();
-  const todaysEntry = getItemObj(todaysDate, defaultGuesses);
-
-  if (won !== undefined) {
-    todaysEntry.won = won;
-    setItemObj(todaysDate, todaysEntry);
-  }
-
-  return todaysEntry.won !== undefined;
-};
-
 const addGuess = function (guess) {
   const todaysDate = getDateToday();
   const todaysEntry = getItemObj(todaysDate, defaultGuesses);
@@ -155,4 +143,24 @@ const getGuesses = function () {
   return todaysEntry.guesses;
 };
 
-export { updateStats, showStats, didDaily, addGuess, getGuesses };
+const didDaily = function (won) {
+  const todaysDate = getDateToday();
+  const todaysEntry = getItemObj(todaysDate, defaultGuesses);
+
+  if (won !== undefined) {
+    todaysEntry.won = won;
+    setItemObj(todaysDate, todaysEntry);
+  }
+
+  return todaysEntry.won !== undefined;
+};
+
+const firstVisit = function () {
+  const hasVisited = localStorage.getItem('hasVisited');
+  if (hasVisited !== 'yes') {
+    localStorage.setItem('hasVisited', 'yes');
+  }
+  return (hasVisited !== 'yes');
+};
+
+export { updateStats, showStats, addGuess, getGuesses, didDaily, firstVisit };

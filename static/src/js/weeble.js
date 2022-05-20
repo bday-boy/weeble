@@ -3,7 +3,7 @@ import { loadAnimeData } from './utils/load.js';
 import { startTimer } from './utils/time.js';
 import { applyFilter } from './filters.js'
 import { checkAnswer } from './check-answer.js';
-import { showStats, didDaily, getGuesses } from './scores.js';
+import { showStats, getGuesses, didDaily, firstVisit } from './storage.js';
 import { suggestAnime } from './suggest.js';
 
 window.bsElements = {
@@ -303,7 +303,7 @@ const startGame = function () {
   loadAnimeData.call(weeble).then(() => {
     startGame();
 
-    if (firstImpression()) {
+    if (firstVisit()) {
       bsElements.modals.about.show();
     }
   });
