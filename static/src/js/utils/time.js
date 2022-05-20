@@ -4,7 +4,6 @@
  * occurs (default is 7, or midnight MST)
  * @returns {Date} The next reset
  */
-/* RENAME THIS TO getNextReset */
 const getNextReset = function (resetTime = 7) {
   const today = new Date();
   today.setUTCHours(today.getUTCHours() - resetTime, 0, 0, 0);
@@ -13,11 +12,20 @@ const getNextReset = function (resetTime = 7) {
   return today;
 };
 
+/**
+ * Gets today's date in YYYY-MM-DD format.
+ * @returns {string} Today's date in YYYY-MM-DD format
+ */
 const getDateToday = function () {
   const date = getNextReset();
   return date.toISOString().split('T')[0];
 };
 
+/**
+ * Sets the textContent of all given elements to be the current time in
+ * HH:MM:SS format each second.
+ * @param {Array<HTMLElement>} timerElements 
+ */
 const startTimer = function (timerElements) {
   const nextRefresh = getNextReset().getTime();
 

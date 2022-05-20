@@ -52,7 +52,8 @@ const fetchAllAnime = function () {
 };
 
 /**
- * Queries the server for the current daily anime.
+ * Queries the server for the current daily anime and puts it in the bound
+ * object.
  * @returns {Promise} A promise that, once resolved, has set the daily anime.
  */
 const fetchDailyAnime = function () {
@@ -71,7 +72,7 @@ const fetchDailyAnime = function () {
 };
 
 /**
- * 
+ * Fetches the anime titles json and puts it into the bound object.
  * @returns {Promise} A promise that, once resolved, has set all titles into
  * the weeble namespace.
  */
@@ -91,7 +92,7 @@ const fetchAnimeTitles = function () {
  * Given the AniList ID of an anime, returns a promise that resolves into an
  * array of all non-spoiler tags for that anime.
  * @returns {Promise<Array.<Object>} A promise that resolves into an array of
- * tags
+ * tags.
  */
 const fetchAnswerData = function () {
   const query = `

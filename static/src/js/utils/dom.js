@@ -20,6 +20,7 @@ const createNewButton = function (text, btnClass) {
 };
 
 /**
+ * Converts a string of HTML to document element.
  * @param {String} html - HTML representing a single element
  * @return {Element}
  */
@@ -30,6 +31,7 @@ const htmlToElement = function (html) {
 };
 
 /**
+ * Converts a string of HTML to a NodeList of document elements.
  * @param {String} html - HTML representing any number of sibling elements
  * @return {NodeList} 
  */
@@ -39,14 +41,4 @@ const htmlToElements = function (html) {
   return template.content.childNodes;
 };
 
-/**
- * @param {String} html - HTML representing any number of sibling elements
- * @return {NodeList} 
- */
-const htmlToDocFragment = function (html) {
-  const template = document.createElement('template');
-  template.innerHTML = html.trim();
-  return template.content;
-};
-
-export { createNewButton, htmlToElement, htmlToElements, htmlToDocFragment };
+export { createNewButton, htmlToElement, htmlToElements };

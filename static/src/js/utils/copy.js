@@ -1,5 +1,10 @@
 import { constrainString } from './string.js';
 
+/**
+ * Creates a square emoji based on the color of the given iconWrapper element.
+ * @param {HTMLElement} iconWrapper 
+ * @returns {string} The square emoji.
+ */
 const getIconEmoji = function (iconWrapper) {
   if (iconWrapper.classList.contains('bg-success')) {
     if (document.body.classList.contains('high-contrast')) {
@@ -14,6 +19,12 @@ const getIconEmoji = function (iconWrapper) {
   }
 };
 
+/**
+ * Creates a string of emojis based on the colors of the given guessWrapper's
+ * success markers.
+ * @param {HTMLElement} guessWrapper 
+ * @returns {string} A string of all found emojis.
+ */
 const getGuessEmojis = function (guessWrapper) {
   const guessEmojis = [];
   guessWrapper.querySelectorAll('div > div.icon-wrapper').forEach((iconWrapper) => {
@@ -22,6 +33,12 @@ const getGuessEmojis = function (guessWrapper) {
   return guessEmojis.join('');
 };
 
+/**
+ * Returns the text used for the given location.
+ * @param {HTMLElement} guessWrapper 
+ * @param {string} location 
+ * @returns {string} The title as formatted for the given copy location.
+ */
 const getGuessTitle = function (guessWrapper, location) {
   const a = guessWrapper.querySelector('a');
   if (location === 'anilist') {
@@ -33,6 +50,13 @@ const getGuessTitle = function (guessWrapper, location) {
   }
 };
 
+/**
+ * Creates the copyable text for the user's daily guesses.
+ * @param {string} location 
+ * @param {boolean} won 
+ * @param {number} dailyCount 
+ * @returns {string} The full copyable text for the user's daily.
+ */
 const createCopyText = function (location, won, dailyCount) {
   const copyTexts = [];
   const guesses = Array.from(document.querySelectorAll('#guesses > div'));
@@ -52,7 +76,7 @@ const createCopyText = function (location, won, dailyCount) {
       copyTexts.push(getGuessEmojis(guessWrapper) + ' ');
       copyTexts.push(getGuessTitle(guessWrapper, location));
     });
-  } else if (location === 'general') {
+  } else {
     guesses.forEach((guessWrapper) => {
       copyTexts.push(getGuessTitle(guessWrapper, location));
       copyTexts.push(getGuessEmojis(guessWrapper) + '\n');
@@ -62,11 +86,22 @@ const createCopyText = function (location, won, dailyCount) {
   return copyTexts.join('');
 };
 
+/**
+ * If all attempts to send the text to the user's clipboard fail, they will at
+ * least have a textarea where they can select the text for copying.
+ * @param {string} copyText 
+ */
 const copyFallbackFallback = function (copyText) {
   const copyTextarea = document.getElementById('copy-text');
   copyTextarea.value = copyText;
 };
 
+/**
+ * Uses an outdated method of copying to the clipboard. Only happens if the
+ * modern method fails.
+ * @param {string} copyText 
+ * @returns {boolean} Whether or not the copying was successful.
+ */
 const copyFallback = function (copyText) {
   const copier = document.createElement('textarea');
   copier.value = copyText;
@@ -91,6 +126,14 @@ const copyFallback = function (copyText) {
   return successful;
 };
 
+/**
+ * Creates copy text for the user's daily and returns a promise that tries to
+ * copy it to their clipboard.
+ * @param {string} location 
+ * @param {boolean} won 
+ * @param {number} dailyCount 
+ * @returns {Promise} A Promise that copies text to the user's clipboard.
+ */
 const copyToClipboard = function (location, won, dailyCount) {
   const copyText = createCopyText(location, won, dailyCount);
   copyFallbackFallback(copyText);
