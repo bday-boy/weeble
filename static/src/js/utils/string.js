@@ -196,12 +196,12 @@ const fuzzySearch = function (search, text) {
 /**
  * Uses a dummy canvas to find the width of the text on a screen.
  * @param {string} text
+ * @param {number|string} fontSize - The font size in pixels
  * @param {string} fontFamily
- * @param {number|string} fontSize
  * @returns {number} The width of the text on screen
  */
-const getWidthOfText = function (text, fontFamily, fontSize) {
-  const fontspec = (fontSize || 12) + ' ' + (fontFamily || 'Arial');
+const getWidthOfText = function (text, fontSize, fontFamily) {
+  const fontspec = `${fontSize || 12}px ${fontFamily || 'Garamond'}`;
 
   if (getWidthOfText.c === undefined) {
     getWidthOfText.c = document.createElement('canvas');
@@ -216,14 +216,14 @@ const getWidthOfText = function (text, fontFamily, fontSize) {
 };
 
 const dotsLength = getWidthOfText('...');
-const maxLength = getWidthOfText('wwwwwwwwwwwwwwwwww');
+const maxLength = getWidthOfText('wwwwwwwwwwwwwww');
 
-const padString = function (text) {
-  const paddingLength = maxLength + dotsLength - getWidthOfText(text);
-  if (paddingLength <= 0) {
+const padString = function (paddingLength) {
+  const numSpaces = Math.floor(paddingLength / getWidthOfText(' '));
+  if (numSpaces <= 0) {
     return '';
   } else {
-    return ' '.repeat(Math.floor(paddingLength / getWidthOfText(' ')));
+    return ' '.repeat(numSpaces);
   }
 };
 
@@ -233,8 +233,9 @@ const padString = function (text) {
  * @returns {string} The text constrained to a maximum width.
  */
 const constrainString = function (text) {
+  const textLength = text.length;
   let left = 0;
-  let right = text.length;
+  let right = textLength;
   let mid = 0;
 
   while (left < right) {
@@ -250,10 +251,10 @@ const constrainString = function (text) {
   }
 
   const constrainedTitle = text.slice(0, mid + 1);
-  if (right === text.length) {
-    return `${constrainedTitle}${padString(constrainedTitle)}`;
+  if (right === textLength) {
+    return `${constrainedTitle}${padString(maxLength + dotsLength - getWidthOfText(constrainedTitle))}`;
   } else {
-    return `${constrainedTitle}${mid + 1 < text.length ? '...' : ''}`;
+    return `${constrainedTitle}...`;
   }
 };
 
