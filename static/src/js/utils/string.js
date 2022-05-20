@@ -215,26 +215,27 @@ const getWidthOfText = function (text, fontFamily, fontSize) {
   return getWidthOfText.ctx.measureText(text).width;
 };
 
+const dotsLength = getWidthOfText('...');
 const maxLength = getWidthOfText('wwwwwwwwwwwwwwwwww');
 
 const padString = function (text) {
-  const paddingLength = maxLength - getWidthOfText(text + '...');
+  const paddingLength = maxLength + dotsLength - getWidthOfText(text);
   if (paddingLength <= 0) {
     return '';
   } else {
-    return '-'.repeat(Math.floor(paddingLength / getWidthOfText('-')))
+    return ' '.repeat(Math.floor(paddingLength / getWidthOfText(' ')));
   }
 };
 
 /**
  * Constrains a string to a certain length.
  * @param {string} text 
- * @returns {string} The text constrained to a maximum length.
+ * @returns {string} The text constrained to a maximum width.
  */
 const constrainString = function (text) {
   let left = 0;
   let right = text.length;
-  let mid;
+  let mid = 0;
 
   while (left < right) {
     mid = Math.floor((left + right) / 2);
@@ -244,12 +245,16 @@ const constrainString = function (text) {
     } else if (maxLength < textWidth) {
       right = mid - 1;
     } else {
-      return `${text.slice(0, mid + 1)}${mid + 1 < text.length ? '...' : ''}`;
+      break;
     }
   }
 
-  // TODO: Add padding for shorter titles
-  return `${text.slice(0, mid + 1)}${mid + 1 < text.length ? '...' : ''}`;
+  const constrainedTitle = text.slice(0, mid + 1);
+  if (right === text.length) {
+    return `${constrainedTitle}${padString(constrainedTitle)}`;
+  } else {
+    return `${constrainedTitle}${mid + 1 < text.length ? '...' : ''}`;
+  }
 };
 
 export { levenshtein, fuzzySearch, constrainString };
