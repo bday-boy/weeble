@@ -2,8 +2,9 @@
 
 Uses public APIs to get anime data based on various criteria and then uses that
 data to make a Wordle- or Squirle-like game. Can be played
-[here](https://weeble.herokuapp.com/) or by entering https://weeble.ninja/ into
-your browser, which redirects to the actual website.
+[here](https://weeble.herokuapp.com/) or by entering
+[https://weeble.ninja/](https://weeble.ninja/) into your browser, which
+redirects to the actual website.
 
 ## Guessing information
 
@@ -35,7 +36,7 @@ However, there are some important things to note about these:
 
 - Add indicator that there are no tags/genres/etc.
 - Clean up the absolute behemoth that is check-answer.js
-  - It is seriously so ugly, some of the worst spaghetti code I've written
+  - It is seriously so ugly. Some of the worst spaghetti code I've written
     in my life. Just thinking about how I'm the one who made it makes me cringe
 
 ### Low-priority
