@@ -96,8 +96,6 @@ class AnimeJSONifier:
 
     def get_valid_title(self, all_titles: list[str]) -> list[str]:
         for first_valid_title in all_titles:
-            if 'berserk' in first_valid_title.lower():
-                a = 1
             if first_valid_title not in self.titles_set:
                 self.titles_set.add(first_valid_title)
                 return first_valid_title
